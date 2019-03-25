@@ -1,0 +1,11 @@
+{
+  "name": "labs11-teamhome3BE-refactor",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "https://github.com/yannafaith/labs11-teamhome3BE-refactor.git",
+  "author": "yannafaith <yannafaith97@gmail.com>",
+  "license": "MIT",
+  "dependencies": {
+    "graphql-yoga": "^1.17.4"
+  }
+}
