@@ -8,9 +8,14 @@ const users = (parent, args, context, info) => {
         return context.prisma.users();
 }
 
+const todoLists = (parent, args, context, info) => {
+        return context.prisma.todoLists();
+}
+
 
 module.exports = {
     info,
     todoes,
-    users
+    users,
+    todoLists
 }

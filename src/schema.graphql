@@ -4,16 +4,12 @@ type Mutation {
     createTodoList(description: String!, ownedBy: String!, assignedTo: String!, completed: Boolean): TodoList
 }
 
-input todoListInput {
-    owners: String!
-    assignedTo: String!
-}
-
 type Query {
     info: String!
     todoes: [Todo]
     todo(id: ID!): Todo!
     users: [User]
+    todoLists: [TodoList]
 }
 
 type TodoList {
