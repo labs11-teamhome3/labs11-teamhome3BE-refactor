@@ -1,35 +1,9 @@
 const { GraphQLServer } = require('graphql-yoga');
 const { prisma } = require('./generated/prisma-client');
-
-const typeDefs = `
-type Query {
-    info: String!
-    users: [User!]!
-  }
-
-
-type Mutation {
-    createUser(name: String!): User!
-}
-
-type User {
-    id: ID! 
-    firstName: String!
-    lastName: String!
-    email: String!
-    avatar: String
-    phoneNumber: String
-}
-`
-
-const resolvers = {
-    Query: {
-        info: () => `This is the API Team Home 3`
-      }
-}
+const resolvers = require('./resolvers/index');
 
 const server = new GraphQLServer({
-    typeDefs,
+    typeDefs: './schema.graphql',
     resolvers,
     context: {prisma}
 })
