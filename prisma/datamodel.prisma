@@ -9,10 +9,10 @@ type TodoList {
 }
 
 type Todo {
-  id: ID! @unique
-  description: String!
-  partOf: TodoList
-  completed: Boolean
+    id: ID! @unique
+    description: String!
+    partOf: TodoList
+    completed: Boolean
 }
 
 type User {

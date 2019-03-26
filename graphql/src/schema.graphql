@@ -16,12 +16,14 @@ type TodoList {
     ownedBy: [User!]!
     assignedTo: [User!]!
     todos: [Todo!]!
+    completed: Boolean
 }
 
 type Todo {
     id: ID!
     description: String!
     partOf: TodoList
+    completed: Boolean
 }
 
 type User {
