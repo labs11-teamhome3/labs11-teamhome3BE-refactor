@@ -1,8 +1,11 @@
 type Mutation {
     createUser(name: String!): User!
     createTodo(description: String!, partOf: String!, completed: Boolean): Todo
+    deleteTodo(id: String!): String!
+    updateTodo(id: String!, description: String!, completed: Boolean): Todo
     createTodoList(description: String!, ownedBy: String!, assignedTo: String!, completed: Boolean): TodoList
     deleteTodoList(id: String!): String!
+    updateTodoList(id: String!, description: String!, completed: Boolean): TodoList
 }
 
 type Query {
