@@ -1,25 +1,30 @@
+require('dotenv').config();
 const { GraphQLServer } = require('graphql-yoga');
 const { prisma } = require('../prisma/generated/prisma-client');
 
 const resolvers = {
     Query: {
         info: () => `This is the API of a Hackernews clone`,
-        feed: (root, args, context, info) => {
-            return context.prisma.links()
+        todoes: (root, args, context, info) => {
+            return context.prisma.todoes()
         },
+        users: (root, args, context, info) => {
+            return context.prisma.users();
+        }
     },
     Mutation: {
-        post: (root, args, context) => {
-            return context.prisma.createLink({
-                url: args.url,
-                description: args.description
+        createTodo: (root, args, context) => {
+            return context.prisma.createTodo({
+                description: args.description,
+                ownedBy: args.input.owners,
+                assignedTo: args.input.assignedTo
             })
         },
     },
 };
 
 const server = new GraphQLServer ({
-    typeDefs: './src/schema.graphql',
+    typeDefs: './graphql/src/schema.graphql',
     resolvers,
     context: {prisma},
 });
