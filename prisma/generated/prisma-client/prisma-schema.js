@@ -7,6 +7,10 @@ module.exports = {
   count: Int!
 }
 
+type AggregateTodoList {
+  count: Int!
+}
+
 type AggregateUser {
   count: Int!
 }
@@ -26,6 +30,12 @@ type Mutation {
   upsertTodo(where: TodoWhereUniqueInput!, create: TodoCreateInput!, update: TodoUpdateInput!): Todo!
   deleteTodo(where: TodoWhereUniqueInput!): Todo
   deleteManyTodoes(where: TodoWhereInput): BatchPayload!
+  createTodoList(data: TodoListCreateInput!): TodoList!
+  updateTodoList(data: TodoListUpdateInput!, where: TodoListWhereUniqueInput!): TodoList
+  updateManyTodoLists(data: TodoListUpdateManyMutationInput!, where: TodoListWhereInput): BatchPayload!
+  upsertTodoList(where: TodoListWhereUniqueInput!, create: TodoListCreateInput!, update: TodoListUpdateInput!): TodoList!
+  deleteTodoList(where: TodoListWhereUniqueInput!): TodoList
+  deleteManyTodoLists(where: TodoListWhereInput): BatchPayload!
   createUser(data: UserCreateInput!): User!
   updateUser(data: UserUpdateInput!, where: UserWhereUniqueInput!): User
   updateManyUsers(data: UserUpdateManyMutationInput!, where: UserWhereInput): BatchPayload!
@@ -55,6 +65,9 @@ type Query {
   todo(where: TodoWhereUniqueInput!): Todo
   todoes(where: TodoWhereInput, orderBy: TodoOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Todo]!
   todoesConnection(where: TodoWhereInput, orderBy: TodoOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): TodoConnection!
+  todoList(where: TodoListWhereUniqueInput!): TodoList
+  todoLists(where: TodoListWhereInput, orderBy: TodoListOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [TodoList]!
+  todoListsConnection(where: TodoListWhereInput, orderBy: TodoListOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): TodoListConnection!
   user(where: UserWhereUniqueInput!): User
   users(where: UserWhereInput, orderBy: UserOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [User]!
   usersConnection(where: UserWhereInput, orderBy: UserOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): UserConnection!
@@ -63,15 +76,14 @@ type Query {
 
 type Subscription {
   todo(where: TodoSubscriptionWhereInput): TodoSubscriptionPayload
+  todoList(where: TodoListSubscriptionWhereInput): TodoListSubscriptionPayload
   user(where: UserSubscriptionWhereInput): UserSubscriptionPayload
 }
 
 type Todo {
   id: ID!
-  createdAt: DateTime!
   description: String!
-  ownedBy(where: UserWhereInput, orderBy: UserOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [User!]
-  assignedTo(where: UserWhereInput, orderBy: UserOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [User!]
+  partOf: TodoList
 }
 
 type TodoConnection {
@@ -82,8 +94,16 @@ type TodoConnection {
 
 input TodoCreateInput {
   description: String!
-  ownedBy: UserCreateManyInput
-  assignedTo: UserCreateManyInput
+  partOf: TodoListCreateOneWithoutTodosInput
+}
+
+input TodoCreateManyWithoutPartOfInput {
+  create: [TodoCreateWithoutPartOfInput!]
+  connect: [TodoWhereUniqueInput!]
+}
+
+input TodoCreateWithoutPartOfInput {
+  description: String!
 }
 
 type TodoEdge {
@@ -91,7 +111,67 @@ type TodoEdge {
   cursor: String!
 }
 
-enum TodoOrderByInput {
+type TodoList {
+  id: ID!
+  createdAt: DateTime!
+  description: String!
+  ownedBy(where: UserWhereInput, orderBy: UserOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [User!]
+  assignedTo(where: UserWhereInput, orderBy: UserOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [User!]
+  todos(where: TodoWhereInput, orderBy: TodoOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Todo!]
+}
+
+type TodoListConnection {
+  pageInfo: PageInfo!
+  edges: [TodoListEdge]!
+  aggregate: AggregateTodoList!
+}
+
+input TodoListCreateInput {
+  description: String!
+  ownedBy: UserCreateManyWithoutTodoListsOwnedInput
+  assignedTo: UserCreateManyWithoutTodoListsAssignedInput
+  todos: TodoCreateManyWithoutPartOfInput
+}
+
+input TodoListCreateManyWithoutAssignedToInput {
+  create: [TodoListCreateWithoutAssignedToInput!]
+  connect: [TodoListWhereUniqueInput!]
+}
+
+input TodoListCreateManyWithoutOwnedByInput {
+  create: [TodoListCreateWithoutOwnedByInput!]
+  connect: [TodoListWhereUniqueInput!]
+}
+
+input TodoListCreateOneWithoutTodosInput {
+  create: TodoListCreateWithoutTodosInput
+  connect: TodoListWhereUniqueInput
+}
+
+input TodoListCreateWithoutAssignedToInput {
+  description: String!
+  ownedBy: UserCreateManyWithoutTodoListsOwnedInput
+  todos: TodoCreateManyWithoutPartOfInput
+}
+
+input TodoListCreateWithoutOwnedByInput {
+  description: String!
+  assignedTo: UserCreateManyWithoutTodoListsAssignedInput
+  todos: TodoCreateManyWithoutPartOfInput
+}
+
+input TodoListCreateWithoutTodosInput {
+  description: String!
+  ownedBy: UserCreateManyWithoutTodoListsOwnedInput
+  assignedTo: UserCreateManyWithoutTodoListsAssignedInput
+}
+
+type TodoListEdge {
+  node: TodoList!
+  cursor: String!
+}
+
+enum TodoListOrderByInput {
   id_ASC
   id_DESC
   createdAt_ASC
@@ -102,41 +182,171 @@ enum TodoOrderByInput {
   updatedAt_DESC
 }
 
-type TodoPreviousValues {
+type TodoListPreviousValues {
   id: ID!
   createdAt: DateTime!
   description: String!
 }
 
-type TodoSubscriptionPayload {
-  mutation: MutationType!
-  node: Todo
-  updatedFields: [String!]
-  previousValues: TodoPreviousValues
+input TodoListScalarWhereInput {
+  id: ID
+  id_not: ID
+  id_in: [ID!]
+  id_not_in: [ID!]
+  id_lt: ID
+  id_lte: ID
+  id_gt: ID
+  id_gte: ID
+  id_contains: ID
+  id_not_contains: ID
+  id_starts_with: ID
+  id_not_starts_with: ID
+  id_ends_with: ID
+  id_not_ends_with: ID
+  createdAt: DateTime
+  createdAt_not: DateTime
+  createdAt_in: [DateTime!]
+  createdAt_not_in: [DateTime!]
+  createdAt_lt: DateTime
+  createdAt_lte: DateTime
+  createdAt_gt: DateTime
+  createdAt_gte: DateTime
+  description: String
+  description_not: String
+  description_in: [String!]
+  description_not_in: [String!]
+  description_lt: String
+  description_lte: String
+  description_gt: String
+  description_gte: String
+  description_contains: String
+  description_not_contains: String
+  description_starts_with: String
+  description_not_starts_with: String
+  description_ends_with: String
+  description_not_ends_with: String
+  AND: [TodoListScalarWhereInput!]
+  OR: [TodoListScalarWhereInput!]
+  NOT: [TodoListScalarWhereInput!]
 }
 
-input TodoSubscriptionWhereInput {
+type TodoListSubscriptionPayload {
+  mutation: MutationType!
+  node: TodoList
+  updatedFields: [String!]
+  previousValues: TodoListPreviousValues
+}
+
+input TodoListSubscriptionWhereInput {
   mutation_in: [MutationType!]
   updatedFields_contains: String
   updatedFields_contains_every: [String!]
   updatedFields_contains_some: [String!]
-  node: TodoWhereInput
-  AND: [TodoSubscriptionWhereInput!]
-  OR: [TodoSubscriptionWhereInput!]
-  NOT: [TodoSubscriptionWhereInput!]
+  node: TodoListWhereInput
+  AND: [TodoListSubscriptionWhereInput!]
+  OR: [TodoListSubscriptionWhereInput!]
+  NOT: [TodoListSubscriptionWhereInput!]
 }
 
-input TodoUpdateInput {
+input TodoListUpdateInput {
   description: String
-  ownedBy: UserUpdateManyInput
-  assignedTo: UserUpdateManyInput
+  ownedBy: UserUpdateManyWithoutTodoListsOwnedInput
+  assignedTo: UserUpdateManyWithoutTodoListsAssignedInput
+  todos: TodoUpdateManyWithoutPartOfInput
 }
 
-input TodoUpdateManyMutationInput {
+input TodoListUpdateManyDataInput {
   description: String
 }
 
-input TodoWhereInput {
+input TodoListUpdateManyMutationInput {
+  description: String
+}
+
+input TodoListUpdateManyWithoutAssignedToInput {
+  create: [TodoListCreateWithoutAssignedToInput!]
+  delete: [TodoListWhereUniqueInput!]
+  connect: [TodoListWhereUniqueInput!]
+  set: [TodoListWhereUniqueInput!]
+  disconnect: [TodoListWhereUniqueInput!]
+  update: [TodoListUpdateWithWhereUniqueWithoutAssignedToInput!]
+  upsert: [TodoListUpsertWithWhereUniqueWithoutAssignedToInput!]
+  deleteMany: [TodoListScalarWhereInput!]
+  updateMany: [TodoListUpdateManyWithWhereNestedInput!]
+}
+
+input TodoListUpdateManyWithoutOwnedByInput {
+  create: [TodoListCreateWithoutOwnedByInput!]
+  delete: [TodoListWhereUniqueInput!]
+  connect: [TodoListWhereUniqueInput!]
+  set: [TodoListWhereUniqueInput!]
+  disconnect: [TodoListWhereUniqueInput!]
+  update: [TodoListUpdateWithWhereUniqueWithoutOwnedByInput!]
+  upsert: [TodoListUpsertWithWhereUniqueWithoutOwnedByInput!]
+  deleteMany: [TodoListScalarWhereInput!]
+  updateMany: [TodoListUpdateManyWithWhereNestedInput!]
+}
+
+input TodoListUpdateManyWithWhereNestedInput {
+  where: TodoListScalarWhereInput!
+  data: TodoListUpdateManyDataInput!
+}
+
+input TodoListUpdateOneWithoutTodosInput {
+  create: TodoListCreateWithoutTodosInput
+  update: TodoListUpdateWithoutTodosDataInput
+  upsert: TodoListUpsertWithoutTodosInput
+  delete: Boolean
+  disconnect: Boolean
+  connect: TodoListWhereUniqueInput
+}
+
+input TodoListUpdateWithoutAssignedToDataInput {
+  description: String
+  ownedBy: UserUpdateManyWithoutTodoListsOwnedInput
+  todos: TodoUpdateManyWithoutPartOfInput
+}
+
+input TodoListUpdateWithoutOwnedByDataInput {
+  description: String
+  assignedTo: UserUpdateManyWithoutTodoListsAssignedInput
+  todos: TodoUpdateManyWithoutPartOfInput
+}
+
+input TodoListUpdateWithoutTodosDataInput {
+  description: String
+  ownedBy: UserUpdateManyWithoutTodoListsOwnedInput
+  assignedTo: UserUpdateManyWithoutTodoListsAssignedInput
+}
+
+input TodoListUpdateWithWhereUniqueWithoutAssignedToInput {
+  where: TodoListWhereUniqueInput!
+  data: TodoListUpdateWithoutAssignedToDataInput!
+}
+
+input TodoListUpdateWithWhereUniqueWithoutOwnedByInput {
+  where: TodoListWhereUniqueInput!
+  data: TodoListUpdateWithoutOwnedByDataInput!
+}
+
+input TodoListUpsertWithoutTodosInput {
+  update: TodoListUpdateWithoutTodosDataInput!
+  create: TodoListCreateWithoutTodosInput!
+}
+
+input TodoListUpsertWithWhereUniqueWithoutAssignedToInput {
+  where: TodoListWhereUniqueInput!
+  update: TodoListUpdateWithoutAssignedToDataInput!
+  create: TodoListCreateWithoutAssignedToInput!
+}
+
+input TodoListUpsertWithWhereUniqueWithoutOwnedByInput {
+  where: TodoListWhereUniqueInput!
+  update: TodoListUpdateWithoutOwnedByDataInput!
+  create: TodoListCreateWithoutOwnedByInput!
+}
+
+input TodoListWhereInput {
   id: ID
   id_not: ID
   id_in: [ID!]
@@ -179,6 +389,161 @@ input TodoWhereInput {
   assignedTo_every: UserWhereInput
   assignedTo_some: UserWhereInput
   assignedTo_none: UserWhereInput
+  todos_every: TodoWhereInput
+  todos_some: TodoWhereInput
+  todos_none: TodoWhereInput
+  AND: [TodoListWhereInput!]
+  OR: [TodoListWhereInput!]
+  NOT: [TodoListWhereInput!]
+}
+
+input TodoListWhereUniqueInput {
+  id: ID
+}
+
+enum TodoOrderByInput {
+  id_ASC
+  id_DESC
+  description_ASC
+  description_DESC
+  createdAt_ASC
+  createdAt_DESC
+  updatedAt_ASC
+  updatedAt_DESC
+}
+
+type TodoPreviousValues {
+  id: ID!
+  description: String!
+}
+
+input TodoScalarWhereInput {
+  id: ID
+  id_not: ID
+  id_in: [ID!]
+  id_not_in: [ID!]
+  id_lt: ID
+  id_lte: ID
+  id_gt: ID
+  id_gte: ID
+  id_contains: ID
+  id_not_contains: ID
+  id_starts_with: ID
+  id_not_starts_with: ID
+  id_ends_with: ID
+  id_not_ends_with: ID
+  description: String
+  description_not: String
+  description_in: [String!]
+  description_not_in: [String!]
+  description_lt: String
+  description_lte: String
+  description_gt: String
+  description_gte: String
+  description_contains: String
+  description_not_contains: String
+  description_starts_with: String
+  description_not_starts_with: String
+  description_ends_with: String
+  description_not_ends_with: String
+  AND: [TodoScalarWhereInput!]
+  OR: [TodoScalarWhereInput!]
+  NOT: [TodoScalarWhereInput!]
+}
+
+type TodoSubscriptionPayload {
+  mutation: MutationType!
+  node: Todo
+  updatedFields: [String!]
+  previousValues: TodoPreviousValues
+}
+
+input TodoSubscriptionWhereInput {
+  mutation_in: [MutationType!]
+  updatedFields_contains: String
+  updatedFields_contains_every: [String!]
+  updatedFields_contains_some: [String!]
+  node: TodoWhereInput
+  AND: [TodoSubscriptionWhereInput!]
+  OR: [TodoSubscriptionWhereInput!]
+  NOT: [TodoSubscriptionWhereInput!]
+}
+
+input TodoUpdateInput {
+  description: String
+  partOf: TodoListUpdateOneWithoutTodosInput
+}
+
+input TodoUpdateManyDataInput {
+  description: String
+}
+
+input TodoUpdateManyMutationInput {
+  description: String
+}
+
+input TodoUpdateManyWithoutPartOfInput {
+  create: [TodoCreateWithoutPartOfInput!]
+  delete: [TodoWhereUniqueInput!]
+  connect: [TodoWhereUniqueInput!]
+  set: [TodoWhereUniqueInput!]
+  disconnect: [TodoWhereUniqueInput!]
+  update: [TodoUpdateWithWhereUniqueWithoutPartOfInput!]
+  upsert: [TodoUpsertWithWhereUniqueWithoutPartOfInput!]
+  deleteMany: [TodoScalarWhereInput!]
+  updateMany: [TodoUpdateManyWithWhereNestedInput!]
+}
+
+input TodoUpdateManyWithWhereNestedInput {
+  where: TodoScalarWhereInput!
+  data: TodoUpdateManyDataInput!
+}
+
+input TodoUpdateWithoutPartOfDataInput {
+  description: String
+}
+
+input TodoUpdateWithWhereUniqueWithoutPartOfInput {
+  where: TodoWhereUniqueInput!
+  data: TodoUpdateWithoutPartOfDataInput!
+}
+
+input TodoUpsertWithWhereUniqueWithoutPartOfInput {
+  where: TodoWhereUniqueInput!
+  update: TodoUpdateWithoutPartOfDataInput!
+  create: TodoCreateWithoutPartOfInput!
+}
+
+input TodoWhereInput {
+  id: ID
+  id_not: ID
+  id_in: [ID!]
+  id_not_in: [ID!]
+  id_lt: ID
+  id_lte: ID
+  id_gt: ID
+  id_gte: ID
+  id_contains: ID
+  id_not_contains: ID
+  id_starts_with: ID
+  id_not_starts_with: ID
+  id_ends_with: ID
+  id_not_ends_with: ID
+  description: String
+  description_not: String
+  description_in: [String!]
+  description_not_in: [String!]
+  description_lt: String
+  description_lte: String
+  description_gt: String
+  description_gte: String
+  description_contains: String
+  description_not_contains: String
+  description_starts_with: String
+  description_not_starts_with: String
+  description_ends_with: String
+  description_not_ends_with: String
+  partOf: TodoListWhereInput
   AND: [TodoWhereInput!]
   OR: [TodoWhereInput!]
   NOT: [TodoWhereInput!]
@@ -192,6 +557,8 @@ type User {
   id: ID!
   createdAt: DateTime!
   name: String!
+  todoListsOwned(where: TodoListWhereInput, orderBy: TodoListOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [TodoList!]
+  todoListsAssigned(where: TodoListWhereInput, orderBy: TodoListOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [TodoList!]
 }
 
 type UserConnection {
@@ -202,11 +569,28 @@ type UserConnection {
 
 input UserCreateInput {
   name: String!
+  todoListsOwned: TodoListCreateManyWithoutOwnedByInput
+  todoListsAssigned: TodoListCreateManyWithoutAssignedToInput
 }
 
-input UserCreateManyInput {
-  create: [UserCreateInput!]
+input UserCreateManyWithoutTodoListsAssignedInput {
+  create: [UserCreateWithoutTodoListsAssignedInput!]
   connect: [UserWhereUniqueInput!]
+}
+
+input UserCreateManyWithoutTodoListsOwnedInput {
+  create: [UserCreateWithoutTodoListsOwnedInput!]
+  connect: [UserWhereUniqueInput!]
+}
+
+input UserCreateWithoutTodoListsAssignedInput {
+  name: String!
+  todoListsOwned: TodoListCreateManyWithoutOwnedByInput
+}
+
+input UserCreateWithoutTodoListsOwnedInput {
+  name: String!
+  todoListsAssigned: TodoListCreateManyWithoutAssignedToInput
 }
 
 type UserEdge {
@@ -291,32 +675,42 @@ input UserSubscriptionWhereInput {
   NOT: [UserSubscriptionWhereInput!]
 }
 
-input UserUpdateDataInput {
-  name: String
-}
-
 input UserUpdateInput {
   name: String
+  todoListsOwned: TodoListUpdateManyWithoutOwnedByInput
+  todoListsAssigned: TodoListUpdateManyWithoutAssignedToInput
 }
 
 input UserUpdateManyDataInput {
   name: String
 }
 
-input UserUpdateManyInput {
-  create: [UserCreateInput!]
-  update: [UserUpdateWithWhereUniqueNestedInput!]
-  upsert: [UserUpsertWithWhereUniqueNestedInput!]
+input UserUpdateManyMutationInput {
+  name: String
+}
+
+input UserUpdateManyWithoutTodoListsAssignedInput {
+  create: [UserCreateWithoutTodoListsAssignedInput!]
   delete: [UserWhereUniqueInput!]
   connect: [UserWhereUniqueInput!]
   set: [UserWhereUniqueInput!]
   disconnect: [UserWhereUniqueInput!]
+  update: [UserUpdateWithWhereUniqueWithoutTodoListsAssignedInput!]
+  upsert: [UserUpsertWithWhereUniqueWithoutTodoListsAssignedInput!]
   deleteMany: [UserScalarWhereInput!]
   updateMany: [UserUpdateManyWithWhereNestedInput!]
 }
 
-input UserUpdateManyMutationInput {
-  name: String
+input UserUpdateManyWithoutTodoListsOwnedInput {
+  create: [UserCreateWithoutTodoListsOwnedInput!]
+  delete: [UserWhereUniqueInput!]
+  connect: [UserWhereUniqueInput!]
+  set: [UserWhereUniqueInput!]
+  disconnect: [UserWhereUniqueInput!]
+  update: [UserUpdateWithWhereUniqueWithoutTodoListsOwnedInput!]
+  upsert: [UserUpsertWithWhereUniqueWithoutTodoListsOwnedInput!]
+  deleteMany: [UserScalarWhereInput!]
+  updateMany: [UserUpdateManyWithWhereNestedInput!]
 }
 
 input UserUpdateManyWithWhereNestedInput {
@@ -324,15 +718,36 @@ input UserUpdateManyWithWhereNestedInput {
   data: UserUpdateManyDataInput!
 }
 
-input UserUpdateWithWhereUniqueNestedInput {
-  where: UserWhereUniqueInput!
-  data: UserUpdateDataInput!
+input UserUpdateWithoutTodoListsAssignedDataInput {
+  name: String
+  todoListsOwned: TodoListUpdateManyWithoutOwnedByInput
 }
 
-input UserUpsertWithWhereUniqueNestedInput {
+input UserUpdateWithoutTodoListsOwnedDataInput {
+  name: String
+  todoListsAssigned: TodoListUpdateManyWithoutAssignedToInput
+}
+
+input UserUpdateWithWhereUniqueWithoutTodoListsAssignedInput {
   where: UserWhereUniqueInput!
-  update: UserUpdateDataInput!
-  create: UserCreateInput!
+  data: UserUpdateWithoutTodoListsAssignedDataInput!
+}
+
+input UserUpdateWithWhereUniqueWithoutTodoListsOwnedInput {
+  where: UserWhereUniqueInput!
+  data: UserUpdateWithoutTodoListsOwnedDataInput!
+}
+
+input UserUpsertWithWhereUniqueWithoutTodoListsAssignedInput {
+  where: UserWhereUniqueInput!
+  update: UserUpdateWithoutTodoListsAssignedDataInput!
+  create: UserCreateWithoutTodoListsAssignedInput!
+}
+
+input UserUpsertWithWhereUniqueWithoutTodoListsOwnedInput {
+  where: UserWhereUniqueInput!
+  update: UserUpdateWithoutTodoListsOwnedDataInput!
+  create: UserCreateWithoutTodoListsOwnedInput!
 }
 
 input UserWhereInput {
@@ -372,6 +787,12 @@ input UserWhereInput {
   name_not_starts_with: String
   name_ends_with: String
   name_not_ends_with: String
+  todoListsOwned_every: TodoListWhereInput
+  todoListsOwned_some: TodoListWhereInput
+  todoListsOwned_none: TodoListWhereInput
+  todoListsAssigned_every: TodoListWhereInput
+  todoListsAssigned_some: TodoListWhereInput
+  todoListsAssigned_none: TodoListWhereInput
   AND: [UserWhereInput!]
   OR: [UserWhereInput!]
   NOT: [UserWhereInput!]

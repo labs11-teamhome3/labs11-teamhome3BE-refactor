@@ -2,7 +2,6 @@
 #endpoint: ''
 # endpoint: https://manaje-be-8de8017c47.herokuapp.com/labs11-teamhome3BE-refactor/dev
 endpoint: http://localhost:4466
-
 # Points to the file that contains your datamodel
 datamodel: datamodel.prisma
 
@@ -10,3 +9,8 @@ datamodel: datamodel.prisma
 generate:
   - generator: javascript-client
     output: ./generated/prisma-client
+
+
+hooks:
+  post-deploy:
+    - prisma generate
