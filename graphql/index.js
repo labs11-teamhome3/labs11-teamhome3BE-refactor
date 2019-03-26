@@ -4,7 +4,7 @@ const { prisma } = require('../prisma/generated/prisma-client');
 
 const resolvers = {
     Query: {
-        info: () => `This is the API of a Hackernews clone`,
+        info: () => `This is the API of Manaje`,
         todoes: (root, args, context, info) => {
             return context.prisma.todoes()
         },
@@ -18,6 +18,12 @@ const resolvers = {
                 description: args.description,
                 ownedBy: args.input.owners,
                 assignedTo: args.input.assignedTo
+            })
+        },
+        createTeam: (root, args, context) => {
+            return context.prisma.createTeam({
+                name: args.name,
+                creator: args.input.creator
             })
         },
     },

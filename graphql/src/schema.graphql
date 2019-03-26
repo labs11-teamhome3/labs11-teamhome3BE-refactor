@@ -8,6 +8,7 @@ type Query {
     todoes: [Todo]
     todo(id: ID!): Todo!
     users: [User]
+    teams: [Team]
 }
 
 type TodoList {
@@ -31,4 +32,10 @@ type User {
     name: String!
     todoListsOwned: [TodoList]
     todoListsAssigned: [TodoList]
+}
+
+type Team {
+    id: ID!
+    name: String!
+    creator: [User!]!
 }

@@ -22,3 +22,9 @@ type User {
     todoListsOwned: [TodoList] @relation(name: "OwnedBy")
     todoListsAssigned: [TodoList] @relation(name: "AssignedTo")
 }
+
+type Team {
+    id: ID! @unique
+    name: String!
+    creator: [User!]! @relation(name: "Creator")
+}
