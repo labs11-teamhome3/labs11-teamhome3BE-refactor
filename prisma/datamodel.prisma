@@ -22,12 +22,3 @@ type User {
     todoListsOwned: [TodoList] @relation(name: "OwnedBy")
     todoListsAssigned: [TodoList] @relation(name: "AssignedTo")
 }
-<<<<<<< HEAD
-
-type Team {
-    id: ID! @unique
-    name: String!
-    creator: [User!]! @relation(name: "Creator")
-}
-=======
->>>>>>> 43f7a636652006fc6cbbaa3dcea5b08f3b75faae
