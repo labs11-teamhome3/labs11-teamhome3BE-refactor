@@ -1,4 +1,5 @@
-const { GraphQLServer } = require('graphql-yoga')
+const { GraphQLServer } = require('graphql-yoga');
+const { prisma } = require('./generated/prisma-client');
 
 const typeDefs = `
 type Query {
@@ -12,7 +13,7 @@ type Mutation {
 }
 
 type User {
-    id: ID!
+    id: ID! 
     firstName: String!
     lastName: String!
     email: String!
@@ -30,5 +31,8 @@ const resolvers = {
 const server = new GraphQLServer({
     typeDefs,
     resolvers,
+    context: {prisma}
 })
 server.start(() => console.log(`Server is running on http://localhost:4000`));
+
+// endpoint: https://manaje-be-8de8017c47.herokuapp.com/labs11-teamhome3BE-refactor/dev
