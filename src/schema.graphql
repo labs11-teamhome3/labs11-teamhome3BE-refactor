@@ -1,17 +1,39 @@
+type Mutation {
+    createUser(name: String!): User!
+    createTodo(description: String!, partOf: TodoList!, completed: Boolean): Todo
+}
+
+input todoListInput {
+    owners: String!
+    assignedTo: String!
+}
+
 type Query {
     info: String!
-    users: [User!]!
-  }
+    todoes: [Todo]
+    todo(id: ID!): Todo!
+    users: [User]
+}
 
-type Mutation {
-    createUser(firstName: String!, lastName: String!, email:String!): User!
+type TodoList {
+    id: ID!
+    description: String!
+    ownedBy: [User!]!
+    assignedTo: [User!]!
+    todos: [Todo!]!
+    completed: Boolean
+}
+
+type Todo {
+    id: ID!
+    description: String!
+    partOf: TodoList
+    completed: Boolean
 }
 
 type User {
-    id: ID! 
-    firstName: String!
-    lastName: String!
-    email: String!
-    avatar: String
-    phoneNumber: String
+    id: ID!
+    name: String!
+    todoListsOwned: [TodoList]
+    todoListsAssigned: [TodoList]
 }
