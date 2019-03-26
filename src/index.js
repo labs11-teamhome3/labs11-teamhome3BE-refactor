@@ -1,14 +1,8 @@
 //require('dotenv').config();
-const { GraphQLServer } = require('graphql-yoga');
-const { prisma } = require('../prisma/generated/prisma-client');
-const resolvers = require('./resolvers/index');
+const createServer = require('./createServer');
 const configMiddleware = require('./config/express-middleware');
 
-const server = new GraphQLServer({
-    typeDefs: './src/schema.graphql',
-    resolvers,
-    context: {prisma}
-})
+const server = createServer();
 
 configMiddleware(server); 
 
