@@ -6,6 +6,7 @@
   "author": "Daniel Weinman <namniewd@gmail.com>",
   "license": "MIT",
   "dependencies": {
+    "dotenv": "^7.0.0",
     "graphql-yoga": "^1.17.4",
     "prisma-client-lib": "^1.29.1"
   },
@@ -13,6 +14,6 @@
     "nodemon": "^1.18.10"
   },
   "scripts": {
-    "server": "nodemon src/index.js"
+    "server": "nodemon graphql/index.js"
   }
 }

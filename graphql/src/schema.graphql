@@ -1,17 +1,36 @@
+input todoListInput {
+    owners: String!
+    assignedTo: String!
+}
+
 type Query {
     info: String!
-    feed: [Link!]!
-    link(id: ID!): Link
+    todoes: [Todo]
+    todo(id: ID!): Todo!
+    users: [User]
 }
 
 type Mutation {
-    post(url: String!, description: String!): Link!
-    updateLink(id: ID!, url: String, description: String): Link
-    deleteLink(id: ID!): String!
+    createTodo(input: todoInput, description: String!): Todo!
 }
 
-type Link {
+type TodoList {
     id: ID!
     description: String!
-    url: String!
+    ownedBy: [User!]!
+    assignedTo: [User!]!
+    todos: [Todo!]!
+}
+
+type Todo {
+    id: ID!
+    description: String!
+    partOf: TodoList
+}
+
+type User {
+    id: ID!
+    name: String!
+    todoListsOwned: [TodoList]
+    todoListsAssigned: [TodoList]
 }
