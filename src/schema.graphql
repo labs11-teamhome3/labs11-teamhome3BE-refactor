@@ -1,0 +1,41 @@
+type Mutation {
+    createUser(name: String!): User!
+    createTodo(description: String!, partOf: String!, completed: Boolean): Todo
+    deleteTodo(id: String!): String!
+    updateTodo(id: String!, description: String!, completed: Boolean): Todo
+    createTodoList(description: String!, ownedBy: String!, assignedTo: String!, completed: Boolean): TodoList
+    deleteTodoList(id: String!): String!
+    updateTodoList(id: String!, description: String!, completed: Boolean): TodoList
+}
+
+type Query {
+    info: String!
+    todoes: [Todo]
+    todo(id: ID!): Todo!
+    users: [User]
+    todoLists: [TodoList]
+    todoList(id: ID!): TodoList!
+}
+
+type TodoList {
+    id: ID!
+    description: String!
+    ownedBy: [User!]! 
+    assignedTo: [User!]! 
+    todos: [Todo!]!
+    completed: Boolean
+}
+
+type Todo {
+    id: ID!
+    description: String!
+    partOf: TodoList
+    completed: Boolean
+}
+
+type User {
+    id: ID!
+    name: String!
+    todoListsOwned: [TodoList] 
+    todoListsAssigned: [TodoList] 
+}

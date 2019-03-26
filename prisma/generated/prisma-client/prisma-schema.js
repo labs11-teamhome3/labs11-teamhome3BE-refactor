@@ -540,7 +540,6 @@ input TodoListWhereInput {
 
 input TodoListWhereUniqueInput {
   id: ID
-  description: String
 }
 
 enum TodoOrderByInput {
