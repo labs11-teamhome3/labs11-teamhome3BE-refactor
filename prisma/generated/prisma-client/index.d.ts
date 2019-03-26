@@ -369,7 +369,6 @@ export interface TodoWhereInput {
 
 export type TodoListWhereUniqueInput = AtLeastOne<{
   id: ID_Input;
-  description?: String;
 }>;
 
 export type UserWhereUniqueInput = AtLeastOne<{

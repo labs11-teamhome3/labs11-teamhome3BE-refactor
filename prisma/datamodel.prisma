@@ -1,7 +1,7 @@
 type TodoList {
     id: ID! @unique
     createdAt: DateTime!
-    description: String! @unique
+    description: String!
     ownedBy: [User!]! @relation(name: "OwnedBy")
     assignedTo: [User!]! @relation(name: "AssignedTo")
     todos: [Todo!]!
