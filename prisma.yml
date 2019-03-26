@@ -1,0 +1,20 @@
+# The HTTP endpoint for your Prisma API
+#endpoint: ''
+
+# ****** Use this endpoint for production *****
+# endpoint: https://manaje-be-8de8017c47.herokuapp.com/labs11-teamhome3BE-refactor/dev
+
+# ****** Use this endpoint for development ******
+endpoint: http://localhost:4466
+
+# Points to the file that contains your datamodel
+datamodel: prisma.graphql
+
+# generate:
+#   - generator: javascript-client
+#     output: ./generated/prisma-client
+
+hooks:
+  post-deploy:
+    - prisma generate
+    - graphql get-schema -p prisma
