@@ -1,3 +1,8 @@
+type Mutation {
+    createUser(name: String!): User!
+    createTodo(description: String!, partOf: TodoList!, completed: Boolean): Todo
+}
+
 input todoListInput {
     owners: String!
     assignedTo: String!
