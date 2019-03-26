@@ -1,6 +1,5 @@
-const Query = {
-    info: () => `This is the API Team Home 3`,
-    
-};
+const info = () => `This is the API of Manaje`
 
-module.exports = Query;
+module.exports = {
+    info,
+}
