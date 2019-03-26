@@ -1,5 +1,5 @@
 async function createUser(parent, args, ctx, info) {
-    console.log(args);
+    return ctx.prisma.createUser(args);
 }
 
 module.exports = {
