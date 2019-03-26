@@ -14,7 +14,9 @@ export type AtLeastOne<T, U = { [K in keyof T]: Pick<T, K> }> = Partial<T> &
   U[keyof U];
 
 export interface Exists {
-  link: (where?: LinkWhereInput) => Promise<boolean>;
+  todo: (where?: TodoWhereInput) => Promise<boolean>;
+  todoList: (where?: TodoListWhereInput) => Promise<boolean>;
+  user: (where?: UserWhereInput) => Promise<boolean>;
 }
 
 export interface Node {}
@@ -36,51 +38,129 @@ export interface Prisma {
    * Queries
    */
 
-  link: (where: LinkWhereUniqueInput) => LinkPromise;
-  links: (
+  todo: (where: TodoWhereUniqueInput) => TodoPromise;
+  todoes: (
     args?: {
-      where?: LinkWhereInput;
-      orderBy?: LinkOrderByInput;
+      where?: TodoWhereInput;
+      orderBy?: TodoOrderByInput;
       skip?: Int;
       after?: String;
       before?: String;
       first?: Int;
       last?: Int;
     }
-  ) => FragmentableArray<Link>;
-  linksConnection: (
+  ) => FragmentableArray<Todo>;
+  todoesConnection: (
     args?: {
-      where?: LinkWhereInput;
-      orderBy?: LinkOrderByInput;
+      where?: TodoWhereInput;
+      orderBy?: TodoOrderByInput;
       skip?: Int;
       after?: String;
       before?: String;
       first?: Int;
       last?: Int;
     }
-  ) => LinkConnectionPromise;
+  ) => TodoConnectionPromise;
+  todoList: (where: TodoListWhereUniqueInput) => TodoListPromise;
+  todoLists: (
+    args?: {
+      where?: TodoListWhereInput;
+      orderBy?: TodoListOrderByInput;
+      skip?: Int;
+      after?: String;
+      before?: String;
+      first?: Int;
+      last?: Int;
+    }
+  ) => FragmentableArray<TodoList>;
+  todoListsConnection: (
+    args?: {
+      where?: TodoListWhereInput;
+      orderBy?: TodoListOrderByInput;
+      skip?: Int;
+      after?: String;
+      before?: String;
+      first?: Int;
+      last?: Int;
+    }
+  ) => TodoListConnectionPromise;
+  user: (where: UserWhereUniqueInput) => UserPromise;
+  users: (
+    args?: {
+      where?: UserWhereInput;
+      orderBy?: UserOrderByInput;
+      skip?: Int;
+      after?: String;
+      before?: String;
+      first?: Int;
+      last?: Int;
+    }
+  ) => FragmentableArray<User>;
+  usersConnection: (
+    args?: {
+      where?: UserWhereInput;
+      orderBy?: UserOrderByInput;
+      skip?: Int;
+      after?: String;
+      before?: String;
+      first?: Int;
+      last?: Int;
+    }
+  ) => UserConnectionPromise;
   node: (args: { id: ID_Output }) => Node;
 
   /**
    * Mutations
    */
 
-  createLink: (data: LinkCreateInput) => LinkPromise;
-  updateLink: (
-    args: { data: LinkUpdateInput; where: LinkWhereUniqueInput }
-  ) => LinkPromise;
-  updateManyLinks: (
-    args: { data: LinkUpdateManyMutationInput; where?: LinkWhereInput }
+  createTodo: (data: TodoCreateInput) => TodoPromise;
+  updateTodo: (
+    args: { data: TodoUpdateInput; where: TodoWhereUniqueInput }
+  ) => TodoPromise;
+  updateManyTodoes: (
+    args: { data: TodoUpdateManyMutationInput; where?: TodoWhereInput }
   ) => BatchPayloadPromise;
-  upsertLink: (
+  upsertTodo: (
     args: {
-      where: LinkWhereUniqueInput;
-      create: LinkCreateInput;
-      update: LinkUpdateInput;
+      where: TodoWhereUniqueInput;
+      create: TodoCreateInput;
+      update: TodoUpdateInput;
     }
-  ) => LinkPromise;
-  deleteLink: (where: LinkWhereUniqueInput) => LinkPromise;
-  deleteManyLinks: (where?: LinkWhereInput) => BatchPayloadPromise;
+  ) => TodoPromise;
+  deleteTodo: (where: TodoWhereUniqueInput) => TodoPromise;
+  deleteManyTodoes: (where?: TodoWhereInput) => BatchPayloadPromise;
+  createTodoList: (data: TodoListCreateInput) => TodoListPromise;
+  updateTodoList: (
+    args: { data: TodoListUpdateInput; where: TodoListWhereUniqueInput }
+  ) => TodoListPromise;
+  updateManyTodoLists: (
+    args: { data: TodoListUpdateManyMutationInput; where?: TodoListWhereInput }
+  ) => BatchPayloadPromise;
+  upsertTodoList: (
+    args: {
+      where: TodoListWhereUniqueInput;
+      create: TodoListCreateInput;
+      update: TodoListUpdateInput;
+    }
+  ) => TodoListPromise;
+  deleteTodoList: (where: TodoListWhereUniqueInput) => TodoListPromise;
+  deleteManyTodoLists: (where?: TodoListWhereInput) => BatchPayloadPromise;
+  createUser: (data: UserCreateInput) => UserPromise;
+  updateUser: (
+    args: { data: UserUpdateInput; where: UserWhereUniqueInput }
+  ) => UserPromise;
+  updateManyUsers: (
+    args: { data: UserUpdateManyMutationInput; where?: UserWhereInput }
+  ) => BatchPayloadPromise;
+  upsertUser: (
+    args: {
+      where: UserWhereUniqueInput;
+      create: UserCreateInput;
+      update: UserUpdateInput;
+    }
+  ) => UserPromise;
+  deleteUser: (where: UserWhereUniqueInput) => UserPromise;
+  deleteManyUsers: (where?: UserWhereInput) => BatchPayloadPromise;
 
   /**
    * Subscriptions
@@ -90,9 +170,15 @@ export interface Prisma {
 }
 
 export interface Subscription {
-  link: (
-    where?: LinkSubscriptionWhereInput
-  ) => LinkSubscriptionPayloadSubscription;
+  todo: (
+    where?: TodoSubscriptionWhereInput
+  ) => TodoSubscriptionPayloadSubscription;
+  todoList: (
+    where?: TodoListSubscriptionWhereInput
+  ) => TodoListSubscriptionPayloadSubscription;
+  user: (
+    where?: UserSubscriptionWhereInput
+  ) => UserSubscriptionPayloadSubscription;
 }
 
 export interface ClientConstructor<T> {
@@ -103,25 +189,95 @@ export interface ClientConstructor<T> {
  * Types
  */
 
-export type LinkOrderByInput =
+export type UserOrderByInput =
+  | "id_ASC"
+  | "id_DESC"
+  | "createdAt_ASC"
+  | "createdAt_DESC"
+  | "name_ASC"
+  | "name_DESC"
+  | "updatedAt_ASC"
+  | "updatedAt_DESC";
+
+export type TodoListOrderByInput =
   | "id_ASC"
   | "id_DESC"
   | "createdAt_ASC"
   | "createdAt_DESC"
   | "description_ASC"
   | "description_DESC"
-  | "url_ASC"
-  | "url_DESC"
+  | "completed_ASC"
+  | "completed_DESC"
+  | "updatedAt_ASC"
+  | "updatedAt_DESC";
+
+export type TodoOrderByInput =
+  | "id_ASC"
+  | "id_DESC"
+  | "description_ASC"
+  | "description_DESC"
+  | "completed_ASC"
+  | "completed_DESC"
+  | "createdAt_ASC"
+  | "createdAt_DESC"
   | "updatedAt_ASC"
   | "updatedAt_DESC";
 
 export type MutationType = "CREATED" | "UPDATED" | "DELETED";
 
-export type LinkWhereUniqueInput = AtLeastOne<{
+export type TodoWhereUniqueInput = AtLeastOne<{
   id: ID_Input;
 }>;
 
-export interface LinkWhereInput {
+export interface UserWhereInput {
+  id?: ID_Input;
+  id_not?: ID_Input;
+  id_in?: ID_Input[] | ID_Input;
+  id_not_in?: ID_Input[] | ID_Input;
+  id_lt?: ID_Input;
+  id_lte?: ID_Input;
+  id_gt?: ID_Input;
+  id_gte?: ID_Input;
+  id_contains?: ID_Input;
+  id_not_contains?: ID_Input;
+  id_starts_with?: ID_Input;
+  id_not_starts_with?: ID_Input;
+  id_ends_with?: ID_Input;
+  id_not_ends_with?: ID_Input;
+  createdAt?: DateTimeInput;
+  createdAt_not?: DateTimeInput;
+  createdAt_in?: DateTimeInput[] | DateTimeInput;
+  createdAt_not_in?: DateTimeInput[] | DateTimeInput;
+  createdAt_lt?: DateTimeInput;
+  createdAt_lte?: DateTimeInput;
+  createdAt_gt?: DateTimeInput;
+  createdAt_gte?: DateTimeInput;
+  name?: String;
+  name_not?: String;
+  name_in?: String[] | String;
+  name_not_in?: String[] | String;
+  name_lt?: String;
+  name_lte?: String;
+  name_gt?: String;
+  name_gte?: String;
+  name_contains?: String;
+  name_not_contains?: String;
+  name_starts_with?: String;
+  name_not_starts_with?: String;
+  name_ends_with?: String;
+  name_not_ends_with?: String;
+  todoListsOwned_every?: TodoListWhereInput;
+  todoListsOwned_some?: TodoListWhereInput;
+  todoListsOwned_none?: TodoListWhereInput;
+  todoListsAssigned_every?: TodoListWhereInput;
+  todoListsAssigned_some?: TodoListWhereInput;
+  todoListsAssigned_none?: TodoListWhereInput;
+  AND?: UserWhereInput[] | UserWhereInput;
+  OR?: UserWhereInput[] | UserWhereInput;
+  NOT?: UserWhereInput[] | UserWhereInput;
+}
+
+export interface TodoListWhereInput {
   id?: ID_Input;
   id_not?: ID_Input;
   id_in?: ID_Input[] | ID_Input;
@@ -158,97 +314,781 @@ export interface LinkWhereInput {
   description_not_starts_with?: String;
   description_ends_with?: String;
   description_not_ends_with?: String;
-  url?: String;
-  url_not?: String;
-  url_in?: String[] | String;
-  url_not_in?: String[] | String;
-  url_lt?: String;
-  url_lte?: String;
-  url_gt?: String;
-  url_gte?: String;
-  url_contains?: String;
-  url_not_contains?: String;
-  url_starts_with?: String;
-  url_not_starts_with?: String;
-  url_ends_with?: String;
-  url_not_ends_with?: String;
-  AND?: LinkWhereInput[] | LinkWhereInput;
-  OR?: LinkWhereInput[] | LinkWhereInput;
-  NOT?: LinkWhereInput[] | LinkWhereInput;
+  ownedBy_every?: UserWhereInput;
+  ownedBy_some?: UserWhereInput;
+  ownedBy_none?: UserWhereInput;
+  assignedTo_every?: UserWhereInput;
+  assignedTo_some?: UserWhereInput;
+  assignedTo_none?: UserWhereInput;
+  todos_every?: TodoWhereInput;
+  todos_some?: TodoWhereInput;
+  todos_none?: TodoWhereInput;
+  completed?: Boolean;
+  completed_not?: Boolean;
+  AND?: TodoListWhereInput[] | TodoListWhereInput;
+  OR?: TodoListWhereInput[] | TodoListWhereInput;
+  NOT?: TodoListWhereInput[] | TodoListWhereInput;
 }
 
-export interface LinkCreateInput {
+export interface TodoWhereInput {
+  id?: ID_Input;
+  id_not?: ID_Input;
+  id_in?: ID_Input[] | ID_Input;
+  id_not_in?: ID_Input[] | ID_Input;
+  id_lt?: ID_Input;
+  id_lte?: ID_Input;
+  id_gt?: ID_Input;
+  id_gte?: ID_Input;
+  id_contains?: ID_Input;
+  id_not_contains?: ID_Input;
+  id_starts_with?: ID_Input;
+  id_not_starts_with?: ID_Input;
+  id_ends_with?: ID_Input;
+  id_not_ends_with?: ID_Input;
+  description?: String;
+  description_not?: String;
+  description_in?: String[] | String;
+  description_not_in?: String[] | String;
+  description_lt?: String;
+  description_lte?: String;
+  description_gt?: String;
+  description_gte?: String;
+  description_contains?: String;
+  description_not_contains?: String;
+  description_starts_with?: String;
+  description_not_starts_with?: String;
+  description_ends_with?: String;
+  description_not_ends_with?: String;
+  partOf?: TodoListWhereInput;
+  completed?: Boolean;
+  completed_not?: Boolean;
+  AND?: TodoWhereInput[] | TodoWhereInput;
+  OR?: TodoWhereInput[] | TodoWhereInput;
+  NOT?: TodoWhereInput[] | TodoWhereInput;
+}
+
+export type TodoListWhereUniqueInput = AtLeastOne<{
+  id: ID_Input;
+  description?: String;
+}>;
+
+export type UserWhereUniqueInput = AtLeastOne<{
+  id: ID_Input;
+}>;
+
+export interface TodoCreateInput {
   description: String;
-  url: String;
+  partOf?: TodoListCreateOneWithoutTodosInput;
+  completed?: Boolean;
 }
 
-export interface LinkUpdateInput {
+export interface TodoListCreateOneWithoutTodosInput {
+  create?: TodoListCreateWithoutTodosInput;
+  connect?: TodoListWhereUniqueInput;
+}
+
+export interface TodoListCreateWithoutTodosInput {
+  description: String;
+  ownedBy?: UserCreateManyWithoutTodoListsOwnedInput;
+  assignedTo?: UserCreateManyWithoutTodoListsAssignedInput;
+  completed?: Boolean;
+}
+
+export interface UserCreateManyWithoutTodoListsOwnedInput {
+  create?:
+    | UserCreateWithoutTodoListsOwnedInput[]
+    | UserCreateWithoutTodoListsOwnedInput;
+  connect?: UserWhereUniqueInput[] | UserWhereUniqueInput;
+}
+
+export interface UserCreateWithoutTodoListsOwnedInput {
+  name: String;
+  todoListsAssigned?: TodoListCreateManyWithoutAssignedToInput;
+}
+
+export interface TodoListCreateManyWithoutAssignedToInput {
+  create?:
+    | TodoListCreateWithoutAssignedToInput[]
+    | TodoListCreateWithoutAssignedToInput;
+  connect?: TodoListWhereUniqueInput[] | TodoListWhereUniqueInput;
+}
+
+export interface TodoListCreateWithoutAssignedToInput {
+  description: String;
+  ownedBy?: UserCreateManyWithoutTodoListsOwnedInput;
+  todos?: TodoCreateManyWithoutPartOfInput;
+  completed?: Boolean;
+}
+
+export interface TodoCreateManyWithoutPartOfInput {
+  create?: TodoCreateWithoutPartOfInput[] | TodoCreateWithoutPartOfInput;
+  connect?: TodoWhereUniqueInput[] | TodoWhereUniqueInput;
+}
+
+export interface TodoCreateWithoutPartOfInput {
+  description: String;
+  completed?: Boolean;
+}
+
+export interface UserCreateManyWithoutTodoListsAssignedInput {
+  create?:
+    | UserCreateWithoutTodoListsAssignedInput[]
+    | UserCreateWithoutTodoListsAssignedInput;
+  connect?: UserWhereUniqueInput[] | UserWhereUniqueInput;
+}
+
+export interface UserCreateWithoutTodoListsAssignedInput {
+  name: String;
+  todoListsOwned?: TodoListCreateManyWithoutOwnedByInput;
+}
+
+export interface TodoListCreateManyWithoutOwnedByInput {
+  create?:
+    | TodoListCreateWithoutOwnedByInput[]
+    | TodoListCreateWithoutOwnedByInput;
+  connect?: TodoListWhereUniqueInput[] | TodoListWhereUniqueInput;
+}
+
+export interface TodoListCreateWithoutOwnedByInput {
+  description: String;
+  assignedTo?: UserCreateManyWithoutTodoListsAssignedInput;
+  todos?: TodoCreateManyWithoutPartOfInput;
+  completed?: Boolean;
+}
+
+export interface TodoUpdateInput {
   description?: String;
-  url?: String;
+  partOf?: TodoListUpdateOneWithoutTodosInput;
+  completed?: Boolean;
 }
 
-export interface LinkUpdateManyMutationInput {
+export interface TodoListUpdateOneWithoutTodosInput {
+  create?: TodoListCreateWithoutTodosInput;
+  update?: TodoListUpdateWithoutTodosDataInput;
+  upsert?: TodoListUpsertWithoutTodosInput;
+  delete?: Boolean;
+  disconnect?: Boolean;
+  connect?: TodoListWhereUniqueInput;
+}
+
+export interface TodoListUpdateWithoutTodosDataInput {
   description?: String;
-  url?: String;
+  ownedBy?: UserUpdateManyWithoutTodoListsOwnedInput;
+  assignedTo?: UserUpdateManyWithoutTodoListsAssignedInput;
+  completed?: Boolean;
 }
 
-export interface LinkSubscriptionWhereInput {
+export interface UserUpdateManyWithoutTodoListsOwnedInput {
+  create?:
+    | UserCreateWithoutTodoListsOwnedInput[]
+    | UserCreateWithoutTodoListsOwnedInput;
+  delete?: UserWhereUniqueInput[] | UserWhereUniqueInput;
+  connect?: UserWhereUniqueInput[] | UserWhereUniqueInput;
+  set?: UserWhereUniqueInput[] | UserWhereUniqueInput;
+  disconnect?: UserWhereUniqueInput[] | UserWhereUniqueInput;
+  update?:
+    | UserUpdateWithWhereUniqueWithoutTodoListsOwnedInput[]
+    | UserUpdateWithWhereUniqueWithoutTodoListsOwnedInput;
+  upsert?:
+    | UserUpsertWithWhereUniqueWithoutTodoListsOwnedInput[]
+    | UserUpsertWithWhereUniqueWithoutTodoListsOwnedInput;
+  deleteMany?: UserScalarWhereInput[] | UserScalarWhereInput;
+  updateMany?:
+    | UserUpdateManyWithWhereNestedInput[]
+    | UserUpdateManyWithWhereNestedInput;
+}
+
+export interface UserUpdateWithWhereUniqueWithoutTodoListsOwnedInput {
+  where: UserWhereUniqueInput;
+  data: UserUpdateWithoutTodoListsOwnedDataInput;
+}
+
+export interface UserUpdateWithoutTodoListsOwnedDataInput {
+  name?: String;
+  todoListsAssigned?: TodoListUpdateManyWithoutAssignedToInput;
+}
+
+export interface TodoListUpdateManyWithoutAssignedToInput {
+  create?:
+    | TodoListCreateWithoutAssignedToInput[]
+    | TodoListCreateWithoutAssignedToInput;
+  delete?: TodoListWhereUniqueInput[] | TodoListWhereUniqueInput;
+  connect?: TodoListWhereUniqueInput[] | TodoListWhereUniqueInput;
+  set?: TodoListWhereUniqueInput[] | TodoListWhereUniqueInput;
+  disconnect?: TodoListWhereUniqueInput[] | TodoListWhereUniqueInput;
+  update?:
+    | TodoListUpdateWithWhereUniqueWithoutAssignedToInput[]
+    | TodoListUpdateWithWhereUniqueWithoutAssignedToInput;
+  upsert?:
+    | TodoListUpsertWithWhereUniqueWithoutAssignedToInput[]
+    | TodoListUpsertWithWhereUniqueWithoutAssignedToInput;
+  deleteMany?: TodoListScalarWhereInput[] | TodoListScalarWhereInput;
+  updateMany?:
+    | TodoListUpdateManyWithWhereNestedInput[]
+    | TodoListUpdateManyWithWhereNestedInput;
+}
+
+export interface TodoListUpdateWithWhereUniqueWithoutAssignedToInput {
+  where: TodoListWhereUniqueInput;
+  data: TodoListUpdateWithoutAssignedToDataInput;
+}
+
+export interface TodoListUpdateWithoutAssignedToDataInput {
+  description?: String;
+  ownedBy?: UserUpdateManyWithoutTodoListsOwnedInput;
+  todos?: TodoUpdateManyWithoutPartOfInput;
+  completed?: Boolean;
+}
+
+export interface TodoUpdateManyWithoutPartOfInput {
+  create?: TodoCreateWithoutPartOfInput[] | TodoCreateWithoutPartOfInput;
+  delete?: TodoWhereUniqueInput[] | TodoWhereUniqueInput;
+  connect?: TodoWhereUniqueInput[] | TodoWhereUniqueInput;
+  set?: TodoWhereUniqueInput[] | TodoWhereUniqueInput;
+  disconnect?: TodoWhereUniqueInput[] | TodoWhereUniqueInput;
+  update?:
+    | TodoUpdateWithWhereUniqueWithoutPartOfInput[]
+    | TodoUpdateWithWhereUniqueWithoutPartOfInput;
+  upsert?:
+    | TodoUpsertWithWhereUniqueWithoutPartOfInput[]
+    | TodoUpsertWithWhereUniqueWithoutPartOfInput;
+  deleteMany?: TodoScalarWhereInput[] | TodoScalarWhereInput;
+  updateMany?:
+    | TodoUpdateManyWithWhereNestedInput[]
+    | TodoUpdateManyWithWhereNestedInput;
+}
+
+export interface TodoUpdateWithWhereUniqueWithoutPartOfInput {
+  where: TodoWhereUniqueInput;
+  data: TodoUpdateWithoutPartOfDataInput;
+}
+
+export interface TodoUpdateWithoutPartOfDataInput {
+  description?: String;
+  completed?: Boolean;
+}
+
+export interface TodoUpsertWithWhereUniqueWithoutPartOfInput {
+  where: TodoWhereUniqueInput;
+  update: TodoUpdateWithoutPartOfDataInput;
+  create: TodoCreateWithoutPartOfInput;
+}
+
+export interface TodoScalarWhereInput {
+  id?: ID_Input;
+  id_not?: ID_Input;
+  id_in?: ID_Input[] | ID_Input;
+  id_not_in?: ID_Input[] | ID_Input;
+  id_lt?: ID_Input;
+  id_lte?: ID_Input;
+  id_gt?: ID_Input;
+  id_gte?: ID_Input;
+  id_contains?: ID_Input;
+  id_not_contains?: ID_Input;
+  id_starts_with?: ID_Input;
+  id_not_starts_with?: ID_Input;
+  id_ends_with?: ID_Input;
+  id_not_ends_with?: ID_Input;
+  description?: String;
+  description_not?: String;
+  description_in?: String[] | String;
+  description_not_in?: String[] | String;
+  description_lt?: String;
+  description_lte?: String;
+  description_gt?: String;
+  description_gte?: String;
+  description_contains?: String;
+  description_not_contains?: String;
+  description_starts_with?: String;
+  description_not_starts_with?: String;
+  description_ends_with?: String;
+  description_not_ends_with?: String;
+  completed?: Boolean;
+  completed_not?: Boolean;
+  AND?: TodoScalarWhereInput[] | TodoScalarWhereInput;
+  OR?: TodoScalarWhereInput[] | TodoScalarWhereInput;
+  NOT?: TodoScalarWhereInput[] | TodoScalarWhereInput;
+}
+
+export interface TodoUpdateManyWithWhereNestedInput {
+  where: TodoScalarWhereInput;
+  data: TodoUpdateManyDataInput;
+}
+
+export interface TodoUpdateManyDataInput {
+  description?: String;
+  completed?: Boolean;
+}
+
+export interface TodoListUpsertWithWhereUniqueWithoutAssignedToInput {
+  where: TodoListWhereUniqueInput;
+  update: TodoListUpdateWithoutAssignedToDataInput;
+  create: TodoListCreateWithoutAssignedToInput;
+}
+
+export interface TodoListScalarWhereInput {
+  id?: ID_Input;
+  id_not?: ID_Input;
+  id_in?: ID_Input[] | ID_Input;
+  id_not_in?: ID_Input[] | ID_Input;
+  id_lt?: ID_Input;
+  id_lte?: ID_Input;
+  id_gt?: ID_Input;
+  id_gte?: ID_Input;
+  id_contains?: ID_Input;
+  id_not_contains?: ID_Input;
+  id_starts_with?: ID_Input;
+  id_not_starts_with?: ID_Input;
+  id_ends_with?: ID_Input;
+  id_not_ends_with?: ID_Input;
+  createdAt?: DateTimeInput;
+  createdAt_not?: DateTimeInput;
+  createdAt_in?: DateTimeInput[] | DateTimeInput;
+  createdAt_not_in?: DateTimeInput[] | DateTimeInput;
+  createdAt_lt?: DateTimeInput;
+  createdAt_lte?: DateTimeInput;
+  createdAt_gt?: DateTimeInput;
+  createdAt_gte?: DateTimeInput;
+  description?: String;
+  description_not?: String;
+  description_in?: String[] | String;
+  description_not_in?: String[] | String;
+  description_lt?: String;
+  description_lte?: String;
+  description_gt?: String;
+  description_gte?: String;
+  description_contains?: String;
+  description_not_contains?: String;
+  description_starts_with?: String;
+  description_not_starts_with?: String;
+  description_ends_with?: String;
+  description_not_ends_with?: String;
+  completed?: Boolean;
+  completed_not?: Boolean;
+  AND?: TodoListScalarWhereInput[] | TodoListScalarWhereInput;
+  OR?: TodoListScalarWhereInput[] | TodoListScalarWhereInput;
+  NOT?: TodoListScalarWhereInput[] | TodoListScalarWhereInput;
+}
+
+export interface TodoListUpdateManyWithWhereNestedInput {
+  where: TodoListScalarWhereInput;
+  data: TodoListUpdateManyDataInput;
+}
+
+export interface TodoListUpdateManyDataInput {
+  description?: String;
+  completed?: Boolean;
+}
+
+export interface UserUpsertWithWhereUniqueWithoutTodoListsOwnedInput {
+  where: UserWhereUniqueInput;
+  update: UserUpdateWithoutTodoListsOwnedDataInput;
+  create: UserCreateWithoutTodoListsOwnedInput;
+}
+
+export interface UserScalarWhereInput {
+  id?: ID_Input;
+  id_not?: ID_Input;
+  id_in?: ID_Input[] | ID_Input;
+  id_not_in?: ID_Input[] | ID_Input;
+  id_lt?: ID_Input;
+  id_lte?: ID_Input;
+  id_gt?: ID_Input;
+  id_gte?: ID_Input;
+  id_contains?: ID_Input;
+  id_not_contains?: ID_Input;
+  id_starts_with?: ID_Input;
+  id_not_starts_with?: ID_Input;
+  id_ends_with?: ID_Input;
+  id_not_ends_with?: ID_Input;
+  createdAt?: DateTimeInput;
+  createdAt_not?: DateTimeInput;
+  createdAt_in?: DateTimeInput[] | DateTimeInput;
+  createdAt_not_in?: DateTimeInput[] | DateTimeInput;
+  createdAt_lt?: DateTimeInput;
+  createdAt_lte?: DateTimeInput;
+  createdAt_gt?: DateTimeInput;
+  createdAt_gte?: DateTimeInput;
+  name?: String;
+  name_not?: String;
+  name_in?: String[] | String;
+  name_not_in?: String[] | String;
+  name_lt?: String;
+  name_lte?: String;
+  name_gt?: String;
+  name_gte?: String;
+  name_contains?: String;
+  name_not_contains?: String;
+  name_starts_with?: String;
+  name_not_starts_with?: String;
+  name_ends_with?: String;
+  name_not_ends_with?: String;
+  AND?: UserScalarWhereInput[] | UserScalarWhereInput;
+  OR?: UserScalarWhereInput[] | UserScalarWhereInput;
+  NOT?: UserScalarWhereInput[] | UserScalarWhereInput;
+}
+
+export interface UserUpdateManyWithWhereNestedInput {
+  where: UserScalarWhereInput;
+  data: UserUpdateManyDataInput;
+}
+
+export interface UserUpdateManyDataInput {
+  name?: String;
+}
+
+export interface UserUpdateManyWithoutTodoListsAssignedInput {
+  create?:
+    | UserCreateWithoutTodoListsAssignedInput[]
+    | UserCreateWithoutTodoListsAssignedInput;
+  delete?: UserWhereUniqueInput[] | UserWhereUniqueInput;
+  connect?: UserWhereUniqueInput[] | UserWhereUniqueInput;
+  set?: UserWhereUniqueInput[] | UserWhereUniqueInput;
+  disconnect?: UserWhereUniqueInput[] | UserWhereUniqueInput;
+  update?:
+    | UserUpdateWithWhereUniqueWithoutTodoListsAssignedInput[]
+    | UserUpdateWithWhereUniqueWithoutTodoListsAssignedInput;
+  upsert?:
+    | UserUpsertWithWhereUniqueWithoutTodoListsAssignedInput[]
+    | UserUpsertWithWhereUniqueWithoutTodoListsAssignedInput;
+  deleteMany?: UserScalarWhereInput[] | UserScalarWhereInput;
+  updateMany?:
+    | UserUpdateManyWithWhereNestedInput[]
+    | UserUpdateManyWithWhereNestedInput;
+}
+
+export interface UserUpdateWithWhereUniqueWithoutTodoListsAssignedInput {
+  where: UserWhereUniqueInput;
+  data: UserUpdateWithoutTodoListsAssignedDataInput;
+}
+
+export interface UserUpdateWithoutTodoListsAssignedDataInput {
+  name?: String;
+  todoListsOwned?: TodoListUpdateManyWithoutOwnedByInput;
+}
+
+export interface TodoListUpdateManyWithoutOwnedByInput {
+  create?:
+    | TodoListCreateWithoutOwnedByInput[]
+    | TodoListCreateWithoutOwnedByInput;
+  delete?: TodoListWhereUniqueInput[] | TodoListWhereUniqueInput;
+  connect?: TodoListWhereUniqueInput[] | TodoListWhereUniqueInput;
+  set?: TodoListWhereUniqueInput[] | TodoListWhereUniqueInput;
+  disconnect?: TodoListWhereUniqueInput[] | TodoListWhereUniqueInput;
+  update?:
+    | TodoListUpdateWithWhereUniqueWithoutOwnedByInput[]
+    | TodoListUpdateWithWhereUniqueWithoutOwnedByInput;
+  upsert?:
+    | TodoListUpsertWithWhereUniqueWithoutOwnedByInput[]
+    | TodoListUpsertWithWhereUniqueWithoutOwnedByInput;
+  deleteMany?: TodoListScalarWhereInput[] | TodoListScalarWhereInput;
+  updateMany?:
+    | TodoListUpdateManyWithWhereNestedInput[]
+    | TodoListUpdateManyWithWhereNestedInput;
+}
+
+export interface TodoListUpdateWithWhereUniqueWithoutOwnedByInput {
+  where: TodoListWhereUniqueInput;
+  data: TodoListUpdateWithoutOwnedByDataInput;
+}
+
+export interface TodoListUpdateWithoutOwnedByDataInput {
+  description?: String;
+  assignedTo?: UserUpdateManyWithoutTodoListsAssignedInput;
+  todos?: TodoUpdateManyWithoutPartOfInput;
+  completed?: Boolean;
+}
+
+export interface TodoListUpsertWithWhereUniqueWithoutOwnedByInput {
+  where: TodoListWhereUniqueInput;
+  update: TodoListUpdateWithoutOwnedByDataInput;
+  create: TodoListCreateWithoutOwnedByInput;
+}
+
+export interface UserUpsertWithWhereUniqueWithoutTodoListsAssignedInput {
+  where: UserWhereUniqueInput;
+  update: UserUpdateWithoutTodoListsAssignedDataInput;
+  create: UserCreateWithoutTodoListsAssignedInput;
+}
+
+export interface TodoListUpsertWithoutTodosInput {
+  update: TodoListUpdateWithoutTodosDataInput;
+  create: TodoListCreateWithoutTodosInput;
+}
+
+export interface TodoUpdateManyMutationInput {
+  description?: String;
+  completed?: Boolean;
+}
+
+export interface TodoListCreateInput {
+  description: String;
+  ownedBy?: UserCreateManyWithoutTodoListsOwnedInput;
+  assignedTo?: UserCreateManyWithoutTodoListsAssignedInput;
+  todos?: TodoCreateManyWithoutPartOfInput;
+  completed?: Boolean;
+}
+
+export interface TodoListUpdateInput {
+  description?: String;
+  ownedBy?: UserUpdateManyWithoutTodoListsOwnedInput;
+  assignedTo?: UserUpdateManyWithoutTodoListsAssignedInput;
+  todos?: TodoUpdateManyWithoutPartOfInput;
+  completed?: Boolean;
+}
+
+export interface TodoListUpdateManyMutationInput {
+  description?: String;
+  completed?: Boolean;
+}
+
+export interface UserCreateInput {
+  name: String;
+  todoListsOwned?: TodoListCreateManyWithoutOwnedByInput;
+  todoListsAssigned?: TodoListCreateManyWithoutAssignedToInput;
+}
+
+export interface UserUpdateInput {
+  name?: String;
+  todoListsOwned?: TodoListUpdateManyWithoutOwnedByInput;
+  todoListsAssigned?: TodoListUpdateManyWithoutAssignedToInput;
+}
+
+export interface UserUpdateManyMutationInput {
+  name?: String;
+}
+
+export interface TodoSubscriptionWhereInput {
   mutation_in?: MutationType[] | MutationType;
   updatedFields_contains?: String;
   updatedFields_contains_every?: String[] | String;
   updatedFields_contains_some?: String[] | String;
-  node?: LinkWhereInput;
-  AND?: LinkSubscriptionWhereInput[] | LinkSubscriptionWhereInput;
-  OR?: LinkSubscriptionWhereInput[] | LinkSubscriptionWhereInput;
-  NOT?: LinkSubscriptionWhereInput[] | LinkSubscriptionWhereInput;
+  node?: TodoWhereInput;
+  AND?: TodoSubscriptionWhereInput[] | TodoSubscriptionWhereInput;
+  OR?: TodoSubscriptionWhereInput[] | TodoSubscriptionWhereInput;
+  NOT?: TodoSubscriptionWhereInput[] | TodoSubscriptionWhereInput;
+}
+
+export interface TodoListSubscriptionWhereInput {
+  mutation_in?: MutationType[] | MutationType;
+  updatedFields_contains?: String;
+  updatedFields_contains_every?: String[] | String;
+  updatedFields_contains_some?: String[] | String;
+  node?: TodoListWhereInput;
+  AND?: TodoListSubscriptionWhereInput[] | TodoListSubscriptionWhereInput;
+  OR?: TodoListSubscriptionWhereInput[] | TodoListSubscriptionWhereInput;
+  NOT?: TodoListSubscriptionWhereInput[] | TodoListSubscriptionWhereInput;
+}
+
+export interface UserSubscriptionWhereInput {
+  mutation_in?: MutationType[] | MutationType;
+  updatedFields_contains?: String;
+  updatedFields_contains_every?: String[] | String;
+  updatedFields_contains_some?: String[] | String;
+  node?: UserWhereInput;
+  AND?: UserSubscriptionWhereInput[] | UserSubscriptionWhereInput;
+  OR?: UserSubscriptionWhereInput[] | UserSubscriptionWhereInput;
+  NOT?: UserSubscriptionWhereInput[] | UserSubscriptionWhereInput;
 }
 
 export interface NodeNode {
   id: ID_Output;
 }
 
-export interface Link {
+export interface Todo {
+  id: ID_Output;
+  description: String;
+  completed?: Boolean;
+}
+
+export interface TodoPromise extends Promise<Todo>, Fragmentable {
+  id: () => Promise<ID_Output>;
+  description: () => Promise<String>;
+  partOf: <T = TodoListPromise>() => T;
+  completed: () => Promise<Boolean>;
+}
+
+export interface TodoSubscription
+  extends Promise<AsyncIterator<Todo>>,
+    Fragmentable {
+  id: () => Promise<AsyncIterator<ID_Output>>;
+  description: () => Promise<AsyncIterator<String>>;
+  partOf: <T = TodoListSubscription>() => T;
+  completed: () => Promise<AsyncIterator<Boolean>>;
+}
+
+export interface TodoList {
   id: ID_Output;
   createdAt: DateTimeOutput;
   description: String;
-  url: String;
+  completed?: Boolean;
 }
 
-export interface LinkPromise extends Promise<Link>, Fragmentable {
+export interface TodoListPromise extends Promise<TodoList>, Fragmentable {
   id: () => Promise<ID_Output>;
   createdAt: () => Promise<DateTimeOutput>;
   description: () => Promise<String>;
-  url: () => Promise<String>;
+  ownedBy: <T = FragmentableArray<User>>(
+    args?: {
+      where?: UserWhereInput;
+      orderBy?: UserOrderByInput;
+      skip?: Int;
+      after?: String;
+      before?: String;
+      first?: Int;
+      last?: Int;
+    }
+  ) => T;
+  assignedTo: <T = FragmentableArray<User>>(
+    args?: {
+      where?: UserWhereInput;
+      orderBy?: UserOrderByInput;
+      skip?: Int;
+      after?: String;
+      before?: String;
+      first?: Int;
+      last?: Int;
+    }
+  ) => T;
+  todos: <T = FragmentableArray<Todo>>(
+    args?: {
+      where?: TodoWhereInput;
+      orderBy?: TodoOrderByInput;
+      skip?: Int;
+      after?: String;
+      before?: String;
+      first?: Int;
+      last?: Int;
+    }
+  ) => T;
+  completed: () => Promise<Boolean>;
 }
 
-export interface LinkSubscription
-  extends Promise<AsyncIterator<Link>>,
+export interface TodoListSubscription
+  extends Promise<AsyncIterator<TodoList>>,
     Fragmentable {
   id: () => Promise<AsyncIterator<ID_Output>>;
   createdAt: () => Promise<AsyncIterator<DateTimeOutput>>;
   description: () => Promise<AsyncIterator<String>>;
-  url: () => Promise<AsyncIterator<String>>;
+  ownedBy: <T = Promise<AsyncIterator<UserSubscription>>>(
+    args?: {
+      where?: UserWhereInput;
+      orderBy?: UserOrderByInput;
+      skip?: Int;
+      after?: String;
+      before?: String;
+      first?: Int;
+      last?: Int;
+    }
+  ) => T;
+  assignedTo: <T = Promise<AsyncIterator<UserSubscription>>>(
+    args?: {
+      where?: UserWhereInput;
+      orderBy?: UserOrderByInput;
+      skip?: Int;
+      after?: String;
+      before?: String;
+      first?: Int;
+      last?: Int;
+    }
+  ) => T;
+  todos: <T = Promise<AsyncIterator<TodoSubscription>>>(
+    args?: {
+      where?: TodoWhereInput;
+      orderBy?: TodoOrderByInput;
+      skip?: Int;
+      after?: String;
+      before?: String;
+      first?: Int;
+      last?: Int;
+    }
+  ) => T;
+  completed: () => Promise<AsyncIterator<Boolean>>;
 }
 
-export interface LinkConnection {
+export interface User {
+  id: ID_Output;
+  createdAt: DateTimeOutput;
+  name: String;
+}
+
+export interface UserPromise extends Promise<User>, Fragmentable {
+  id: () => Promise<ID_Output>;
+  createdAt: () => Promise<DateTimeOutput>;
+  name: () => Promise<String>;
+  todoListsOwned: <T = FragmentableArray<TodoList>>(
+    args?: {
+      where?: TodoListWhereInput;
+      orderBy?: TodoListOrderByInput;
+      skip?: Int;
+      after?: String;
+      before?: String;
+      first?: Int;
+      last?: Int;
+    }
+  ) => T;
+  todoListsAssigned: <T = FragmentableArray<TodoList>>(
+    args?: {
+      where?: TodoListWhereInput;
+      orderBy?: TodoListOrderByInput;
+      skip?: Int;
+      after?: String;
+      before?: String;
+      first?: Int;
+      last?: Int;
+    }
+  ) => T;
+}
+
+export interface UserSubscription
+  extends Promise<AsyncIterator<User>>,
+    Fragmentable {
+  id: () => Promise<AsyncIterator<ID_Output>>;
+  createdAt: () => Promise<AsyncIterator<DateTimeOutput>>;
+  name: () => Promise<AsyncIterator<String>>;
+  todoListsOwned: <T = Promise<AsyncIterator<TodoListSubscription>>>(
+    args?: {
+      where?: TodoListWhereInput;
+      orderBy?: TodoListOrderByInput;
+      skip?: Int;
+      after?: String;
+      before?: String;
+      first?: Int;
+      last?: Int;
+    }
+  ) => T;
+  todoListsAssigned: <T = Promise<AsyncIterator<TodoListSubscription>>>(
+    args?: {
+      where?: TodoListWhereInput;
+      orderBy?: TodoListOrderByInput;
+      skip?: Int;
+      after?: String;
+      before?: String;
+      first?: Int;
+      last?: Int;
+    }
+  ) => T;
+}
+
+export interface TodoConnection {
   pageInfo: PageInfo;
-  edges: LinkEdge[];
+  edges: TodoEdge[];
 }
 
-export interface LinkConnectionPromise
-  extends Promise<LinkConnection>,
+export interface TodoConnectionPromise
+  extends Promise<TodoConnection>,
     Fragmentable {
   pageInfo: <T = PageInfoPromise>() => T;
-  edges: <T = FragmentableArray<LinkEdge>>() => T;
-  aggregate: <T = AggregateLinkPromise>() => T;
+  edges: <T = FragmentableArray<TodoEdge>>() => T;
+  aggregate: <T = AggregateTodoPromise>() => T;
 }
 
-export interface LinkConnectionSubscription
-  extends Promise<AsyncIterator<LinkConnection>>,
+export interface TodoConnectionSubscription
+  extends Promise<AsyncIterator<TodoConnection>>,
     Fragmentable {
   pageInfo: <T = PageInfoSubscription>() => T;
-  edges: <T = Promise<AsyncIterator<LinkEdgeSubscription>>>() => T;
-  aggregate: <T = AggregateLinkSubscription>() => T;
+  edges: <T = Promise<AsyncIterator<TodoEdgeSubscription>>>() => T;
+  aggregate: <T = AggregateTodoSubscription>() => T;
 }
 
 export interface PageInfo {
@@ -274,35 +1114,145 @@ export interface PageInfoSubscription
   endCursor: () => Promise<AsyncIterator<String>>;
 }
 
-export interface LinkEdge {
-  node: Link;
+export interface TodoEdge {
+  node: Todo;
   cursor: String;
 }
 
-export interface LinkEdgePromise extends Promise<LinkEdge>, Fragmentable {
-  node: <T = LinkPromise>() => T;
+export interface TodoEdgePromise extends Promise<TodoEdge>, Fragmentable {
+  node: <T = TodoPromise>() => T;
   cursor: () => Promise<String>;
 }
 
-export interface LinkEdgeSubscription
-  extends Promise<AsyncIterator<LinkEdge>>,
+export interface TodoEdgeSubscription
+  extends Promise<AsyncIterator<TodoEdge>>,
     Fragmentable {
-  node: <T = LinkSubscription>() => T;
+  node: <T = TodoSubscription>() => T;
   cursor: () => Promise<AsyncIterator<String>>;
 }
 
-export interface AggregateLink {
+export interface AggregateTodo {
   count: Int;
 }
 
-export interface AggregateLinkPromise
-  extends Promise<AggregateLink>,
+export interface AggregateTodoPromise
+  extends Promise<AggregateTodo>,
     Fragmentable {
   count: () => Promise<Int>;
 }
 
-export interface AggregateLinkSubscription
-  extends Promise<AsyncIterator<AggregateLink>>,
+export interface AggregateTodoSubscription
+  extends Promise<AsyncIterator<AggregateTodo>>,
+    Fragmentable {
+  count: () => Promise<AsyncIterator<Int>>;
+}
+
+export interface TodoListConnection {
+  pageInfo: PageInfo;
+  edges: TodoListEdge[];
+}
+
+export interface TodoListConnectionPromise
+  extends Promise<TodoListConnection>,
+    Fragmentable {
+  pageInfo: <T = PageInfoPromise>() => T;
+  edges: <T = FragmentableArray<TodoListEdge>>() => T;
+  aggregate: <T = AggregateTodoListPromise>() => T;
+}
+
+export interface TodoListConnectionSubscription
+  extends Promise<AsyncIterator<TodoListConnection>>,
+    Fragmentable {
+  pageInfo: <T = PageInfoSubscription>() => T;
+  edges: <T = Promise<AsyncIterator<TodoListEdgeSubscription>>>() => T;
+  aggregate: <T = AggregateTodoListSubscription>() => T;
+}
+
+export interface TodoListEdge {
+  node: TodoList;
+  cursor: String;
+}
+
+export interface TodoListEdgePromise
+  extends Promise<TodoListEdge>,
+    Fragmentable {
+  node: <T = TodoListPromise>() => T;
+  cursor: () => Promise<String>;
+}
+
+export interface TodoListEdgeSubscription
+  extends Promise<AsyncIterator<TodoListEdge>>,
+    Fragmentable {
+  node: <T = TodoListSubscription>() => T;
+  cursor: () => Promise<AsyncIterator<String>>;
+}
+
+export interface AggregateTodoList {
+  count: Int;
+}
+
+export interface AggregateTodoListPromise
+  extends Promise<AggregateTodoList>,
+    Fragmentable {
+  count: () => Promise<Int>;
+}
+
+export interface AggregateTodoListSubscription
+  extends Promise<AsyncIterator<AggregateTodoList>>,
+    Fragmentable {
+  count: () => Promise<AsyncIterator<Int>>;
+}
+
+export interface UserConnection {
+  pageInfo: PageInfo;
+  edges: UserEdge[];
+}
+
+export interface UserConnectionPromise
+  extends Promise<UserConnection>,
+    Fragmentable {
+  pageInfo: <T = PageInfoPromise>() => T;
+  edges: <T = FragmentableArray<UserEdge>>() => T;
+  aggregate: <T = AggregateUserPromise>() => T;
+}
+
+export interface UserConnectionSubscription
+  extends Promise<AsyncIterator<UserConnection>>,
+    Fragmentable {
+  pageInfo: <T = PageInfoSubscription>() => T;
+  edges: <T = Promise<AsyncIterator<UserEdgeSubscription>>>() => T;
+  aggregate: <T = AggregateUserSubscription>() => T;
+}
+
+export interface UserEdge {
+  node: User;
+  cursor: String;
+}
+
+export interface UserEdgePromise extends Promise<UserEdge>, Fragmentable {
+  node: <T = UserPromise>() => T;
+  cursor: () => Promise<String>;
+}
+
+export interface UserEdgeSubscription
+  extends Promise<AsyncIterator<UserEdge>>,
+    Fragmentable {
+  node: <T = UserSubscription>() => T;
+  cursor: () => Promise<AsyncIterator<String>>;
+}
+
+export interface AggregateUser {
+  count: Int;
+}
+
+export interface AggregateUserPromise
+  extends Promise<AggregateUser>,
+    Fragmentable {
+  count: () => Promise<Int>;
+}
+
+export interface AggregateUserSubscription
+  extends Promise<AsyncIterator<AggregateUser>>,
     Fragmentable {
   count: () => Promise<AsyncIterator<Int>>;
 }
@@ -323,54 +1273,148 @@ export interface BatchPayloadSubscription
   count: () => Promise<AsyncIterator<Long>>;
 }
 
-export interface LinkSubscriptionPayload {
+export interface TodoSubscriptionPayload {
   mutation: MutationType;
-  node: Link;
+  node: Todo;
   updatedFields: String[];
-  previousValues: LinkPreviousValues;
+  previousValues: TodoPreviousValues;
 }
 
-export interface LinkSubscriptionPayloadPromise
-  extends Promise<LinkSubscriptionPayload>,
+export interface TodoSubscriptionPayloadPromise
+  extends Promise<TodoSubscriptionPayload>,
     Fragmentable {
   mutation: () => Promise<MutationType>;
-  node: <T = LinkPromise>() => T;
+  node: <T = TodoPromise>() => T;
   updatedFields: () => Promise<String[]>;
-  previousValues: <T = LinkPreviousValuesPromise>() => T;
+  previousValues: <T = TodoPreviousValuesPromise>() => T;
 }
 
-export interface LinkSubscriptionPayloadSubscription
-  extends Promise<AsyncIterator<LinkSubscriptionPayload>>,
+export interface TodoSubscriptionPayloadSubscription
+  extends Promise<AsyncIterator<TodoSubscriptionPayload>>,
     Fragmentable {
   mutation: () => Promise<AsyncIterator<MutationType>>;
-  node: <T = LinkSubscription>() => T;
+  node: <T = TodoSubscription>() => T;
   updatedFields: () => Promise<AsyncIterator<String[]>>;
-  previousValues: <T = LinkPreviousValuesSubscription>() => T;
+  previousValues: <T = TodoPreviousValuesSubscription>() => T;
 }
 
-export interface LinkPreviousValues {
+export interface TodoPreviousValues {
+  id: ID_Output;
+  description: String;
+  completed?: Boolean;
+}
+
+export interface TodoPreviousValuesPromise
+  extends Promise<TodoPreviousValues>,
+    Fragmentable {
+  id: () => Promise<ID_Output>;
+  description: () => Promise<String>;
+  completed: () => Promise<Boolean>;
+}
+
+export interface TodoPreviousValuesSubscription
+  extends Promise<AsyncIterator<TodoPreviousValues>>,
+    Fragmentable {
+  id: () => Promise<AsyncIterator<ID_Output>>;
+  description: () => Promise<AsyncIterator<String>>;
+  completed: () => Promise<AsyncIterator<Boolean>>;
+}
+
+export interface TodoListSubscriptionPayload {
+  mutation: MutationType;
+  node: TodoList;
+  updatedFields: String[];
+  previousValues: TodoListPreviousValues;
+}
+
+export interface TodoListSubscriptionPayloadPromise
+  extends Promise<TodoListSubscriptionPayload>,
+    Fragmentable {
+  mutation: () => Promise<MutationType>;
+  node: <T = TodoListPromise>() => T;
+  updatedFields: () => Promise<String[]>;
+  previousValues: <T = TodoListPreviousValuesPromise>() => T;
+}
+
+export interface TodoListSubscriptionPayloadSubscription
+  extends Promise<AsyncIterator<TodoListSubscriptionPayload>>,
+    Fragmentable {
+  mutation: () => Promise<AsyncIterator<MutationType>>;
+  node: <T = TodoListSubscription>() => T;
+  updatedFields: () => Promise<AsyncIterator<String[]>>;
+  previousValues: <T = TodoListPreviousValuesSubscription>() => T;
+}
+
+export interface TodoListPreviousValues {
   id: ID_Output;
   createdAt: DateTimeOutput;
   description: String;
-  url: String;
+  completed?: Boolean;
 }
 
-export interface LinkPreviousValuesPromise
-  extends Promise<LinkPreviousValues>,
+export interface TodoListPreviousValuesPromise
+  extends Promise<TodoListPreviousValues>,
     Fragmentable {
   id: () => Promise<ID_Output>;
   createdAt: () => Promise<DateTimeOutput>;
   description: () => Promise<String>;
-  url: () => Promise<String>;
+  completed: () => Promise<Boolean>;
 }
 
-export interface LinkPreviousValuesSubscription
-  extends Promise<AsyncIterator<LinkPreviousValues>>,
+export interface TodoListPreviousValuesSubscription
+  extends Promise<AsyncIterator<TodoListPreviousValues>>,
     Fragmentable {
   id: () => Promise<AsyncIterator<ID_Output>>;
   createdAt: () => Promise<AsyncIterator<DateTimeOutput>>;
   description: () => Promise<AsyncIterator<String>>;
-  url: () => Promise<AsyncIterator<String>>;
+  completed: () => Promise<AsyncIterator<Boolean>>;
+}
+
+export interface UserSubscriptionPayload {
+  mutation: MutationType;
+  node: User;
+  updatedFields: String[];
+  previousValues: UserPreviousValues;
+}
+
+export interface UserSubscriptionPayloadPromise
+  extends Promise<UserSubscriptionPayload>,
+    Fragmentable {
+  mutation: () => Promise<MutationType>;
+  node: <T = UserPromise>() => T;
+  updatedFields: () => Promise<String[]>;
+  previousValues: <T = UserPreviousValuesPromise>() => T;
+}
+
+export interface UserSubscriptionPayloadSubscription
+  extends Promise<AsyncIterator<UserSubscriptionPayload>>,
+    Fragmentable {
+  mutation: () => Promise<AsyncIterator<MutationType>>;
+  node: <T = UserSubscription>() => T;
+  updatedFields: () => Promise<AsyncIterator<String[]>>;
+  previousValues: <T = UserPreviousValuesSubscription>() => T;
+}
+
+export interface UserPreviousValues {
+  id: ID_Output;
+  createdAt: DateTimeOutput;
+  name: String;
+}
+
+export interface UserPreviousValuesPromise
+  extends Promise<UserPreviousValues>,
+    Fragmentable {
+  id: () => Promise<ID_Output>;
+  createdAt: () => Promise<DateTimeOutput>;
+  name: () => Promise<String>;
+}
+
+export interface UserPreviousValuesSubscription
+  extends Promise<AsyncIterator<UserPreviousValues>>,
+    Fragmentable {
+  id: () => Promise<AsyncIterator<ID_Output>>;
+  createdAt: () => Promise<AsyncIterator<DateTimeOutput>>;
+  name: () => Promise<AsyncIterator<String>>;
 }
 
 /*
@@ -378,6 +1422,11 @@ The `ID` scalar type represents a unique identifier, often used to refetch an ob
 */
 export type ID_Input = string | number;
 export type ID_Output = string;
+
+/*
+The `String` scalar type represents textual data, represented as UTF-8 character sequences. The String type is most often used by GraphQL to represent free-form human-readable text.
+*/
+export type String = string;
 
 /*
 DateTime scalar input type, allowing Date
@@ -390,19 +1439,14 @@ DateTime scalar output type, which is always a string
 export type DateTimeOutput = string;
 
 /*
-The `String` scalar type represents textual data, represented as UTF-8 character sequences. The String type is most often used by GraphQL to represent free-form human-readable text.
+The `Boolean` scalar type represents `true` or `false`.
 */
-export type String = string;
+export type Boolean = boolean;
 
 /*
 The `Int` scalar type represents non-fractional signed whole numeric values. Int can represent values between -(2^31) and 2^31 - 1. 
 */
 export type Int = number;
-
-/*
-The `Boolean` scalar type represents `true` or `false`.
-*/
-export type Boolean = boolean;
 
 export type Long = string;
 
@@ -412,7 +1456,15 @@ export type Long = string;
 
 export const models: Model[] = [
   {
-    name: "Link",
+    name: "TodoList",
+    embedded: false
+  },
+  {
+    name: "Todo",
+    embedded: false
+  },
+  {
+    name: "User",
     embedded: false
   }
 ];

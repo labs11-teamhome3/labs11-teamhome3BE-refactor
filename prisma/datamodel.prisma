@@ -1,6 +1,24 @@
-type Link {
-  id: ID! @unique
-  createdAt: DateTime!
-  description: String!
-  url: String!
+type TodoList {
+    id: ID! @unique
+    createdAt: DateTime!
+    description: String! @unique
+    ownedBy: [User!]! @relation(name: "OwnedBy")
+    assignedTo: [User!]! @relation(name: "AssignedTo")
+    todos: [Todo!]!
+    completed: Boolean
+}
+
+type Todo {
+    id: ID! @unique
+    description: String!
+    partOf: TodoList
+    completed: Boolean
+}
+
+type User {
+    id: ID! @unique
+    createdAt: DateTime!
+    name: String!
+    todoListsOwned: [TodoList] @relation(name: "OwnedBy")
+    todoListsAssigned: [TodoList] @relation(name: "AssignedTo")
 }

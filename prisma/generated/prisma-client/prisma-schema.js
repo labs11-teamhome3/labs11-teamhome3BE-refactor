@@ -3,7 +3,15 @@ module.exports = {
   // Please don't change this file manually but run `prisma generate` to update it.
   // For more information, please read the docs: https://www.prisma.io/docs/prisma-client/
 
-/* GraphQL */ `type AggregateLink {
+/* GraphQL */ `type AggregateTodo {
+  count: Int!
+}
+
+type AggregateTodoList {
+  count: Int!
+}
+
+type AggregateUser {
   count: Int!
 }
 
@@ -13,78 +21,185 @@ type BatchPayload {
 
 scalar DateTime
 
-type Link {
+scalar Long
+
+type Mutation {
+  createTodo(data: TodoCreateInput!): Todo!
+  updateTodo(data: TodoUpdateInput!, where: TodoWhereUniqueInput!): Todo
+  updateManyTodoes(data: TodoUpdateManyMutationInput!, where: TodoWhereInput): BatchPayload!
+  upsertTodo(where: TodoWhereUniqueInput!, create: TodoCreateInput!, update: TodoUpdateInput!): Todo!
+  deleteTodo(where: TodoWhereUniqueInput!): Todo
+  deleteManyTodoes(where: TodoWhereInput): BatchPayload!
+  createTodoList(data: TodoListCreateInput!): TodoList!
+  updateTodoList(data: TodoListUpdateInput!, where: TodoListWhereUniqueInput!): TodoList
+  updateManyTodoLists(data: TodoListUpdateManyMutationInput!, where: TodoListWhereInput): BatchPayload!
+  upsertTodoList(where: TodoListWhereUniqueInput!, create: TodoListCreateInput!, update: TodoListUpdateInput!): TodoList!
+  deleteTodoList(where: TodoListWhereUniqueInput!): TodoList
+  deleteManyTodoLists(where: TodoListWhereInput): BatchPayload!
+  createUser(data: UserCreateInput!): User!
+  updateUser(data: UserUpdateInput!, where: UserWhereUniqueInput!): User
+  updateManyUsers(data: UserUpdateManyMutationInput!, where: UserWhereInput): BatchPayload!
+  upsertUser(where: UserWhereUniqueInput!, create: UserCreateInput!, update: UserUpdateInput!): User!
+  deleteUser(where: UserWhereUniqueInput!): User
+  deleteManyUsers(where: UserWhereInput): BatchPayload!
+}
+
+enum MutationType {
+  CREATED
+  UPDATED
+  DELETED
+}
+
+interface Node {
   id: ID!
-  createdAt: DateTime!
-  description: String!
-  url: String!
 }
 
-type LinkConnection {
+type PageInfo {
+  hasNextPage: Boolean!
+  hasPreviousPage: Boolean!
+  startCursor: String
+  endCursor: String
+}
+
+type Query {
+  todo(where: TodoWhereUniqueInput!): Todo
+  todoes(where: TodoWhereInput, orderBy: TodoOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Todo]!
+  todoesConnection(where: TodoWhereInput, orderBy: TodoOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): TodoConnection!
+  todoList(where: TodoListWhereUniqueInput!): TodoList
+  todoLists(where: TodoListWhereInput, orderBy: TodoListOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [TodoList]!
+  todoListsConnection(where: TodoListWhereInput, orderBy: TodoListOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): TodoListConnection!
+  user(where: UserWhereUniqueInput!): User
+  users(where: UserWhereInput, orderBy: UserOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [User]!
+  usersConnection(where: UserWhereInput, orderBy: UserOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): UserConnection!
+  node(id: ID!): Node
+}
+
+type Subscription {
+  todo(where: TodoSubscriptionWhereInput): TodoSubscriptionPayload
+  todoList(where: TodoListSubscriptionWhereInput): TodoListSubscriptionPayload
+  user(where: UserSubscriptionWhereInput): UserSubscriptionPayload
+}
+
+type Todo {
+  id: ID!
+  description: String!
+  partOf: TodoList
+  completed: Boolean
+}
+
+type TodoConnection {
   pageInfo: PageInfo!
-  edges: [LinkEdge]!
-  aggregate: AggregateLink!
+  edges: [TodoEdge]!
+  aggregate: AggregateTodo!
 }
 
-input LinkCreateInput {
+input TodoCreateInput {
   description: String!
-  url: String!
+  partOf: TodoListCreateOneWithoutTodosInput
+  completed: Boolean
 }
 
-type LinkEdge {
-  node: Link!
+input TodoCreateManyWithoutPartOfInput {
+  create: [TodoCreateWithoutPartOfInput!]
+  connect: [TodoWhereUniqueInput!]
+}
+
+input TodoCreateWithoutPartOfInput {
+  description: String!
+  completed: Boolean
+}
+
+type TodoEdge {
+  node: Todo!
   cursor: String!
 }
 
-enum LinkOrderByInput {
+type TodoList {
+  id: ID!
+  createdAt: DateTime!
+  description: String!
+  ownedBy(where: UserWhereInput, orderBy: UserOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [User!]
+  assignedTo(where: UserWhereInput, orderBy: UserOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [User!]
+  todos(where: TodoWhereInput, orderBy: TodoOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Todo!]
+  completed: Boolean
+}
+
+type TodoListConnection {
+  pageInfo: PageInfo!
+  edges: [TodoListEdge]!
+  aggregate: AggregateTodoList!
+}
+
+input TodoListCreateInput {
+  description: String!
+  ownedBy: UserCreateManyWithoutTodoListsOwnedInput
+  assignedTo: UserCreateManyWithoutTodoListsAssignedInput
+  todos: TodoCreateManyWithoutPartOfInput
+  completed: Boolean
+}
+
+input TodoListCreateManyWithoutAssignedToInput {
+  create: [TodoListCreateWithoutAssignedToInput!]
+  connect: [TodoListWhereUniqueInput!]
+}
+
+input TodoListCreateManyWithoutOwnedByInput {
+  create: [TodoListCreateWithoutOwnedByInput!]
+  connect: [TodoListWhereUniqueInput!]
+}
+
+input TodoListCreateOneWithoutTodosInput {
+  create: TodoListCreateWithoutTodosInput
+  connect: TodoListWhereUniqueInput
+}
+
+input TodoListCreateWithoutAssignedToInput {
+  description: String!
+  ownedBy: UserCreateManyWithoutTodoListsOwnedInput
+  todos: TodoCreateManyWithoutPartOfInput
+  completed: Boolean
+}
+
+input TodoListCreateWithoutOwnedByInput {
+  description: String!
+  assignedTo: UserCreateManyWithoutTodoListsAssignedInput
+  todos: TodoCreateManyWithoutPartOfInput
+  completed: Boolean
+}
+
+input TodoListCreateWithoutTodosInput {
+  description: String!
+  ownedBy: UserCreateManyWithoutTodoListsOwnedInput
+  assignedTo: UserCreateManyWithoutTodoListsAssignedInput
+  completed: Boolean
+}
+
+type TodoListEdge {
+  node: TodoList!
+  cursor: String!
+}
+
+enum TodoListOrderByInput {
   id_ASC
   id_DESC
   createdAt_ASC
   createdAt_DESC
   description_ASC
   description_DESC
-  url_ASC
-  url_DESC
+  completed_ASC
+  completed_DESC
   updatedAt_ASC
   updatedAt_DESC
 }
 
-type LinkPreviousValues {
+type TodoListPreviousValues {
   id: ID!
   createdAt: DateTime!
   description: String!
-  url: String!
+  completed: Boolean
 }
 
-type LinkSubscriptionPayload {
-  mutation: MutationType!
-  node: Link
-  updatedFields: [String!]
-  previousValues: LinkPreviousValues
-}
-
-input LinkSubscriptionWhereInput {
-  mutation_in: [MutationType!]
-  updatedFields_contains: String
-  updatedFields_contains_every: [String!]
-  updatedFields_contains_some: [String!]
-  node: LinkWhereInput
-  AND: [LinkSubscriptionWhereInput!]
-  OR: [LinkSubscriptionWhereInput!]
-  NOT: [LinkSubscriptionWhereInput!]
-}
-
-input LinkUpdateInput {
-  description: String
-  url: String
-}
-
-input LinkUpdateManyMutationInput {
-  description: String
-  url: String
-}
-
-input LinkWhereInput {
+input TodoListScalarWhereInput {
   id: ID
   id_not: ID
   id_in: [ID!]
@@ -121,66 +236,603 @@ input LinkWhereInput {
   description_not_starts_with: String
   description_ends_with: String
   description_not_ends_with: String
-  url: String
-  url_not: String
-  url_in: [String!]
-  url_not_in: [String!]
-  url_lt: String
-  url_lte: String
-  url_gt: String
-  url_gte: String
-  url_contains: String
-  url_not_contains: String
-  url_starts_with: String
-  url_not_starts_with: String
-  url_ends_with: String
-  url_not_ends_with: String
-  AND: [LinkWhereInput!]
-  OR: [LinkWhereInput!]
-  NOT: [LinkWhereInput!]
+  completed: Boolean
+  completed_not: Boolean
+  AND: [TodoListScalarWhereInput!]
+  OR: [TodoListScalarWhereInput!]
+  NOT: [TodoListScalarWhereInput!]
 }
 
-input LinkWhereUniqueInput {
+type TodoListSubscriptionPayload {
+  mutation: MutationType!
+  node: TodoList
+  updatedFields: [String!]
+  previousValues: TodoListPreviousValues
+}
+
+input TodoListSubscriptionWhereInput {
+  mutation_in: [MutationType!]
+  updatedFields_contains: String
+  updatedFields_contains_every: [String!]
+  updatedFields_contains_some: [String!]
+  node: TodoListWhereInput
+  AND: [TodoListSubscriptionWhereInput!]
+  OR: [TodoListSubscriptionWhereInput!]
+  NOT: [TodoListSubscriptionWhereInput!]
+}
+
+input TodoListUpdateInput {
+  description: String
+  ownedBy: UserUpdateManyWithoutTodoListsOwnedInput
+  assignedTo: UserUpdateManyWithoutTodoListsAssignedInput
+  todos: TodoUpdateManyWithoutPartOfInput
+  completed: Boolean
+}
+
+input TodoListUpdateManyDataInput {
+  description: String
+  completed: Boolean
+}
+
+input TodoListUpdateManyMutationInput {
+  description: String
+  completed: Boolean
+}
+
+input TodoListUpdateManyWithoutAssignedToInput {
+  create: [TodoListCreateWithoutAssignedToInput!]
+  delete: [TodoListWhereUniqueInput!]
+  connect: [TodoListWhereUniqueInput!]
+  set: [TodoListWhereUniqueInput!]
+  disconnect: [TodoListWhereUniqueInput!]
+  update: [TodoListUpdateWithWhereUniqueWithoutAssignedToInput!]
+  upsert: [TodoListUpsertWithWhereUniqueWithoutAssignedToInput!]
+  deleteMany: [TodoListScalarWhereInput!]
+  updateMany: [TodoListUpdateManyWithWhereNestedInput!]
+}
+
+input TodoListUpdateManyWithoutOwnedByInput {
+  create: [TodoListCreateWithoutOwnedByInput!]
+  delete: [TodoListWhereUniqueInput!]
+  connect: [TodoListWhereUniqueInput!]
+  set: [TodoListWhereUniqueInput!]
+  disconnect: [TodoListWhereUniqueInput!]
+  update: [TodoListUpdateWithWhereUniqueWithoutOwnedByInput!]
+  upsert: [TodoListUpsertWithWhereUniqueWithoutOwnedByInput!]
+  deleteMany: [TodoListScalarWhereInput!]
+  updateMany: [TodoListUpdateManyWithWhereNestedInput!]
+}
+
+input TodoListUpdateManyWithWhereNestedInput {
+  where: TodoListScalarWhereInput!
+  data: TodoListUpdateManyDataInput!
+}
+
+input TodoListUpdateOneWithoutTodosInput {
+  create: TodoListCreateWithoutTodosInput
+  update: TodoListUpdateWithoutTodosDataInput
+  upsert: TodoListUpsertWithoutTodosInput
+  delete: Boolean
+  disconnect: Boolean
+  connect: TodoListWhereUniqueInput
+}
+
+input TodoListUpdateWithoutAssignedToDataInput {
+  description: String
+  ownedBy: UserUpdateManyWithoutTodoListsOwnedInput
+  todos: TodoUpdateManyWithoutPartOfInput
+  completed: Boolean
+}
+
+input TodoListUpdateWithoutOwnedByDataInput {
+  description: String
+  assignedTo: UserUpdateManyWithoutTodoListsAssignedInput
+  todos: TodoUpdateManyWithoutPartOfInput
+  completed: Boolean
+}
+
+input TodoListUpdateWithoutTodosDataInput {
+  description: String
+  ownedBy: UserUpdateManyWithoutTodoListsOwnedInput
+  assignedTo: UserUpdateManyWithoutTodoListsAssignedInput
+  completed: Boolean
+}
+
+input TodoListUpdateWithWhereUniqueWithoutAssignedToInput {
+  where: TodoListWhereUniqueInput!
+  data: TodoListUpdateWithoutAssignedToDataInput!
+}
+
+input TodoListUpdateWithWhereUniqueWithoutOwnedByInput {
+  where: TodoListWhereUniqueInput!
+  data: TodoListUpdateWithoutOwnedByDataInput!
+}
+
+input TodoListUpsertWithoutTodosInput {
+  update: TodoListUpdateWithoutTodosDataInput!
+  create: TodoListCreateWithoutTodosInput!
+}
+
+input TodoListUpsertWithWhereUniqueWithoutAssignedToInput {
+  where: TodoListWhereUniqueInput!
+  update: TodoListUpdateWithoutAssignedToDataInput!
+  create: TodoListCreateWithoutAssignedToInput!
+}
+
+input TodoListUpsertWithWhereUniqueWithoutOwnedByInput {
+  where: TodoListWhereUniqueInput!
+  update: TodoListUpdateWithoutOwnedByDataInput!
+  create: TodoListCreateWithoutOwnedByInput!
+}
+
+input TodoListWhereInput {
+  id: ID
+  id_not: ID
+  id_in: [ID!]
+  id_not_in: [ID!]
+  id_lt: ID
+  id_lte: ID
+  id_gt: ID
+  id_gte: ID
+  id_contains: ID
+  id_not_contains: ID
+  id_starts_with: ID
+  id_not_starts_with: ID
+  id_ends_with: ID
+  id_not_ends_with: ID
+  createdAt: DateTime
+  createdAt_not: DateTime
+  createdAt_in: [DateTime!]
+  createdAt_not_in: [DateTime!]
+  createdAt_lt: DateTime
+  createdAt_lte: DateTime
+  createdAt_gt: DateTime
+  createdAt_gte: DateTime
+  description: String
+  description_not: String
+  description_in: [String!]
+  description_not_in: [String!]
+  description_lt: String
+  description_lte: String
+  description_gt: String
+  description_gte: String
+  description_contains: String
+  description_not_contains: String
+  description_starts_with: String
+  description_not_starts_with: String
+  description_ends_with: String
+  description_not_ends_with: String
+  ownedBy_every: UserWhereInput
+  ownedBy_some: UserWhereInput
+  ownedBy_none: UserWhereInput
+  assignedTo_every: UserWhereInput
+  assignedTo_some: UserWhereInput
+  assignedTo_none: UserWhereInput
+  todos_every: TodoWhereInput
+  todos_some: TodoWhereInput
+  todos_none: TodoWhereInput
+  completed: Boolean
+  completed_not: Boolean
+  AND: [TodoListWhereInput!]
+  OR: [TodoListWhereInput!]
+  NOT: [TodoListWhereInput!]
+}
+
+input TodoListWhereUniqueInput {
+  id: ID
+  description: String
+}
+
+enum TodoOrderByInput {
+  id_ASC
+  id_DESC
+  description_ASC
+  description_DESC
+  completed_ASC
+  completed_DESC
+  createdAt_ASC
+  createdAt_DESC
+  updatedAt_ASC
+  updatedAt_DESC
+}
+
+type TodoPreviousValues {
+  id: ID!
+  description: String!
+  completed: Boolean
+}
+
+input TodoScalarWhereInput {
+  id: ID
+  id_not: ID
+  id_in: [ID!]
+  id_not_in: [ID!]
+  id_lt: ID
+  id_lte: ID
+  id_gt: ID
+  id_gte: ID
+  id_contains: ID
+  id_not_contains: ID
+  id_starts_with: ID
+  id_not_starts_with: ID
+  id_ends_with: ID
+  id_not_ends_with: ID
+  description: String
+  description_not: String
+  description_in: [String!]
+  description_not_in: [String!]
+  description_lt: String
+  description_lte: String
+  description_gt: String
+  description_gte: String
+  description_contains: String
+  description_not_contains: String
+  description_starts_with: String
+  description_not_starts_with: String
+  description_ends_with: String
+  description_not_ends_with: String
+  completed: Boolean
+  completed_not: Boolean
+  AND: [TodoScalarWhereInput!]
+  OR: [TodoScalarWhereInput!]
+  NOT: [TodoScalarWhereInput!]
+}
+
+type TodoSubscriptionPayload {
+  mutation: MutationType!
+  node: Todo
+  updatedFields: [String!]
+  previousValues: TodoPreviousValues
+}
+
+input TodoSubscriptionWhereInput {
+  mutation_in: [MutationType!]
+  updatedFields_contains: String
+  updatedFields_contains_every: [String!]
+  updatedFields_contains_some: [String!]
+  node: TodoWhereInput
+  AND: [TodoSubscriptionWhereInput!]
+  OR: [TodoSubscriptionWhereInput!]
+  NOT: [TodoSubscriptionWhereInput!]
+}
+
+input TodoUpdateInput {
+  description: String
+  partOf: TodoListUpdateOneWithoutTodosInput
+  completed: Boolean
+}
+
+input TodoUpdateManyDataInput {
+  description: String
+  completed: Boolean
+}
+
+input TodoUpdateManyMutationInput {
+  description: String
+  completed: Boolean
+}
+
+input TodoUpdateManyWithoutPartOfInput {
+  create: [TodoCreateWithoutPartOfInput!]
+  delete: [TodoWhereUniqueInput!]
+  connect: [TodoWhereUniqueInput!]
+  set: [TodoWhereUniqueInput!]
+  disconnect: [TodoWhereUniqueInput!]
+  update: [TodoUpdateWithWhereUniqueWithoutPartOfInput!]
+  upsert: [TodoUpsertWithWhereUniqueWithoutPartOfInput!]
+  deleteMany: [TodoScalarWhereInput!]
+  updateMany: [TodoUpdateManyWithWhereNestedInput!]
+}
+
+input TodoUpdateManyWithWhereNestedInput {
+  where: TodoScalarWhereInput!
+  data: TodoUpdateManyDataInput!
+}
+
+input TodoUpdateWithoutPartOfDataInput {
+  description: String
+  completed: Boolean
+}
+
+input TodoUpdateWithWhereUniqueWithoutPartOfInput {
+  where: TodoWhereUniqueInput!
+  data: TodoUpdateWithoutPartOfDataInput!
+}
+
+input TodoUpsertWithWhereUniqueWithoutPartOfInput {
+  where: TodoWhereUniqueInput!
+  update: TodoUpdateWithoutPartOfDataInput!
+  create: TodoCreateWithoutPartOfInput!
+}
+
+input TodoWhereInput {
+  id: ID
+  id_not: ID
+  id_in: [ID!]
+  id_not_in: [ID!]
+  id_lt: ID
+  id_lte: ID
+  id_gt: ID
+  id_gte: ID
+  id_contains: ID
+  id_not_contains: ID
+  id_starts_with: ID
+  id_not_starts_with: ID
+  id_ends_with: ID
+  id_not_ends_with: ID
+  description: String
+  description_not: String
+  description_in: [String!]
+  description_not_in: [String!]
+  description_lt: String
+  description_lte: String
+  description_gt: String
+  description_gte: String
+  description_contains: String
+  description_not_contains: String
+  description_starts_with: String
+  description_not_starts_with: String
+  description_ends_with: String
+  description_not_ends_with: String
+  partOf: TodoListWhereInput
+  completed: Boolean
+  completed_not: Boolean
+  AND: [TodoWhereInput!]
+  OR: [TodoWhereInput!]
+  NOT: [TodoWhereInput!]
+}
+
+input TodoWhereUniqueInput {
   id: ID
 }
 
-scalar Long
-
-type Mutation {
-  createLink(data: LinkCreateInput!): Link!
-  updateLink(data: LinkUpdateInput!, where: LinkWhereUniqueInput!): Link
-  updateManyLinks(data: LinkUpdateManyMutationInput!, where: LinkWhereInput): BatchPayload!
-  upsertLink(where: LinkWhereUniqueInput!, create: LinkCreateInput!, update: LinkUpdateInput!): Link!
-  deleteLink(where: LinkWhereUniqueInput!): Link
-  deleteManyLinks(where: LinkWhereInput): BatchPayload!
-}
-
-enum MutationType {
-  CREATED
-  UPDATED
-  DELETED
-}
-
-interface Node {
+type User {
   id: ID!
+  createdAt: DateTime!
+  name: String!
+  todoListsOwned(where: TodoListWhereInput, orderBy: TodoListOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [TodoList!]
+  todoListsAssigned(where: TodoListWhereInput, orderBy: TodoListOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [TodoList!]
 }
 
-type PageInfo {
-  hasNextPage: Boolean!
-  hasPreviousPage: Boolean!
-  startCursor: String
-  endCursor: String
+type UserConnection {
+  pageInfo: PageInfo!
+  edges: [UserEdge]!
+  aggregate: AggregateUser!
 }
 
-type Query {
-  link(where: LinkWhereUniqueInput!): Link
-  links(where: LinkWhereInput, orderBy: LinkOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Link]!
-  linksConnection(where: LinkWhereInput, orderBy: LinkOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): LinkConnection!
-  node(id: ID!): Node
+input UserCreateInput {
+  name: String!
+  todoListsOwned: TodoListCreateManyWithoutOwnedByInput
+  todoListsAssigned: TodoListCreateManyWithoutAssignedToInput
 }
 
-type Subscription {
-  link(where: LinkSubscriptionWhereInput): LinkSubscriptionPayload
+input UserCreateManyWithoutTodoListsAssignedInput {
+  create: [UserCreateWithoutTodoListsAssignedInput!]
+  connect: [UserWhereUniqueInput!]
+}
+
+input UserCreateManyWithoutTodoListsOwnedInput {
+  create: [UserCreateWithoutTodoListsOwnedInput!]
+  connect: [UserWhereUniqueInput!]
+}
+
+input UserCreateWithoutTodoListsAssignedInput {
+  name: String!
+  todoListsOwned: TodoListCreateManyWithoutOwnedByInput
+}
+
+input UserCreateWithoutTodoListsOwnedInput {
+  name: String!
+  todoListsAssigned: TodoListCreateManyWithoutAssignedToInput
+}
+
+type UserEdge {
+  node: User!
+  cursor: String!
+}
+
+enum UserOrderByInput {
+  id_ASC
+  id_DESC
+  createdAt_ASC
+  createdAt_DESC
+  name_ASC
+  name_DESC
+  updatedAt_ASC
+  updatedAt_DESC
+}
+
+type UserPreviousValues {
+  id: ID!
+  createdAt: DateTime!
+  name: String!
+}
+
+input UserScalarWhereInput {
+  id: ID
+  id_not: ID
+  id_in: [ID!]
+  id_not_in: [ID!]
+  id_lt: ID
+  id_lte: ID
+  id_gt: ID
+  id_gte: ID
+  id_contains: ID
+  id_not_contains: ID
+  id_starts_with: ID
+  id_not_starts_with: ID
+  id_ends_with: ID
+  id_not_ends_with: ID
+  createdAt: DateTime
+  createdAt_not: DateTime
+  createdAt_in: [DateTime!]
+  createdAt_not_in: [DateTime!]
+  createdAt_lt: DateTime
+  createdAt_lte: DateTime
+  createdAt_gt: DateTime
+  createdAt_gte: DateTime
+  name: String
+  name_not: String
+  name_in: [String!]
+  name_not_in: [String!]
+  name_lt: String
+  name_lte: String
+  name_gt: String
+  name_gte: String
+  name_contains: String
+  name_not_contains: String
+  name_starts_with: String
+  name_not_starts_with: String
+  name_ends_with: String
+  name_not_ends_with: String
+  AND: [UserScalarWhereInput!]
+  OR: [UserScalarWhereInput!]
+  NOT: [UserScalarWhereInput!]
+}
+
+type UserSubscriptionPayload {
+  mutation: MutationType!
+  node: User
+  updatedFields: [String!]
+  previousValues: UserPreviousValues
+}
+
+input UserSubscriptionWhereInput {
+  mutation_in: [MutationType!]
+  updatedFields_contains: String
+  updatedFields_contains_every: [String!]
+  updatedFields_contains_some: [String!]
+  node: UserWhereInput
+  AND: [UserSubscriptionWhereInput!]
+  OR: [UserSubscriptionWhereInput!]
+  NOT: [UserSubscriptionWhereInput!]
+}
+
+input UserUpdateInput {
+  name: String
+  todoListsOwned: TodoListUpdateManyWithoutOwnedByInput
+  todoListsAssigned: TodoListUpdateManyWithoutAssignedToInput
+}
+
+input UserUpdateManyDataInput {
+  name: String
+}
+
+input UserUpdateManyMutationInput {
+  name: String
+}
+
+input UserUpdateManyWithoutTodoListsAssignedInput {
+  create: [UserCreateWithoutTodoListsAssignedInput!]
+  delete: [UserWhereUniqueInput!]
+  connect: [UserWhereUniqueInput!]
+  set: [UserWhereUniqueInput!]
+  disconnect: [UserWhereUniqueInput!]
+  update: [UserUpdateWithWhereUniqueWithoutTodoListsAssignedInput!]
+  upsert: [UserUpsertWithWhereUniqueWithoutTodoListsAssignedInput!]
+  deleteMany: [UserScalarWhereInput!]
+  updateMany: [UserUpdateManyWithWhereNestedInput!]
+}
+
+input UserUpdateManyWithoutTodoListsOwnedInput {
+  create: [UserCreateWithoutTodoListsOwnedInput!]
+  delete: [UserWhereUniqueInput!]
+  connect: [UserWhereUniqueInput!]
+  set: [UserWhereUniqueInput!]
+  disconnect: [UserWhereUniqueInput!]
+  update: [UserUpdateWithWhereUniqueWithoutTodoListsOwnedInput!]
+  upsert: [UserUpsertWithWhereUniqueWithoutTodoListsOwnedInput!]
+  deleteMany: [UserScalarWhereInput!]
+  updateMany: [UserUpdateManyWithWhereNestedInput!]
+}
+
+input UserUpdateManyWithWhereNestedInput {
+  where: UserScalarWhereInput!
+  data: UserUpdateManyDataInput!
+}
+
+input UserUpdateWithoutTodoListsAssignedDataInput {
+  name: String
+  todoListsOwned: TodoListUpdateManyWithoutOwnedByInput
+}
+
+input UserUpdateWithoutTodoListsOwnedDataInput {
+  name: String
+  todoListsAssigned: TodoListUpdateManyWithoutAssignedToInput
+}
+
+input UserUpdateWithWhereUniqueWithoutTodoListsAssignedInput {
+  where: UserWhereUniqueInput!
+  data: UserUpdateWithoutTodoListsAssignedDataInput!
+}
+
+input UserUpdateWithWhereUniqueWithoutTodoListsOwnedInput {
+  where: UserWhereUniqueInput!
+  data: UserUpdateWithoutTodoListsOwnedDataInput!
+}
+
+input UserUpsertWithWhereUniqueWithoutTodoListsAssignedInput {
+  where: UserWhereUniqueInput!
+  update: UserUpdateWithoutTodoListsAssignedDataInput!
+  create: UserCreateWithoutTodoListsAssignedInput!
+}
+
+input UserUpsertWithWhereUniqueWithoutTodoListsOwnedInput {
+  where: UserWhereUniqueInput!
+  update: UserUpdateWithoutTodoListsOwnedDataInput!
+  create: UserCreateWithoutTodoListsOwnedInput!
+}
+
+input UserWhereInput {
+  id: ID
+  id_not: ID
+  id_in: [ID!]
+  id_not_in: [ID!]
+  id_lt: ID
+  id_lte: ID
+  id_gt: ID
+  id_gte: ID
+  id_contains: ID
+  id_not_contains: ID
+  id_starts_with: ID
+  id_not_starts_with: ID
+  id_ends_with: ID
+  id_not_ends_with: ID
+  createdAt: DateTime
+  createdAt_not: DateTime
+  createdAt_in: [DateTime!]
+  createdAt_not_in: [DateTime!]
+  createdAt_lt: DateTime
+  createdAt_lte: DateTime
+  createdAt_gt: DateTime
+  createdAt_gte: DateTime
+  name: String
+  name_not: String
+  name_in: [String!]
+  name_not_in: [String!]
+  name_lt: String
+  name_lte: String
+  name_gt: String
+  name_gte: String
+  name_contains: String
+  name_not_contains: String
+  name_starts_with: String
+  name_not_starts_with: String
+  name_ends_with: String
+  name_not_ends_with: String
+  todoListsOwned_every: TodoListWhereInput
+  todoListsOwned_some: TodoListWhereInput
+  todoListsOwned_none: TodoListWhereInput
+  todoListsAssigned_every: TodoListWhereInput
+  todoListsAssigned_some: TodoListWhereInput
+  todoListsAssigned_none: TodoListWhereInput
+  AND: [UserWhereInput!]
+  OR: [UserWhereInput!]
+  NOT: [UserWhereInput!]
+}
+
+input UserWhereUniqueInput {
+  id: ID
 }
 `
       }
