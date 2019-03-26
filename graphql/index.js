@@ -13,13 +13,19 @@ const resolvers = {
         }
     },
     Mutation: {
-        createTodo: (root, args, context) => {
+        createTodoList: (root, args, context, info) => {
             return context.prisma.createTodo({
                 description: args.description,
                 ownedBy: args.input.owners,
                 assignedTo: args.input.assignedTo
             })
         },
+        createTodo: (root, args, context, info) => {
+            return context.prisma.createTodo({
+                description: args.description,
+                partOf: args.partOf
+            })
+        }
     },
 };
 
