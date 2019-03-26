@@ -2,6 +2,7 @@ type Mutation {
     createUser(name: String!): User!
     createTodo(description: String!, partOf: String!, completed: Boolean): Todo
     createTodoList(description: String!, ownedBy: String!, assignedTo: String!, completed: Boolean): TodoList
+    deleteTodoList(id: String!): String!
 }
 
 type Query {
@@ -15,8 +16,8 @@ type Query {
 type TodoList {
     id: ID!
     description: String!
-    ownedBy: [User!]!
-    assignedTo: [User!]!
+    ownedBy: [User!]! 
+    assignedTo: [User!]! 
     todos: [Todo!]!
     completed: Boolean
 }
@@ -31,6 +32,6 @@ type Todo {
 type User {
     id: ID!
     name: String!
-    todoListsOwned: [TodoList]
-    todoListsAssigned: [TodoList]
+    todoListsOwned: [TodoList] 
+    todoListsAssigned: [TodoList] 
 }

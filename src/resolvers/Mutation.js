@@ -2,7 +2,7 @@ async function createUser(parent, args, ctx, info) {
     return ctx.prisma.createUser(args);
 }
 
-function createTodo(parent, args, context, info) {
+async function createTodo(parent, args, context, info) {
     return context.prisma.createTodo({
         description: args.description,
         partOf: {
@@ -29,8 +29,14 @@ async function createTodoList(parent, args, context, info) {
     })
 }
 
+async function deleteTodoList(parent, args, context , info) {
+   await context.prisma.deleteTodoList({id: args.id,})
+   return `TodoList ${args.id} deleted`
+}
+
 module.exports = {
    createUser,
    createTodo,
-   createTodoList
+   createTodoList,
+   deleteTodoList,
 };
