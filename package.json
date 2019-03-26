@@ -6,6 +6,8 @@
   "author": "Daniel Weinman <namniewd@gmail.com>",
   "license": "MIT",
   "dependencies": {
+    "apollo-server-express": "^2.4.8",
+    "graphql": "^14.1.1",
     "graphql-yoga": "^1.17.4",
     "prisma-client-lib": "^1.29.1"
   },
@@ -13,6 +15,6 @@
     "nodemon": "^1.18.10"
   },
   "scripts": {
-    "server": "nodemon src/index.js"
+    "server": "nodemon index.js"
   }
 }
