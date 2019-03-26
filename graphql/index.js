@@ -14,7 +14,7 @@ const resolvers = {
     },
     Mutation: {
         createTodoList: (root, args, context, info) => {
-            return context.prisma.createTodo({
+            return context.prisma.createTodoList({
                 description: args.description,
                 ownedBy: args.input.owners,
                 assignedTo: args.input.assignedTo
