@@ -10,10 +10,6 @@ type Query {
     users: [User]
 }
 
-type Mutation {
-    createTodo(input: todoListInput, description: String!): Todo!
-}
-
 type TodoList {
     id: ID!
     description: String!

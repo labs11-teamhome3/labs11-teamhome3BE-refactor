@@ -1,16 +1,18 @@
 type TodoList {
     id: ID! @unique
     createdAt: DateTime!
-    description: String!
+    description: String! @unique
     ownedBy: [User!]! @relation(name: "OwnedBy")
     assignedTo: [User!]! @relation(name: "AssignedTo")
     todos: [Todo!]!
+    completed: Boolean
 }
 
 type Todo {
   id: ID! @unique
   description: String!
   partOf: TodoList
+  completed: Boolean
 }
 
 type User {

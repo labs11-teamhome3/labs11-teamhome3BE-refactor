@@ -206,6 +206,8 @@ export type TodoListOrderByInput =
   | "createdAt_DESC"
   | "description_ASC"
   | "description_DESC"
+  | "completed_ASC"
+  | "completed_DESC"
   | "updatedAt_ASC"
   | "updatedAt_DESC";
 
@@ -214,6 +216,8 @@ export type TodoOrderByInput =
   | "id_DESC"
   | "description_ASC"
   | "description_DESC"
+  | "completed_ASC"
+  | "completed_DESC"
   | "createdAt_ASC"
   | "createdAt_DESC"
   | "updatedAt_ASC"
@@ -319,6 +323,8 @@ export interface TodoListWhereInput {
   todos_every?: TodoWhereInput;
   todos_some?: TodoWhereInput;
   todos_none?: TodoWhereInput;
+  completed?: Boolean;
+  completed_not?: Boolean;
   AND?: TodoListWhereInput[] | TodoListWhereInput;
   OR?: TodoListWhereInput[] | TodoListWhereInput;
   NOT?: TodoListWhereInput[] | TodoListWhereInput;
@@ -354,6 +360,8 @@ export interface TodoWhereInput {
   description_ends_with?: String;
   description_not_ends_with?: String;
   partOf?: TodoListWhereInput;
+  completed?: Boolean;
+  completed_not?: Boolean;
   AND?: TodoWhereInput[] | TodoWhereInput;
   OR?: TodoWhereInput[] | TodoWhereInput;
   NOT?: TodoWhereInput[] | TodoWhereInput;
@@ -361,6 +369,7 @@ export interface TodoWhereInput {
 
 export type TodoListWhereUniqueInput = AtLeastOne<{
   id: ID_Input;
+  description?: String;
 }>;
 
 export type UserWhereUniqueInput = AtLeastOne<{
@@ -370,6 +379,7 @@ export type UserWhereUniqueInput = AtLeastOne<{
 export interface TodoCreateInput {
   description: String;
   partOf?: TodoListCreateOneWithoutTodosInput;
+  completed?: Boolean;
 }
 
 export interface TodoListCreateOneWithoutTodosInput {
@@ -381,6 +391,7 @@ export interface TodoListCreateWithoutTodosInput {
   description: String;
   ownedBy?: UserCreateManyWithoutTodoListsOwnedInput;
   assignedTo?: UserCreateManyWithoutTodoListsAssignedInput;
+  completed?: Boolean;
 }
 
 export interface UserCreateManyWithoutTodoListsOwnedInput {
@@ -406,6 +417,7 @@ export interface TodoListCreateWithoutAssignedToInput {
   description: String;
   ownedBy?: UserCreateManyWithoutTodoListsOwnedInput;
   todos?: TodoCreateManyWithoutPartOfInput;
+  completed?: Boolean;
 }
 
 export interface TodoCreateManyWithoutPartOfInput {
@@ -415,6 +427,7 @@ export interface TodoCreateManyWithoutPartOfInput {
 
 export interface TodoCreateWithoutPartOfInput {
   description: String;
+  completed?: Boolean;
 }
 
 export interface UserCreateManyWithoutTodoListsAssignedInput {
@@ -440,11 +453,13 @@ export interface TodoListCreateWithoutOwnedByInput {
   description: String;
   assignedTo?: UserCreateManyWithoutTodoListsAssignedInput;
   todos?: TodoCreateManyWithoutPartOfInput;
+  completed?: Boolean;
 }
 
 export interface TodoUpdateInput {
   description?: String;
   partOf?: TodoListUpdateOneWithoutTodosInput;
+  completed?: Boolean;
 }
 
 export interface TodoListUpdateOneWithoutTodosInput {
@@ -460,6 +475,7 @@ export interface TodoListUpdateWithoutTodosDataInput {
   description?: String;
   ownedBy?: UserUpdateManyWithoutTodoListsOwnedInput;
   assignedTo?: UserUpdateManyWithoutTodoListsAssignedInput;
+  completed?: Boolean;
 }
 
 export interface UserUpdateManyWithoutTodoListsOwnedInput {
@@ -521,6 +537,7 @@ export interface TodoListUpdateWithoutAssignedToDataInput {
   description?: String;
   ownedBy?: UserUpdateManyWithoutTodoListsOwnedInput;
   todos?: TodoUpdateManyWithoutPartOfInput;
+  completed?: Boolean;
 }
 
 export interface TodoUpdateManyWithoutPartOfInput {
@@ -548,6 +565,7 @@ export interface TodoUpdateWithWhereUniqueWithoutPartOfInput {
 
 export interface TodoUpdateWithoutPartOfDataInput {
   description?: String;
+  completed?: Boolean;
 }
 
 export interface TodoUpsertWithWhereUniqueWithoutPartOfInput {
@@ -585,6 +603,8 @@ export interface TodoScalarWhereInput {
   description_not_starts_with?: String;
   description_ends_with?: String;
   description_not_ends_with?: String;
+  completed?: Boolean;
+  completed_not?: Boolean;
   AND?: TodoScalarWhereInput[] | TodoScalarWhereInput;
   OR?: TodoScalarWhereInput[] | TodoScalarWhereInput;
   NOT?: TodoScalarWhereInput[] | TodoScalarWhereInput;
@@ -597,6 +617,7 @@ export interface TodoUpdateManyWithWhereNestedInput {
 
 export interface TodoUpdateManyDataInput {
   description?: String;
+  completed?: Boolean;
 }
 
 export interface TodoListUpsertWithWhereUniqueWithoutAssignedToInput {
@@ -642,6 +663,8 @@ export interface TodoListScalarWhereInput {
   description_not_starts_with?: String;
   description_ends_with?: String;
   description_not_ends_with?: String;
+  completed?: Boolean;
+  completed_not?: Boolean;
   AND?: TodoListScalarWhereInput[] | TodoListScalarWhereInput;
   OR?: TodoListScalarWhereInput[] | TodoListScalarWhereInput;
   NOT?: TodoListScalarWhereInput[] | TodoListScalarWhereInput;
@@ -654,6 +677,7 @@ export interface TodoListUpdateManyWithWhereNestedInput {
 
 export interface TodoListUpdateManyDataInput {
   description?: String;
+  completed?: Boolean;
 }
 
 export interface UserUpsertWithWhereUniqueWithoutTodoListsOwnedInput {
@@ -772,6 +796,7 @@ export interface TodoListUpdateWithoutOwnedByDataInput {
   description?: String;
   assignedTo?: UserUpdateManyWithoutTodoListsAssignedInput;
   todos?: TodoUpdateManyWithoutPartOfInput;
+  completed?: Boolean;
 }
 
 export interface TodoListUpsertWithWhereUniqueWithoutOwnedByInput {
@@ -793,6 +818,7 @@ export interface TodoListUpsertWithoutTodosInput {
 
 export interface TodoUpdateManyMutationInput {
   description?: String;
+  completed?: Boolean;
 }
 
 export interface TodoListCreateInput {
@@ -800,6 +826,7 @@ export interface TodoListCreateInput {
   ownedBy?: UserCreateManyWithoutTodoListsOwnedInput;
   assignedTo?: UserCreateManyWithoutTodoListsAssignedInput;
   todos?: TodoCreateManyWithoutPartOfInput;
+  completed?: Boolean;
 }
 
 export interface TodoListUpdateInput {
@@ -807,10 +834,12 @@ export interface TodoListUpdateInput {
   ownedBy?: UserUpdateManyWithoutTodoListsOwnedInput;
   assignedTo?: UserUpdateManyWithoutTodoListsAssignedInput;
   todos?: TodoUpdateManyWithoutPartOfInput;
+  completed?: Boolean;
 }
 
 export interface TodoListUpdateManyMutationInput {
   description?: String;
+  completed?: Boolean;
 }
 
 export interface UserCreateInput {
@@ -869,12 +898,14 @@ export interface NodeNode {
 export interface Todo {
   id: ID_Output;
   description: String;
+  completed?: Boolean;
 }
 
 export interface TodoPromise extends Promise<Todo>, Fragmentable {
   id: () => Promise<ID_Output>;
   description: () => Promise<String>;
   partOf: <T = TodoListPromise>() => T;
+  completed: () => Promise<Boolean>;
 }
 
 export interface TodoSubscription
@@ -883,12 +914,14 @@ export interface TodoSubscription
   id: () => Promise<AsyncIterator<ID_Output>>;
   description: () => Promise<AsyncIterator<String>>;
   partOf: <T = TodoListSubscription>() => T;
+  completed: () => Promise<AsyncIterator<Boolean>>;
 }
 
 export interface TodoList {
   id: ID_Output;
   createdAt: DateTimeOutput;
   description: String;
+  completed?: Boolean;
 }
 
 export interface TodoListPromise extends Promise<TodoList>, Fragmentable {
@@ -928,6 +961,7 @@ export interface TodoListPromise extends Promise<TodoList>, Fragmentable {
       last?: Int;
     }
   ) => T;
+  completed: () => Promise<Boolean>;
 }
 
 export interface TodoListSubscription
@@ -969,6 +1003,7 @@ export interface TodoListSubscription
       last?: Int;
     }
   ) => T;
+  completed: () => Promise<AsyncIterator<Boolean>>;
 }
 
 export interface User {
@@ -1266,6 +1301,7 @@ export interface TodoSubscriptionPayloadSubscription
 export interface TodoPreviousValues {
   id: ID_Output;
   description: String;
+  completed?: Boolean;
 }
 
 export interface TodoPreviousValuesPromise
@@ -1273,6 +1309,7 @@ export interface TodoPreviousValuesPromise
     Fragmentable {
   id: () => Promise<ID_Output>;
   description: () => Promise<String>;
+  completed: () => Promise<Boolean>;
 }
 
 export interface TodoPreviousValuesSubscription
@@ -1280,6 +1317,7 @@ export interface TodoPreviousValuesSubscription
     Fragmentable {
   id: () => Promise<AsyncIterator<ID_Output>>;
   description: () => Promise<AsyncIterator<String>>;
+  completed: () => Promise<AsyncIterator<Boolean>>;
 }
 
 export interface TodoListSubscriptionPayload {
@@ -1311,6 +1349,7 @@ export interface TodoListPreviousValues {
   id: ID_Output;
   createdAt: DateTimeOutput;
   description: String;
+  completed?: Boolean;
 }
 
 export interface TodoListPreviousValuesPromise
@@ -1319,6 +1358,7 @@ export interface TodoListPreviousValuesPromise
   id: () => Promise<ID_Output>;
   createdAt: () => Promise<DateTimeOutput>;
   description: () => Promise<String>;
+  completed: () => Promise<Boolean>;
 }
 
 export interface TodoListPreviousValuesSubscription
@@ -1327,6 +1367,7 @@ export interface TodoListPreviousValuesSubscription
   id: () => Promise<AsyncIterator<ID_Output>>;
   createdAt: () => Promise<AsyncIterator<DateTimeOutput>>;
   description: () => Promise<AsyncIterator<String>>;
+  completed: () => Promise<AsyncIterator<Boolean>>;
 }
 
 export interface UserSubscriptionPayload {
@@ -1398,14 +1439,14 @@ DateTime scalar output type, which is always a string
 export type DateTimeOutput = string;
 
 /*
-The `Int` scalar type represents non-fractional signed whole numeric values. Int can represent values between -(2^31) and 2^31 - 1. 
-*/
-export type Int = number;
-
-/*
 The `Boolean` scalar type represents `true` or `false`.
 */
 export type Boolean = boolean;
+
+/*
+The `Int` scalar type represents non-fractional signed whole numeric values. Int can represent values between -(2^31) and 2^31 - 1. 
+*/
+export type Int = number;
 
 export type Long = string;
 

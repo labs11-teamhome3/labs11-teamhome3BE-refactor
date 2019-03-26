@@ -84,6 +84,7 @@ type Todo {
   id: ID!
   description: String!
   partOf: TodoList
+  completed: Boolean
 }
 
 type TodoConnection {
@@ -95,6 +96,7 @@ type TodoConnection {
 input TodoCreateInput {
   description: String!
   partOf: TodoListCreateOneWithoutTodosInput
+  completed: Boolean
 }
 
 input TodoCreateManyWithoutPartOfInput {
@@ -104,6 +106,7 @@ input TodoCreateManyWithoutPartOfInput {
 
 input TodoCreateWithoutPartOfInput {
   description: String!
+  completed: Boolean
 }
 
 type TodoEdge {
@@ -118,6 +121,7 @@ type TodoList {
   ownedBy(where: UserWhereInput, orderBy: UserOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [User!]
   assignedTo(where: UserWhereInput, orderBy: UserOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [User!]
   todos(where: TodoWhereInput, orderBy: TodoOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Todo!]
+  completed: Boolean
 }
 
 type TodoListConnection {
@@ -131,6 +135,7 @@ input TodoListCreateInput {
   ownedBy: UserCreateManyWithoutTodoListsOwnedInput
   assignedTo: UserCreateManyWithoutTodoListsAssignedInput
   todos: TodoCreateManyWithoutPartOfInput
+  completed: Boolean
 }
 
 input TodoListCreateManyWithoutAssignedToInput {
@@ -152,18 +157,21 @@ input TodoListCreateWithoutAssignedToInput {
   description: String!
   ownedBy: UserCreateManyWithoutTodoListsOwnedInput
   todos: TodoCreateManyWithoutPartOfInput
+  completed: Boolean
 }
 
 input TodoListCreateWithoutOwnedByInput {
   description: String!
   assignedTo: UserCreateManyWithoutTodoListsAssignedInput
   todos: TodoCreateManyWithoutPartOfInput
+  completed: Boolean
 }
 
 input TodoListCreateWithoutTodosInput {
   description: String!
   ownedBy: UserCreateManyWithoutTodoListsOwnedInput
   assignedTo: UserCreateManyWithoutTodoListsAssignedInput
+  completed: Boolean
 }
 
 type TodoListEdge {
@@ -178,6 +186,8 @@ enum TodoListOrderByInput {
   createdAt_DESC
   description_ASC
   description_DESC
+  completed_ASC
+  completed_DESC
   updatedAt_ASC
   updatedAt_DESC
 }
@@ -186,6 +196,7 @@ type TodoListPreviousValues {
   id: ID!
   createdAt: DateTime!
   description: String!
+  completed: Boolean
 }
 
 input TodoListScalarWhereInput {
@@ -225,6 +236,8 @@ input TodoListScalarWhereInput {
   description_not_starts_with: String
   description_ends_with: String
   description_not_ends_with: String
+  completed: Boolean
+  completed_not: Boolean
   AND: [TodoListScalarWhereInput!]
   OR: [TodoListScalarWhereInput!]
   NOT: [TodoListScalarWhereInput!]
@@ -253,14 +266,17 @@ input TodoListUpdateInput {
   ownedBy: UserUpdateManyWithoutTodoListsOwnedInput
   assignedTo: UserUpdateManyWithoutTodoListsAssignedInput
   todos: TodoUpdateManyWithoutPartOfInput
+  completed: Boolean
 }
 
 input TodoListUpdateManyDataInput {
   description: String
+  completed: Boolean
 }
 
 input TodoListUpdateManyMutationInput {
   description: String
+  completed: Boolean
 }
 
 input TodoListUpdateManyWithoutAssignedToInput {
@@ -305,18 +321,21 @@ input TodoListUpdateWithoutAssignedToDataInput {
   description: String
   ownedBy: UserUpdateManyWithoutTodoListsOwnedInput
   todos: TodoUpdateManyWithoutPartOfInput
+  completed: Boolean
 }
 
 input TodoListUpdateWithoutOwnedByDataInput {
   description: String
   assignedTo: UserUpdateManyWithoutTodoListsAssignedInput
   todos: TodoUpdateManyWithoutPartOfInput
+  completed: Boolean
 }
 
 input TodoListUpdateWithoutTodosDataInput {
   description: String
   ownedBy: UserUpdateManyWithoutTodoListsOwnedInput
   assignedTo: UserUpdateManyWithoutTodoListsAssignedInput
+  completed: Boolean
 }
 
 input TodoListUpdateWithWhereUniqueWithoutAssignedToInput {
@@ -392,6 +411,8 @@ input TodoListWhereInput {
   todos_every: TodoWhereInput
   todos_some: TodoWhereInput
   todos_none: TodoWhereInput
+  completed: Boolean
+  completed_not: Boolean
   AND: [TodoListWhereInput!]
   OR: [TodoListWhereInput!]
   NOT: [TodoListWhereInput!]
@@ -399,6 +420,7 @@ input TodoListWhereInput {
 
 input TodoListWhereUniqueInput {
   id: ID
+  description: String
 }
 
 enum TodoOrderByInput {
@@ -406,6 +428,8 @@ enum TodoOrderByInput {
   id_DESC
   description_ASC
   description_DESC
+  completed_ASC
+  completed_DESC
   createdAt_ASC
   createdAt_DESC
   updatedAt_ASC
@@ -415,6 +439,7 @@ enum TodoOrderByInput {
 type TodoPreviousValues {
   id: ID!
   description: String!
+  completed: Boolean
 }
 
 input TodoScalarWhereInput {
@@ -446,6 +471,8 @@ input TodoScalarWhereInput {
   description_not_starts_with: String
   description_ends_with: String
   description_not_ends_with: String
+  completed: Boolean
+  completed_not: Boolean
   AND: [TodoScalarWhereInput!]
   OR: [TodoScalarWhereInput!]
   NOT: [TodoScalarWhereInput!]
@@ -472,14 +499,17 @@ input TodoSubscriptionWhereInput {
 input TodoUpdateInput {
   description: String
   partOf: TodoListUpdateOneWithoutTodosInput
+  completed: Boolean
 }
 
 input TodoUpdateManyDataInput {
   description: String
+  completed: Boolean
 }
 
 input TodoUpdateManyMutationInput {
   description: String
+  completed: Boolean
 }
 
 input TodoUpdateManyWithoutPartOfInput {
@@ -501,6 +531,7 @@ input TodoUpdateManyWithWhereNestedInput {
 
 input TodoUpdateWithoutPartOfDataInput {
   description: String
+  completed: Boolean
 }
 
 input TodoUpdateWithWhereUniqueWithoutPartOfInput {
@@ -544,6 +575,8 @@ input TodoWhereInput {
   description_ends_with: String
   description_not_ends_with: String
   partOf: TodoListWhereInput
+  completed: Boolean
+  completed_not: Boolean
   AND: [TodoWhereInput!]
   OR: [TodoWhereInput!]
   NOT: [TodoWhereInput!]
