@@ -5,14 +5,14 @@ type TodoList {
     ownedBy: [User!]! @relation(name: "OwnedBy")
     assignedTo: [User!]! @relation(name: "AssignedTo")
     todos: [Todo!]!
-    completed: Boolean
+    completed: Boolean @default(value: "false")
 }
 
 type Todo {
     id: ID! @unique
     description: String!
     partOf: TodoList
-    completed: Boolean
+    completed: Boolean @default(value: "false")
 }
 
 type User {
