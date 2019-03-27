@@ -3,7 +3,11 @@ module.exports = {
   // Please don't change this file manually but run `prisma generate` to update it.
   // For more information, please read the docs: https://www.prisma.io/docs/prisma-client/
 
-/* GraphQL */ `type AggregateTodo {
+/* GraphQL */ `type AggregateTeam {
+  count: Int!
+}
+
+type AggregateTodo {
   count: Int!
 }
 
@@ -24,6 +28,12 @@ scalar DateTime
 scalar Long
 
 type Mutation {
+  createTeam(data: TeamCreateInput!): Team!
+  updateTeam(data: TeamUpdateInput!, where: TeamWhereUniqueInput!): Team
+  updateManyTeams(data: TeamUpdateManyMutationInput!, where: TeamWhereInput): BatchPayload!
+  upsertTeam(where: TeamWhereUniqueInput!, create: TeamCreateInput!, update: TeamUpdateInput!): Team!
+  deleteTeam(where: TeamWhereUniqueInput!): Team
+  deleteManyTeams(where: TeamWhereInput): BatchPayload!
   createTodo(data: TodoCreateInput!): Todo!
   updateTodo(data: TodoUpdateInput!, where: TodoWhereUniqueInput!): Todo
   updateManyTodoes(data: TodoUpdateManyMutationInput!, where: TodoWhereInput): BatchPayload!
@@ -62,6 +72,9 @@ type PageInfo {
 }
 
 type Query {
+  team(where: TeamWhereUniqueInput!): Team
+  teams(where: TeamWhereInput, orderBy: TeamOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Team]!
+  teamsConnection(where: TeamWhereInput, orderBy: TeamOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): TeamConnection!
   todo(where: TodoWhereUniqueInput!): Todo
   todoes(where: TodoWhereInput, orderBy: TodoOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Todo]!
   todoesConnection(where: TodoWhereInput, orderBy: TodoOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): TodoConnection!
@@ -75,9 +88,180 @@ type Query {
 }
 
 type Subscription {
+  team(where: TeamSubscriptionWhereInput): TeamSubscriptionPayload
   todo(where: TodoSubscriptionWhereInput): TodoSubscriptionPayload
   todoList(where: TodoListSubscriptionWhereInput): TodoListSubscriptionPayload
   user(where: UserSubscriptionWhereInput): UserSubscriptionPayload
+}
+
+type Team {
+  id: ID!
+  teamName: String!
+  members(where: UserWhereInput, orderBy: UserOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [User!]
+  todoLists(where: TodoListWhereInput, orderBy: TodoListOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [TodoList!]
+}
+
+type TeamConnection {
+  pageInfo: PageInfo!
+  edges: [TeamEdge]!
+  aggregate: AggregateTeam!
+}
+
+input TeamCreateInput {
+  teamName: String!
+  members: UserCreateManyWithoutInTeamInput
+  todoLists: TodoListCreateManyWithoutInTeamInput
+}
+
+input TeamCreateOneWithoutMembersInput {
+  create: TeamCreateWithoutMembersInput
+  connect: TeamWhereUniqueInput
+}
+
+input TeamCreateOneWithoutTodoListsInput {
+  create: TeamCreateWithoutTodoListsInput
+  connect: TeamWhereUniqueInput
+}
+
+input TeamCreateWithoutMembersInput {
+  teamName: String!
+  todoLists: TodoListCreateManyWithoutInTeamInput
+}
+
+input TeamCreateWithoutTodoListsInput {
+  teamName: String!
+  members: UserCreateManyWithoutInTeamInput
+}
+
+type TeamEdge {
+  node: Team!
+  cursor: String!
+}
+
+enum TeamOrderByInput {
+  id_ASC
+  id_DESC
+  teamName_ASC
+  teamName_DESC
+  createdAt_ASC
+  createdAt_DESC
+  updatedAt_ASC
+  updatedAt_DESC
+}
+
+type TeamPreviousValues {
+  id: ID!
+  teamName: String!
+}
+
+type TeamSubscriptionPayload {
+  mutation: MutationType!
+  node: Team
+  updatedFields: [String!]
+  previousValues: TeamPreviousValues
+}
+
+input TeamSubscriptionWhereInput {
+  mutation_in: [MutationType!]
+  updatedFields_contains: String
+  updatedFields_contains_every: [String!]
+  updatedFields_contains_some: [String!]
+  node: TeamWhereInput
+  AND: [TeamSubscriptionWhereInput!]
+  OR: [TeamSubscriptionWhereInput!]
+  NOT: [TeamSubscriptionWhereInput!]
+}
+
+input TeamUpdateInput {
+  teamName: String
+  members: UserUpdateManyWithoutInTeamInput
+  todoLists: TodoListUpdateManyWithoutInTeamInput
+}
+
+input TeamUpdateManyMutationInput {
+  teamName: String
+}
+
+input TeamUpdateOneWithoutMembersInput {
+  create: TeamCreateWithoutMembersInput
+  update: TeamUpdateWithoutMembersDataInput
+  upsert: TeamUpsertWithoutMembersInput
+  delete: Boolean
+  disconnect: Boolean
+  connect: TeamWhereUniqueInput
+}
+
+input TeamUpdateOneWithoutTodoListsInput {
+  create: TeamCreateWithoutTodoListsInput
+  update: TeamUpdateWithoutTodoListsDataInput
+  upsert: TeamUpsertWithoutTodoListsInput
+  delete: Boolean
+  disconnect: Boolean
+  connect: TeamWhereUniqueInput
+}
+
+input TeamUpdateWithoutMembersDataInput {
+  teamName: String
+  todoLists: TodoListUpdateManyWithoutInTeamInput
+}
+
+input TeamUpdateWithoutTodoListsDataInput {
+  teamName: String
+  members: UserUpdateManyWithoutInTeamInput
+}
+
+input TeamUpsertWithoutMembersInput {
+  update: TeamUpdateWithoutMembersDataInput!
+  create: TeamCreateWithoutMembersInput!
+}
+
+input TeamUpsertWithoutTodoListsInput {
+  update: TeamUpdateWithoutTodoListsDataInput!
+  create: TeamCreateWithoutTodoListsInput!
+}
+
+input TeamWhereInput {
+  id: ID
+  id_not: ID
+  id_in: [ID!]
+  id_not_in: [ID!]
+  id_lt: ID
+  id_lte: ID
+  id_gt: ID
+  id_gte: ID
+  id_contains: ID
+  id_not_contains: ID
+  id_starts_with: ID
+  id_not_starts_with: ID
+  id_ends_with: ID
+  id_not_ends_with: ID
+  teamName: String
+  teamName_not: String
+  teamName_in: [String!]
+  teamName_not_in: [String!]
+  teamName_lt: String
+  teamName_lte: String
+  teamName_gt: String
+  teamName_gte: String
+  teamName_contains: String
+  teamName_not_contains: String
+  teamName_starts_with: String
+  teamName_not_starts_with: String
+  teamName_ends_with: String
+  teamName_not_ends_with: String
+  members_every: UserWhereInput
+  members_some: UserWhereInput
+  members_none: UserWhereInput
+  todoLists_every: TodoListWhereInput
+  todoLists_some: TodoListWhereInput
+  todoLists_none: TodoListWhereInput
+  AND: [TeamWhereInput!]
+  OR: [TeamWhereInput!]
+  NOT: [TeamWhereInput!]
+}
+
+input TeamWhereUniqueInput {
+  id: ID
 }
 
 type Todo {
@@ -122,6 +306,7 @@ type TodoList {
   assignedTo(where: UserWhereInput, orderBy: UserOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [User!]
   todos(where: TodoWhereInput, orderBy: TodoOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Todo!]
   completed: Boolean
+  inTeam: Team
 }
 
 type TodoListConnection {
@@ -136,10 +321,16 @@ input TodoListCreateInput {
   assignedTo: UserCreateManyWithoutTodoListsAssignedInput
   todos: TodoCreateManyWithoutPartOfInput
   completed: Boolean
+  inTeam: TeamCreateOneWithoutTodoListsInput
 }
 
 input TodoListCreateManyWithoutAssignedToInput {
   create: [TodoListCreateWithoutAssignedToInput!]
+  connect: [TodoListWhereUniqueInput!]
+}
+
+input TodoListCreateManyWithoutInTeamInput {
+  create: [TodoListCreateWithoutInTeamInput!]
   connect: [TodoListWhereUniqueInput!]
 }
 
@@ -158,6 +349,15 @@ input TodoListCreateWithoutAssignedToInput {
   ownedBy: UserCreateManyWithoutTodoListsOwnedInput
   todos: TodoCreateManyWithoutPartOfInput
   completed: Boolean
+  inTeam: TeamCreateOneWithoutTodoListsInput
+}
+
+input TodoListCreateWithoutInTeamInput {
+  description: String!
+  ownedBy: UserCreateManyWithoutTodoListsOwnedInput
+  assignedTo: UserCreateManyWithoutTodoListsAssignedInput
+  todos: TodoCreateManyWithoutPartOfInput
+  completed: Boolean
 }
 
 input TodoListCreateWithoutOwnedByInput {
@@ -165,6 +365,7 @@ input TodoListCreateWithoutOwnedByInput {
   assignedTo: UserCreateManyWithoutTodoListsAssignedInput
   todos: TodoCreateManyWithoutPartOfInput
   completed: Boolean
+  inTeam: TeamCreateOneWithoutTodoListsInput
 }
 
 input TodoListCreateWithoutTodosInput {
@@ -172,6 +373,7 @@ input TodoListCreateWithoutTodosInput {
   ownedBy: UserCreateManyWithoutTodoListsOwnedInput
   assignedTo: UserCreateManyWithoutTodoListsAssignedInput
   completed: Boolean
+  inTeam: TeamCreateOneWithoutTodoListsInput
 }
 
 type TodoListEdge {
@@ -267,6 +469,7 @@ input TodoListUpdateInput {
   assignedTo: UserUpdateManyWithoutTodoListsAssignedInput
   todos: TodoUpdateManyWithoutPartOfInput
   completed: Boolean
+  inTeam: TeamUpdateOneWithoutTodoListsInput
 }
 
 input TodoListUpdateManyDataInput {
@@ -287,6 +490,18 @@ input TodoListUpdateManyWithoutAssignedToInput {
   disconnect: [TodoListWhereUniqueInput!]
   update: [TodoListUpdateWithWhereUniqueWithoutAssignedToInput!]
   upsert: [TodoListUpsertWithWhereUniqueWithoutAssignedToInput!]
+  deleteMany: [TodoListScalarWhereInput!]
+  updateMany: [TodoListUpdateManyWithWhereNestedInput!]
+}
+
+input TodoListUpdateManyWithoutInTeamInput {
+  create: [TodoListCreateWithoutInTeamInput!]
+  delete: [TodoListWhereUniqueInput!]
+  connect: [TodoListWhereUniqueInput!]
+  set: [TodoListWhereUniqueInput!]
+  disconnect: [TodoListWhereUniqueInput!]
+  update: [TodoListUpdateWithWhereUniqueWithoutInTeamInput!]
+  upsert: [TodoListUpsertWithWhereUniqueWithoutInTeamInput!]
   deleteMany: [TodoListScalarWhereInput!]
   updateMany: [TodoListUpdateManyWithWhereNestedInput!]
 }
@@ -322,6 +537,15 @@ input TodoListUpdateWithoutAssignedToDataInput {
   ownedBy: UserUpdateManyWithoutTodoListsOwnedInput
   todos: TodoUpdateManyWithoutPartOfInput
   completed: Boolean
+  inTeam: TeamUpdateOneWithoutTodoListsInput
+}
+
+input TodoListUpdateWithoutInTeamDataInput {
+  description: String
+  ownedBy: UserUpdateManyWithoutTodoListsOwnedInput
+  assignedTo: UserUpdateManyWithoutTodoListsAssignedInput
+  todos: TodoUpdateManyWithoutPartOfInput
+  completed: Boolean
 }
 
 input TodoListUpdateWithoutOwnedByDataInput {
@@ -329,6 +553,7 @@ input TodoListUpdateWithoutOwnedByDataInput {
   assignedTo: UserUpdateManyWithoutTodoListsAssignedInput
   todos: TodoUpdateManyWithoutPartOfInput
   completed: Boolean
+  inTeam: TeamUpdateOneWithoutTodoListsInput
 }
 
 input TodoListUpdateWithoutTodosDataInput {
@@ -336,11 +561,17 @@ input TodoListUpdateWithoutTodosDataInput {
   ownedBy: UserUpdateManyWithoutTodoListsOwnedInput
   assignedTo: UserUpdateManyWithoutTodoListsAssignedInput
   completed: Boolean
+  inTeam: TeamUpdateOneWithoutTodoListsInput
 }
 
 input TodoListUpdateWithWhereUniqueWithoutAssignedToInput {
   where: TodoListWhereUniqueInput!
   data: TodoListUpdateWithoutAssignedToDataInput!
+}
+
+input TodoListUpdateWithWhereUniqueWithoutInTeamInput {
+  where: TodoListWhereUniqueInput!
+  data: TodoListUpdateWithoutInTeamDataInput!
 }
 
 input TodoListUpdateWithWhereUniqueWithoutOwnedByInput {
@@ -357,6 +588,12 @@ input TodoListUpsertWithWhereUniqueWithoutAssignedToInput {
   where: TodoListWhereUniqueInput!
   update: TodoListUpdateWithoutAssignedToDataInput!
   create: TodoListCreateWithoutAssignedToInput!
+}
+
+input TodoListUpsertWithWhereUniqueWithoutInTeamInput {
+  where: TodoListWhereUniqueInput!
+  update: TodoListUpdateWithoutInTeamDataInput!
+  create: TodoListCreateWithoutInTeamInput!
 }
 
 input TodoListUpsertWithWhereUniqueWithoutOwnedByInput {
@@ -413,6 +650,7 @@ input TodoListWhereInput {
   todos_none: TodoWhereInput
   completed: Boolean
   completed_not: Boolean
+  inTeam: TeamWhereInput
   AND: [TodoListWhereInput!]
   OR: [TodoListWhereInput!]
   NOT: [TodoListWhereInput!]
@@ -591,6 +829,7 @@ type User {
   name: String!
   todoListsOwned(where: TodoListWhereInput, orderBy: TodoListOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [TodoList!]
   todoListsAssigned(where: TodoListWhereInput, orderBy: TodoListOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [TodoList!]
+  inTeam: Team
 }
 
 type UserConnection {
@@ -603,6 +842,12 @@ input UserCreateInput {
   name: String!
   todoListsOwned: TodoListCreateManyWithoutOwnedByInput
   todoListsAssigned: TodoListCreateManyWithoutAssignedToInput
+  inTeam: TeamCreateOneWithoutMembersInput
+}
+
+input UserCreateManyWithoutInTeamInput {
+  create: [UserCreateWithoutInTeamInput!]
+  connect: [UserWhereUniqueInput!]
 }
 
 input UserCreateManyWithoutTodoListsAssignedInput {
@@ -615,14 +860,22 @@ input UserCreateManyWithoutTodoListsOwnedInput {
   connect: [UserWhereUniqueInput!]
 }
 
+input UserCreateWithoutInTeamInput {
+  name: String!
+  todoListsOwned: TodoListCreateManyWithoutOwnedByInput
+  todoListsAssigned: TodoListCreateManyWithoutAssignedToInput
+}
+
 input UserCreateWithoutTodoListsAssignedInput {
   name: String!
   todoListsOwned: TodoListCreateManyWithoutOwnedByInput
+  inTeam: TeamCreateOneWithoutMembersInput
 }
 
 input UserCreateWithoutTodoListsOwnedInput {
   name: String!
   todoListsAssigned: TodoListCreateManyWithoutAssignedToInput
+  inTeam: TeamCreateOneWithoutMembersInput
 }
 
 type UserEdge {
@@ -711,6 +964,7 @@ input UserUpdateInput {
   name: String
   todoListsOwned: TodoListUpdateManyWithoutOwnedByInput
   todoListsAssigned: TodoListUpdateManyWithoutAssignedToInput
+  inTeam: TeamUpdateOneWithoutMembersInput
 }
 
 input UserUpdateManyDataInput {
@@ -719,6 +973,18 @@ input UserUpdateManyDataInput {
 
 input UserUpdateManyMutationInput {
   name: String
+}
+
+input UserUpdateManyWithoutInTeamInput {
+  create: [UserCreateWithoutInTeamInput!]
+  delete: [UserWhereUniqueInput!]
+  connect: [UserWhereUniqueInput!]
+  set: [UserWhereUniqueInput!]
+  disconnect: [UserWhereUniqueInput!]
+  update: [UserUpdateWithWhereUniqueWithoutInTeamInput!]
+  upsert: [UserUpsertWithWhereUniqueWithoutInTeamInput!]
+  deleteMany: [UserScalarWhereInput!]
+  updateMany: [UserUpdateManyWithWhereNestedInput!]
 }
 
 input UserUpdateManyWithoutTodoListsAssignedInput {
@@ -750,14 +1016,27 @@ input UserUpdateManyWithWhereNestedInput {
   data: UserUpdateManyDataInput!
 }
 
+input UserUpdateWithoutInTeamDataInput {
+  name: String
+  todoListsOwned: TodoListUpdateManyWithoutOwnedByInput
+  todoListsAssigned: TodoListUpdateManyWithoutAssignedToInput
+}
+
 input UserUpdateWithoutTodoListsAssignedDataInput {
   name: String
   todoListsOwned: TodoListUpdateManyWithoutOwnedByInput
+  inTeam: TeamUpdateOneWithoutMembersInput
 }
 
 input UserUpdateWithoutTodoListsOwnedDataInput {
   name: String
   todoListsAssigned: TodoListUpdateManyWithoutAssignedToInput
+  inTeam: TeamUpdateOneWithoutMembersInput
+}
+
+input UserUpdateWithWhereUniqueWithoutInTeamInput {
+  where: UserWhereUniqueInput!
+  data: UserUpdateWithoutInTeamDataInput!
 }
 
 input UserUpdateWithWhereUniqueWithoutTodoListsAssignedInput {
@@ -768,6 +1047,12 @@ input UserUpdateWithWhereUniqueWithoutTodoListsAssignedInput {
 input UserUpdateWithWhereUniqueWithoutTodoListsOwnedInput {
   where: UserWhereUniqueInput!
   data: UserUpdateWithoutTodoListsOwnedDataInput!
+}
+
+input UserUpsertWithWhereUniqueWithoutInTeamInput {
+  where: UserWhereUniqueInput!
+  update: UserUpdateWithoutInTeamDataInput!
+  create: UserCreateWithoutInTeamInput!
 }
 
 input UserUpsertWithWhereUniqueWithoutTodoListsAssignedInput {
@@ -825,6 +1110,7 @@ input UserWhereInput {
   todoListsAssigned_every: TodoListWhereInput
   todoListsAssigned_some: TodoListWhereInput
   todoListsAssigned_none: TodoListWhereInput
+  inTeam: TeamWhereInput
   AND: [UserWhereInput!]
   OR: [UserWhereInput!]
   NOT: [UserWhereInput!]
