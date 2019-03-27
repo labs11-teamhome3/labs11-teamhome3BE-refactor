@@ -14,6 +14,8 @@ type Mutation {
     toggleTodoListComplete(todoListId: ID!): TodoList
     addUserToOwners(userId: ID!, todoListId: ID!): TodoList
     addUserToAssignees(userId: ID!, todoListId: ID!): TodoList
+    removeUserFromOwners(userId: ID!, todoListId: ID!): TodoList
+    removeUserFromAssignees(userId: ID!, todoListId: ID!): TodoList
 }
 
 type Query {

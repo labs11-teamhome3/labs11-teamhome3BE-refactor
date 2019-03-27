@@ -124,7 +124,7 @@ function addUserToOwners(parent, args, context, info) {
     })
 }
 
-function addUserToAssignees(parent, args, context, info) {
+async function addUserToAssignees(parent, args, context, info) {
     return context.prisma.updateTodoList({
         where: {id: args.todoListId},
         data: {
@@ -136,6 +136,38 @@ function addUserToAssignees(parent, args, context, info) {
         }
     })
 }
+
+async function removeUserFromOwners(parent, args, context, info) {
+    const todoList = await context.prisma.todoList({ id: args.todoListId }).ownedBy();
+    if (todoList.length < 2) {
+        throw new Error('You can not delete the original owner of the list')
+    } else {
+        return context.prisma.updateTodoList({
+            where: { id: args.todoListId },
+            data: {
+                ownedBy: {
+                    disconnect: {
+                        id: args.userId
+                    }
+                }
+            }
+        })
+    }
+}
+
+function removeUserFromAssignees(parent, args, context, info) {
+    return context.prisma.updateTodoList({
+        where: { id: args.todoListId },
+        data: {
+            assignedTo: {
+                disconnect: {
+                    id: args.userId
+                }
+            }
+        }
+    })
+}
+
 async function toggleTodoComplete(parent, args, context, info) {
     const todo = await context.prisma.todo({ id: args.todoId })
     return context.prisma.updateTodo({
@@ -173,4 +205,6 @@ module.exports = {
    toggleTodoListComplete,
    addUserToOwners,
    addUserToAssignees,
+   removeUserFromOwners,
+   removeUserFromAssignees
 };
