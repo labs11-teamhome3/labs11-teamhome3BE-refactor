@@ -10,8 +10,13 @@ function todos(parent, args, context) {
     return context.prisma.todoList({ id: parent.id }).todos();
 }
 
+function inTeam(parent, args, context) {
+    return context.prisma.todoList({ id: parent.id }).inTeam();
+}
+
 module.exports = {
     ownedBy,
     assignedTo,
-    todos
+    todos,
+    inTeam
 }
