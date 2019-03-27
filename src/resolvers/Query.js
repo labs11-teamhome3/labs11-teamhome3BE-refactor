@@ -12,7 +12,7 @@ const todoLists = (parent, args, context, info) => {
         return context.prisma.todoLists();
 }
 
-const todoList = (parent, args, context, info) => {
+const todoList = async (parent, args, context, info) => {
         return context.prisma.todoList({ id: args.id });
 }
 

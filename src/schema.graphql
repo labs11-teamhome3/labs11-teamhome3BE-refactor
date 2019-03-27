@@ -10,6 +10,12 @@ type Mutation {
     deleteTeam(id: String!): String!
     updateTeam(id: String!, teamName: String!, members: String): Team
     addUserToTeam(userId: ID!, teamId: ID!): Team
+    toggleTodoComplete(todoId: ID!): Todo
+    toggleTodoListComplete(todoListId: ID!): TodoList
+    addUserToOwners(userId: ID!, todoListId: ID!): TodoList
+    addUserToAssignees(userId: ID!, todoListId: ID!): TodoList
+    removeUserFromOwners(userId: ID!, todoListId: ID!): TodoList
+    removeUserFromAssignees(userId: ID!, todoListId: ID!): TodoList
 }
 
 type Query {
