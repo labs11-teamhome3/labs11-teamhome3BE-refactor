@@ -11,7 +11,7 @@ async function createUser(parent, args, ctx, info) {
 
 /*
 async function updateUser(parent, args, context, info) {
-    return context.prisma.updateUser({
+    return context.db.mutation.updateUser({
         where: {id: args.id},
         data: {
             name: args.name,
@@ -111,6 +111,83 @@ function addUserToTeam(parent, args, context, info) {
     }, info)
 }
 
+function addUserToOwners(parent, args, context, info) {
+    return context.db.mutation.updateTodoList({
+        where: {id: args.todoListId},
+        data: {
+            ownedBy: {
+                connect: {
+                    id: args.userId
+                }
+            }
+        }
+    })
+}
+
+async function addUserToAssignees(parent, args, context, info) {
+    return context.db.mutation.updateTodoList({
+        where: {id: args.todoListId},
+        data: {
+            assignedTo: {
+                connect: {
+                    id: args.userId
+                }
+            }
+        }
+    })
+}
+
+async function removeUserFromOwners(parent, args, context, info) {
+    const todoList = await context.db.mutation.todoList({ id: args.todoListId }).ownedBy();
+    if (todoList.length < 2) {
+        throw new Error('You can not delete the original owner of the list')
+    } else {
+        return context.db.mutation.updateTodoList({
+            where: { id: args.todoListId },
+            data: {
+                ownedBy: {
+                    disconnect: {
+                        id: args.userId
+                    }
+                }
+            }
+        })
+    }
+}
+
+function removeUserFromAssignees(parent, args, context, info) {
+    return context.db.mutation.updateTodoList({
+        where: { id: args.todoListId },
+        data: {
+            assignedTo: {
+                disconnect: {
+                    id: args.userId
+                }
+            }
+        }
+    })
+}
+
+async function toggleTodoComplete(parent, args, context, info) {
+    const todo = await context.db.mutation.todo({ id: args.todoId })
+    return context.db.mutation.updateTodo({
+        where: {id: args.todoId},
+        data: {
+            completed: !todo.completed
+        }
+    })
+}
+
+async function toggleTodoListComplete(parent, args, context, info) {
+    const todoList = await context.db.mutation.todoList({ id: args.todoListId });
+    return context.db.mutation.updateTodoList({
+        where: {id: args.todoListId},
+        data: {
+            completed: !todoList.completed
+        }
+    })
+}
+
 module.exports = {
    createUser,
    // updateUser,
@@ -123,5 +200,11 @@ module.exports = {
    createTeam,
    deleteTeam,
    updateTeam,
-   addUserToTeam
+   addUserToTeam,
+   toggleTodoComplete,
+   toggleTodoListComplete,
+   addUserToOwners,
+   addUserToAssignees,
+   removeUserFromOwners,
+   removeUserFromAssignees
 };
