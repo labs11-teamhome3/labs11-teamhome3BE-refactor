@@ -111,6 +111,51 @@ function addUserToTeam(parent, args, context, info) {
     })
 }
 
+function addUserToOwners(parent, args, context, info) {
+    return context.prisma.updateTodoList({
+        where: {id: args.todoListId},
+        data: {
+            ownedBy: {
+                connect: {
+                    id: args.userId
+                }
+            }
+        }
+    })
+}
+
+function addUserToAssignees(parent, args, context, info) {
+    return context.prisma.updateTodoList({
+        where: {id: args.todoListId},
+        data: {
+            assignedTo: {
+                connect: {
+                    id: args.userId
+                }
+            }
+        }
+    })
+}
+async function toggleTodoComplete(parent, args, context, info) {
+    const todo = await context.prisma.todo({ id: args.todoId })
+    return context.prisma.updateTodo({
+        where: {id: args.todoId},
+        data: {
+            completed: !todo.completed
+        }
+    })
+}
+
+async function toggleTodoListComplete(parent, args, context, info) {
+    const todoList = await context.prisma.todoList({ id: args.todoListId });
+    return context.prisma.updateTodoList({
+        where: {id: args.todoListId},
+        data: {
+            completed: !todoList.completed
+        }
+    })
+}
+
 module.exports = {
    createUser,
    // updateUser,
@@ -123,5 +168,9 @@ module.exports = {
    createTeam,
    deleteTeam,
    updateTeam,
-   addUserToTeam
+   addUserToTeam,
+   toggleTodoComplete,
+   toggleTodoListComplete,
+   addUserToOwners,
+   addUserToAssignees,
 };
