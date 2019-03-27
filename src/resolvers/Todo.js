@@ -1,5 +1,5 @@
 function partOf(parent, args, context) {
-    return context.prisma.todo({ id: parent.id }).partOf()
+    return context.db.mutation.todo({ id: parent.id }).partOf()
 }
 
 module.exports = {

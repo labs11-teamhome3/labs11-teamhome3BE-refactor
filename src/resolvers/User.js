@@ -1,13 +1,13 @@
 function todoListsAssigned(parent, args, context) {
-    return context.prisma.user({ id: parent.id }).todoListsAssigned()
+    return context.db.mutation.user({ id: parent.id }).todoListsAssigned()
 }
 
 function todoListsOwned(parent, args, context) {
-    return context.prisma.user({ id: parent.id }).todoListsOwned()
+    return context.db.mutation.user({ id: parent.id }).todoListsOwned()
 }
 
 function inTeam(parent, args, context) {
-    return context.prisma.user({ id: parent.id }).inTeam()
+    return context.db.mutation.user({ id: parent.id }).inTeam()
 }
 
 
