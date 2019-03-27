@@ -7,9 +7,11 @@
   "license": "MIT",
   "dependencies": {
     "apollo-server-express": "^2.4.8",
-    "graphql": "^14.1.1",
     "dotenv": "^7.0.0",
+    "global": "^4.3.2",
+    "graphql": "^14.1.1",
     "graphql-yoga": "^1.17.4",
+    "prisma": "^1.29.2",
     "prisma-client-lib": "^1.29.1"
   },
   "devDependencies": {
