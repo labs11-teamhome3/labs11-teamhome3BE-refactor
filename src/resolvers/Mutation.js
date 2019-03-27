@@ -1,6 +1,24 @@
 async function createUser(parent, args, ctx, info) {
-    return ctx.prisma.createUser(args);
+    return ctx.prisma.createUser({
+        name: args.name,
+        inTeam: {
+            connect: {
+                id: args.inTeam
+            }
+        }
+    });
 }
+
+/*
+async function updateUser(parent, args, context, info) {
+    return context.prisma.updateUser({
+        where: {id: args.id},
+        data: {
+            name: args.name,
+            inTeam: args.inTeam,
+        }
+    })
+} */
 
 async function createTodo(parent, args, context, info) {
     return context.prisma.createTodo({
@@ -40,6 +58,11 @@ async function createTodoList(parent, args, context, info) {
             connect: {
                 id: args.assignedTo
             }
+        },
+        team: {
+            connect: {
+                id: args.team
+            }
         }
     })
 }
@@ -54,17 +77,52 @@ async function updateTodoList(parent, args, context, info) {
         where: {id: args.id},
         data: {
             description: args.description,
-            completed: args.completed
+            completed: args.completed,
         }
     })
 }
 
+async function createTeam(parent, args, ctx, info) {
+    return ctx.prisma.createTeam({
+        teamName: args.teamName,
+        members: {
+            connect: {
+                id: args.members
+            }
+        },
+        todoLists: {
+            connect: {
+                id: args.todoList
+            }
+        }
+    });
+}
+
+async function deleteTeam(parent, args, context, info) {
+    await context.prisma.deleteTeam({id: args.id})
+    return `Team ${args.id} deleted`
+}
+
+async function updateTeam(parent, args, ctx, info) {
+    return ctx.prisma.updateTeam({
+        where: {id: args.id},
+        data: {
+            teamName: args.teamName,
+            members: args.members,
+        }
+    });
+}
+
 module.exports = {
    createUser,
+   // updateUser,
    createTodo,
    deleteTodo,
    updateTodo,
    createTodoList,
    deleteTodoList,
-   updateTodoList
+   updateTodoList,
+   createTeam,
+   deleteTeam,
+   updateTeam
 };

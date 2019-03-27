@@ -14,6 +14,7 @@ export type AtLeastOne<T, U = { [K in keyof T]: Pick<T, K> }> = Partial<T> &
   U[keyof U];
 
 export interface Exists {
+  team: (where?: TeamWhereInput) => Promise<boolean>;
   todo: (where?: TodoWhereInput) => Promise<boolean>;
   todoList: (where?: TodoListWhereInput) => Promise<boolean>;
   user: (where?: UserWhereInput) => Promise<boolean>;
@@ -38,6 +39,29 @@ export interface Prisma {
    * Queries
    */
 
+  team: (where: TeamWhereUniqueInput) => TeamPromise;
+  teams: (
+    args?: {
+      where?: TeamWhereInput;
+      orderBy?: TeamOrderByInput;
+      skip?: Int;
+      after?: String;
+      before?: String;
+      first?: Int;
+      last?: Int;
+    }
+  ) => FragmentableArray<Team>;
+  teamsConnection: (
+    args?: {
+      where?: TeamWhereInput;
+      orderBy?: TeamOrderByInput;
+      skip?: Int;
+      after?: String;
+      before?: String;
+      first?: Int;
+      last?: Int;
+    }
+  ) => TeamConnectionPromise;
   todo: (where: TodoWhereUniqueInput) => TodoPromise;
   todoes: (
     args?: {
@@ -113,6 +137,22 @@ export interface Prisma {
    * Mutations
    */
 
+  createTeam: (data: TeamCreateInput) => TeamPromise;
+  updateTeam: (
+    args: { data: TeamUpdateInput; where: TeamWhereUniqueInput }
+  ) => TeamPromise;
+  updateManyTeams: (
+    args: { data: TeamUpdateManyMutationInput; where?: TeamWhereInput }
+  ) => BatchPayloadPromise;
+  upsertTeam: (
+    args: {
+      where: TeamWhereUniqueInput;
+      create: TeamCreateInput;
+      update: TeamUpdateInput;
+    }
+  ) => TeamPromise;
+  deleteTeam: (where: TeamWhereUniqueInput) => TeamPromise;
+  deleteManyTeams: (where?: TeamWhereInput) => BatchPayloadPromise;
   createTodo: (data: TodoCreateInput) => TodoPromise;
   updateTodo: (
     args: { data: TodoUpdateInput; where: TodoWhereUniqueInput }
@@ -170,6 +210,9 @@ export interface Prisma {
 }
 
 export interface Subscription {
+  team: (
+    where?: TeamSubscriptionWhereInput
+  ) => TeamSubscriptionPayloadSubscription;
   todo: (
     where?: TodoSubscriptionWhereInput
   ) => TodoSubscriptionPayloadSubscription;
@@ -223,9 +266,19 @@ export type TodoOrderByInput =
   | "updatedAt_ASC"
   | "updatedAt_DESC";
 
+export type TeamOrderByInput =
+  | "id_ASC"
+  | "id_DESC"
+  | "teamName_ASC"
+  | "teamName_DESC"
+  | "createdAt_ASC"
+  | "createdAt_DESC"
+  | "updatedAt_ASC"
+  | "updatedAt_DESC";
+
 export type MutationType = "CREATED" | "UPDATED" | "DELETED";
 
-export type TodoWhereUniqueInput = AtLeastOne<{
+export type TeamWhereUniqueInput = AtLeastOne<{
   id: ID_Input;
 }>;
 
@@ -272,6 +325,7 @@ export interface UserWhereInput {
   todoListsAssigned_every?: TodoListWhereInput;
   todoListsAssigned_some?: TodoListWhereInput;
   todoListsAssigned_none?: TodoListWhereInput;
+  inTeam?: TeamWhereInput;
   AND?: UserWhereInput[] | UserWhereInput;
   OR?: UserWhereInput[] | UserWhereInput;
   NOT?: UserWhereInput[] | UserWhereInput;
@@ -325,6 +379,7 @@ export interface TodoListWhereInput {
   todos_none?: TodoWhereInput;
   completed?: Boolean;
   completed_not?: Boolean;
+  inTeam?: TeamWhereInput;
   AND?: TodoListWhereInput[] | TodoListWhereInput;
   OR?: TodoListWhereInput[] | TodoListWhereInput;
   NOT?: TodoListWhereInput[] | TodoListWhereInput;
@@ -367,6 +422,50 @@ export interface TodoWhereInput {
   NOT?: TodoWhereInput[] | TodoWhereInput;
 }
 
+export interface TeamWhereInput {
+  id?: ID_Input;
+  id_not?: ID_Input;
+  id_in?: ID_Input[] | ID_Input;
+  id_not_in?: ID_Input[] | ID_Input;
+  id_lt?: ID_Input;
+  id_lte?: ID_Input;
+  id_gt?: ID_Input;
+  id_gte?: ID_Input;
+  id_contains?: ID_Input;
+  id_not_contains?: ID_Input;
+  id_starts_with?: ID_Input;
+  id_not_starts_with?: ID_Input;
+  id_ends_with?: ID_Input;
+  id_not_ends_with?: ID_Input;
+  teamName?: String;
+  teamName_not?: String;
+  teamName_in?: String[] | String;
+  teamName_not_in?: String[] | String;
+  teamName_lt?: String;
+  teamName_lte?: String;
+  teamName_gt?: String;
+  teamName_gte?: String;
+  teamName_contains?: String;
+  teamName_not_contains?: String;
+  teamName_starts_with?: String;
+  teamName_not_starts_with?: String;
+  teamName_ends_with?: String;
+  teamName_not_ends_with?: String;
+  members_every?: UserWhereInput;
+  members_some?: UserWhereInput;
+  members_none?: UserWhereInput;
+  todoLists_every?: TodoListWhereInput;
+  todoLists_some?: TodoListWhereInput;
+  todoLists_none?: TodoListWhereInput;
+  AND?: TeamWhereInput[] | TeamWhereInput;
+  OR?: TeamWhereInput[] | TeamWhereInput;
+  NOT?: TeamWhereInput[] | TeamWhereInput;
+}
+
+export type TodoWhereUniqueInput = AtLeastOne<{
+  id: ID_Input;
+}>;
+
 export type TodoListWhereUniqueInput = AtLeastOne<{
   id: ID_Input;
 }>;
@@ -375,70 +474,21 @@ export type UserWhereUniqueInput = AtLeastOne<{
   id: ID_Input;
 }>;
 
-export interface TodoCreateInput {
-  description: String;
-  partOf?: TodoListCreateOneWithoutTodosInput;
-  completed?: Boolean;
+export interface TeamCreateInput {
+  teamName: String;
+  members?: UserCreateManyWithoutInTeamInput;
+  todoLists?: TodoListCreateManyWithoutInTeamInput;
 }
 
-export interface TodoListCreateOneWithoutTodosInput {
-  create?: TodoListCreateWithoutTodosInput;
-  connect?: TodoListWhereUniqueInput;
-}
-
-export interface TodoListCreateWithoutTodosInput {
-  description: String;
-  ownedBy?: UserCreateManyWithoutTodoListsOwnedInput;
-  assignedTo?: UserCreateManyWithoutTodoListsAssignedInput;
-  completed?: Boolean;
-}
-
-export interface UserCreateManyWithoutTodoListsOwnedInput {
-  create?:
-    | UserCreateWithoutTodoListsOwnedInput[]
-    | UserCreateWithoutTodoListsOwnedInput;
+export interface UserCreateManyWithoutInTeamInput {
+  create?: UserCreateWithoutInTeamInput[] | UserCreateWithoutInTeamInput;
   connect?: UserWhereUniqueInput[] | UserWhereUniqueInput;
 }
 
-export interface UserCreateWithoutTodoListsOwnedInput {
-  name: String;
-  todoListsAssigned?: TodoListCreateManyWithoutAssignedToInput;
-}
-
-export interface TodoListCreateManyWithoutAssignedToInput {
-  create?:
-    | TodoListCreateWithoutAssignedToInput[]
-    | TodoListCreateWithoutAssignedToInput;
-  connect?: TodoListWhereUniqueInput[] | TodoListWhereUniqueInput;
-}
-
-export interface TodoListCreateWithoutAssignedToInput {
-  description: String;
-  ownedBy?: UserCreateManyWithoutTodoListsOwnedInput;
-  todos?: TodoCreateManyWithoutPartOfInput;
-  completed?: Boolean;
-}
-
-export interface TodoCreateManyWithoutPartOfInput {
-  create?: TodoCreateWithoutPartOfInput[] | TodoCreateWithoutPartOfInput;
-  connect?: TodoWhereUniqueInput[] | TodoWhereUniqueInput;
-}
-
-export interface TodoCreateWithoutPartOfInput {
-  description: String;
-  completed?: Boolean;
-}
-
-export interface UserCreateManyWithoutTodoListsAssignedInput {
-  create?:
-    | UserCreateWithoutTodoListsAssignedInput[]
-    | UserCreateWithoutTodoListsAssignedInput;
-  connect?: UserWhereUniqueInput[] | UserWhereUniqueInput;
-}
-
-export interface UserCreateWithoutTodoListsAssignedInput {
+export interface UserCreateWithoutInTeamInput {
   name: String;
   todoListsOwned?: TodoListCreateManyWithoutOwnedByInput;
+  todoListsAssigned?: TodoListCreateManyWithoutAssignedToInput;
 }
 
 export interface TodoListCreateManyWithoutOwnedByInput {
@@ -453,27 +503,238 @@ export interface TodoListCreateWithoutOwnedByInput {
   assignedTo?: UserCreateManyWithoutTodoListsAssignedInput;
   todos?: TodoCreateManyWithoutPartOfInput;
   completed?: Boolean;
+  inTeam?: TeamCreateOneWithoutTodoListsInput;
 }
 
-export interface TodoUpdateInput {
-  description?: String;
-  partOf?: TodoListUpdateOneWithoutTodosInput;
+export interface UserCreateManyWithoutTodoListsAssignedInput {
+  create?:
+    | UserCreateWithoutTodoListsAssignedInput[]
+    | UserCreateWithoutTodoListsAssignedInput;
+  connect?: UserWhereUniqueInput[] | UserWhereUniqueInput;
+}
+
+export interface UserCreateWithoutTodoListsAssignedInput {
+  name: String;
+  todoListsOwned?: TodoListCreateManyWithoutOwnedByInput;
+  inTeam?: TeamCreateOneWithoutMembersInput;
+}
+
+export interface TeamCreateOneWithoutMembersInput {
+  create?: TeamCreateWithoutMembersInput;
+  connect?: TeamWhereUniqueInput;
+}
+
+export interface TeamCreateWithoutMembersInput {
+  teamName: String;
+  todoLists?: TodoListCreateManyWithoutInTeamInput;
+}
+
+export interface TodoListCreateManyWithoutInTeamInput {
+  create?:
+    | TodoListCreateWithoutInTeamInput[]
+    | TodoListCreateWithoutInTeamInput;
+  connect?: TodoListWhereUniqueInput[] | TodoListWhereUniqueInput;
+}
+
+export interface TodoListCreateWithoutInTeamInput {
+  description: String;
+  ownedBy?: UserCreateManyWithoutTodoListsOwnedInput;
+  assignedTo?: UserCreateManyWithoutTodoListsAssignedInput;
+  todos?: TodoCreateManyWithoutPartOfInput;
   completed?: Boolean;
 }
 
-export interface TodoListUpdateOneWithoutTodosInput {
-  create?: TodoListCreateWithoutTodosInput;
-  update?: TodoListUpdateWithoutTodosDataInput;
-  upsert?: TodoListUpsertWithoutTodosInput;
-  delete?: Boolean;
-  disconnect?: Boolean;
-  connect?: TodoListWhereUniqueInput;
+export interface UserCreateManyWithoutTodoListsOwnedInput {
+  create?:
+    | UserCreateWithoutTodoListsOwnedInput[]
+    | UserCreateWithoutTodoListsOwnedInput;
+  connect?: UserWhereUniqueInput[] | UserWhereUniqueInput;
 }
 
-export interface TodoListUpdateWithoutTodosDataInput {
+export interface UserCreateWithoutTodoListsOwnedInput {
+  name: String;
+  todoListsAssigned?: TodoListCreateManyWithoutAssignedToInput;
+  inTeam?: TeamCreateOneWithoutMembersInput;
+}
+
+export interface TodoListCreateManyWithoutAssignedToInput {
+  create?:
+    | TodoListCreateWithoutAssignedToInput[]
+    | TodoListCreateWithoutAssignedToInput;
+  connect?: TodoListWhereUniqueInput[] | TodoListWhereUniqueInput;
+}
+
+export interface TodoListCreateWithoutAssignedToInput {
+  description: String;
+  ownedBy?: UserCreateManyWithoutTodoListsOwnedInput;
+  todos?: TodoCreateManyWithoutPartOfInput;
+  completed?: Boolean;
+  inTeam?: TeamCreateOneWithoutTodoListsInput;
+}
+
+export interface TodoCreateManyWithoutPartOfInput {
+  create?: TodoCreateWithoutPartOfInput[] | TodoCreateWithoutPartOfInput;
+  connect?: TodoWhereUniqueInput[] | TodoWhereUniqueInput;
+}
+
+export interface TodoCreateWithoutPartOfInput {
+  description: String;
+  completed?: Boolean;
+}
+
+export interface TeamCreateOneWithoutTodoListsInput {
+  create?: TeamCreateWithoutTodoListsInput;
+  connect?: TeamWhereUniqueInput;
+}
+
+export interface TeamCreateWithoutTodoListsInput {
+  teamName: String;
+  members?: UserCreateManyWithoutInTeamInput;
+}
+
+export interface TeamUpdateInput {
+  teamName?: String;
+  members?: UserUpdateManyWithoutInTeamInput;
+  todoLists?: TodoListUpdateManyWithoutInTeamInput;
+}
+
+export interface UserUpdateManyWithoutInTeamInput {
+  create?: UserCreateWithoutInTeamInput[] | UserCreateWithoutInTeamInput;
+  delete?: UserWhereUniqueInput[] | UserWhereUniqueInput;
+  connect?: UserWhereUniqueInput[] | UserWhereUniqueInput;
+  set?: UserWhereUniqueInput[] | UserWhereUniqueInput;
+  disconnect?: UserWhereUniqueInput[] | UserWhereUniqueInput;
+  update?:
+    | UserUpdateWithWhereUniqueWithoutInTeamInput[]
+    | UserUpdateWithWhereUniqueWithoutInTeamInput;
+  upsert?:
+    | UserUpsertWithWhereUniqueWithoutInTeamInput[]
+    | UserUpsertWithWhereUniqueWithoutInTeamInput;
+  deleteMany?: UserScalarWhereInput[] | UserScalarWhereInput;
+  updateMany?:
+    | UserUpdateManyWithWhereNestedInput[]
+    | UserUpdateManyWithWhereNestedInput;
+}
+
+export interface UserUpdateWithWhereUniqueWithoutInTeamInput {
+  where: UserWhereUniqueInput;
+  data: UserUpdateWithoutInTeamDataInput;
+}
+
+export interface UserUpdateWithoutInTeamDataInput {
+  name?: String;
+  todoListsOwned?: TodoListUpdateManyWithoutOwnedByInput;
+  todoListsAssigned?: TodoListUpdateManyWithoutAssignedToInput;
+}
+
+export interface TodoListUpdateManyWithoutOwnedByInput {
+  create?:
+    | TodoListCreateWithoutOwnedByInput[]
+    | TodoListCreateWithoutOwnedByInput;
+  delete?: TodoListWhereUniqueInput[] | TodoListWhereUniqueInput;
+  connect?: TodoListWhereUniqueInput[] | TodoListWhereUniqueInput;
+  set?: TodoListWhereUniqueInput[] | TodoListWhereUniqueInput;
+  disconnect?: TodoListWhereUniqueInput[] | TodoListWhereUniqueInput;
+  update?:
+    | TodoListUpdateWithWhereUniqueWithoutOwnedByInput[]
+    | TodoListUpdateWithWhereUniqueWithoutOwnedByInput;
+  upsert?:
+    | TodoListUpsertWithWhereUniqueWithoutOwnedByInput[]
+    | TodoListUpsertWithWhereUniqueWithoutOwnedByInput;
+  deleteMany?: TodoListScalarWhereInput[] | TodoListScalarWhereInput;
+  updateMany?:
+    | TodoListUpdateManyWithWhereNestedInput[]
+    | TodoListUpdateManyWithWhereNestedInput;
+}
+
+export interface TodoListUpdateWithWhereUniqueWithoutOwnedByInput {
+  where: TodoListWhereUniqueInput;
+  data: TodoListUpdateWithoutOwnedByDataInput;
+}
+
+export interface TodoListUpdateWithoutOwnedByDataInput {
+  description?: String;
+  assignedTo?: UserUpdateManyWithoutTodoListsAssignedInput;
+  todos?: TodoUpdateManyWithoutPartOfInput;
+  completed?: Boolean;
+  inTeam?: TeamUpdateOneWithoutTodoListsInput;
+}
+
+export interface UserUpdateManyWithoutTodoListsAssignedInput {
+  create?:
+    | UserCreateWithoutTodoListsAssignedInput[]
+    | UserCreateWithoutTodoListsAssignedInput;
+  delete?: UserWhereUniqueInput[] | UserWhereUniqueInput;
+  connect?: UserWhereUniqueInput[] | UserWhereUniqueInput;
+  set?: UserWhereUniqueInput[] | UserWhereUniqueInput;
+  disconnect?: UserWhereUniqueInput[] | UserWhereUniqueInput;
+  update?:
+    | UserUpdateWithWhereUniqueWithoutTodoListsAssignedInput[]
+    | UserUpdateWithWhereUniqueWithoutTodoListsAssignedInput;
+  upsert?:
+    | UserUpsertWithWhereUniqueWithoutTodoListsAssignedInput[]
+    | UserUpsertWithWhereUniqueWithoutTodoListsAssignedInput;
+  deleteMany?: UserScalarWhereInput[] | UserScalarWhereInput;
+  updateMany?:
+    | UserUpdateManyWithWhereNestedInput[]
+    | UserUpdateManyWithWhereNestedInput;
+}
+
+export interface UserUpdateWithWhereUniqueWithoutTodoListsAssignedInput {
+  where: UserWhereUniqueInput;
+  data: UserUpdateWithoutTodoListsAssignedDataInput;
+}
+
+export interface UserUpdateWithoutTodoListsAssignedDataInput {
+  name?: String;
+  todoListsOwned?: TodoListUpdateManyWithoutOwnedByInput;
+  inTeam?: TeamUpdateOneWithoutMembersInput;
+}
+
+export interface TeamUpdateOneWithoutMembersInput {
+  create?: TeamCreateWithoutMembersInput;
+  update?: TeamUpdateWithoutMembersDataInput;
+  upsert?: TeamUpsertWithoutMembersInput;
+  delete?: Boolean;
+  disconnect?: Boolean;
+  connect?: TeamWhereUniqueInput;
+}
+
+export interface TeamUpdateWithoutMembersDataInput {
+  teamName?: String;
+  todoLists?: TodoListUpdateManyWithoutInTeamInput;
+}
+
+export interface TodoListUpdateManyWithoutInTeamInput {
+  create?:
+    | TodoListCreateWithoutInTeamInput[]
+    | TodoListCreateWithoutInTeamInput;
+  delete?: TodoListWhereUniqueInput[] | TodoListWhereUniqueInput;
+  connect?: TodoListWhereUniqueInput[] | TodoListWhereUniqueInput;
+  set?: TodoListWhereUniqueInput[] | TodoListWhereUniqueInput;
+  disconnect?: TodoListWhereUniqueInput[] | TodoListWhereUniqueInput;
+  update?:
+    | TodoListUpdateWithWhereUniqueWithoutInTeamInput[]
+    | TodoListUpdateWithWhereUniqueWithoutInTeamInput;
+  upsert?:
+    | TodoListUpsertWithWhereUniqueWithoutInTeamInput[]
+    | TodoListUpsertWithWhereUniqueWithoutInTeamInput;
+  deleteMany?: TodoListScalarWhereInput[] | TodoListScalarWhereInput;
+  updateMany?:
+    | TodoListUpdateManyWithWhereNestedInput[]
+    | TodoListUpdateManyWithWhereNestedInput;
+}
+
+export interface TodoListUpdateWithWhereUniqueWithoutInTeamInput {
+  where: TodoListWhereUniqueInput;
+  data: TodoListUpdateWithoutInTeamDataInput;
+}
+
+export interface TodoListUpdateWithoutInTeamDataInput {
   description?: String;
   ownedBy?: UserUpdateManyWithoutTodoListsOwnedInput;
   assignedTo?: UserUpdateManyWithoutTodoListsAssignedInput;
+  todos?: TodoUpdateManyWithoutPartOfInput;
   completed?: Boolean;
 }
 
@@ -505,6 +766,7 @@ export interface UserUpdateWithWhereUniqueWithoutTodoListsOwnedInput {
 export interface UserUpdateWithoutTodoListsOwnedDataInput {
   name?: String;
   todoListsAssigned?: TodoListUpdateManyWithoutAssignedToInput;
+  inTeam?: TeamUpdateOneWithoutMembersInput;
 }
 
 export interface TodoListUpdateManyWithoutAssignedToInput {
@@ -537,6 +799,7 @@ export interface TodoListUpdateWithoutAssignedToDataInput {
   ownedBy?: UserUpdateManyWithoutTodoListsOwnedInput;
   todos?: TodoUpdateManyWithoutPartOfInput;
   completed?: Boolean;
+  inTeam?: TeamUpdateOneWithoutTodoListsInput;
 }
 
 export interface TodoUpdateManyWithoutPartOfInput {
@@ -617,6 +880,25 @@ export interface TodoUpdateManyWithWhereNestedInput {
 export interface TodoUpdateManyDataInput {
   description?: String;
   completed?: Boolean;
+}
+
+export interface TeamUpdateOneWithoutTodoListsInput {
+  create?: TeamCreateWithoutTodoListsInput;
+  update?: TeamUpdateWithoutTodoListsDataInput;
+  upsert?: TeamUpsertWithoutTodoListsInput;
+  delete?: Boolean;
+  disconnect?: Boolean;
+  connect?: TeamWhereUniqueInput;
+}
+
+export interface TeamUpdateWithoutTodoListsDataInput {
+  teamName?: String;
+  members?: UserUpdateManyWithoutInTeamInput;
+}
+
+export interface TeamUpsertWithoutTodoListsInput {
+  update: TeamUpdateWithoutTodoListsDataInput;
+  create: TeamCreateWithoutTodoListsInput;
 }
 
 export interface TodoListUpsertWithWhereUniqueWithoutAssignedToInput {
@@ -736,66 +1018,21 @@ export interface UserUpdateManyDataInput {
   name?: String;
 }
 
-export interface UserUpdateManyWithoutTodoListsAssignedInput {
-  create?:
-    | UserCreateWithoutTodoListsAssignedInput[]
-    | UserCreateWithoutTodoListsAssignedInput;
-  delete?: UserWhereUniqueInput[] | UserWhereUniqueInput;
-  connect?: UserWhereUniqueInput[] | UserWhereUniqueInput;
-  set?: UserWhereUniqueInput[] | UserWhereUniqueInput;
-  disconnect?: UserWhereUniqueInput[] | UserWhereUniqueInput;
-  update?:
-    | UserUpdateWithWhereUniqueWithoutTodoListsAssignedInput[]
-    | UserUpdateWithWhereUniqueWithoutTodoListsAssignedInput;
-  upsert?:
-    | UserUpsertWithWhereUniqueWithoutTodoListsAssignedInput[]
-    | UserUpsertWithWhereUniqueWithoutTodoListsAssignedInput;
-  deleteMany?: UserScalarWhereInput[] | UserScalarWhereInput;
-  updateMany?:
-    | UserUpdateManyWithWhereNestedInput[]
-    | UserUpdateManyWithWhereNestedInput;
-}
-
-export interface UserUpdateWithWhereUniqueWithoutTodoListsAssignedInput {
-  where: UserWhereUniqueInput;
-  data: UserUpdateWithoutTodoListsAssignedDataInput;
-}
-
-export interface UserUpdateWithoutTodoListsAssignedDataInput {
-  name?: String;
-  todoListsOwned?: TodoListUpdateManyWithoutOwnedByInput;
-}
-
-export interface TodoListUpdateManyWithoutOwnedByInput {
-  create?:
-    | TodoListCreateWithoutOwnedByInput[]
-    | TodoListCreateWithoutOwnedByInput;
-  delete?: TodoListWhereUniqueInput[] | TodoListWhereUniqueInput;
-  connect?: TodoListWhereUniqueInput[] | TodoListWhereUniqueInput;
-  set?: TodoListWhereUniqueInput[] | TodoListWhereUniqueInput;
-  disconnect?: TodoListWhereUniqueInput[] | TodoListWhereUniqueInput;
-  update?:
-    | TodoListUpdateWithWhereUniqueWithoutOwnedByInput[]
-    | TodoListUpdateWithWhereUniqueWithoutOwnedByInput;
-  upsert?:
-    | TodoListUpsertWithWhereUniqueWithoutOwnedByInput[]
-    | TodoListUpsertWithWhereUniqueWithoutOwnedByInput;
-  deleteMany?: TodoListScalarWhereInput[] | TodoListScalarWhereInput;
-  updateMany?:
-    | TodoListUpdateManyWithWhereNestedInput[]
-    | TodoListUpdateManyWithWhereNestedInput;
-}
-
-export interface TodoListUpdateWithWhereUniqueWithoutOwnedByInput {
+export interface TodoListUpsertWithWhereUniqueWithoutInTeamInput {
   where: TodoListWhereUniqueInput;
-  data: TodoListUpdateWithoutOwnedByDataInput;
+  update: TodoListUpdateWithoutInTeamDataInput;
+  create: TodoListCreateWithoutInTeamInput;
 }
 
-export interface TodoListUpdateWithoutOwnedByDataInput {
-  description?: String;
-  assignedTo?: UserUpdateManyWithoutTodoListsAssignedInput;
-  todos?: TodoUpdateManyWithoutPartOfInput;
-  completed?: Boolean;
+export interface TeamUpsertWithoutMembersInput {
+  update: TeamUpdateWithoutMembersDataInput;
+  create: TeamCreateWithoutMembersInput;
+}
+
+export interface UserUpsertWithWhereUniqueWithoutTodoListsAssignedInput {
+  where: UserWhereUniqueInput;
+  update: UserUpdateWithoutTodoListsAssignedDataInput;
+  create: UserCreateWithoutTodoListsAssignedInput;
 }
 
 export interface TodoListUpsertWithWhereUniqueWithoutOwnedByInput {
@@ -804,10 +1041,56 @@ export interface TodoListUpsertWithWhereUniqueWithoutOwnedByInput {
   create: TodoListCreateWithoutOwnedByInput;
 }
 
-export interface UserUpsertWithWhereUniqueWithoutTodoListsAssignedInput {
+export interface UserUpsertWithWhereUniqueWithoutInTeamInput {
   where: UserWhereUniqueInput;
-  update: UserUpdateWithoutTodoListsAssignedDataInput;
-  create: UserCreateWithoutTodoListsAssignedInput;
+  update: UserUpdateWithoutInTeamDataInput;
+  create: UserCreateWithoutInTeamInput;
+}
+
+export interface TeamUpdateManyMutationInput {
+  teamName?: String;
+}
+
+export interface TodoCreateInput {
+  description: String;
+  partOf?: TodoListCreateOneWithoutTodosInput;
+  completed?: Boolean;
+}
+
+export interface TodoListCreateOneWithoutTodosInput {
+  create?: TodoListCreateWithoutTodosInput;
+  connect?: TodoListWhereUniqueInput;
+}
+
+export interface TodoListCreateWithoutTodosInput {
+  description: String;
+  ownedBy?: UserCreateManyWithoutTodoListsOwnedInput;
+  assignedTo?: UserCreateManyWithoutTodoListsAssignedInput;
+  completed?: Boolean;
+  inTeam?: TeamCreateOneWithoutTodoListsInput;
+}
+
+export interface TodoUpdateInput {
+  description?: String;
+  partOf?: TodoListUpdateOneWithoutTodosInput;
+  completed?: Boolean;
+}
+
+export interface TodoListUpdateOneWithoutTodosInput {
+  create?: TodoListCreateWithoutTodosInput;
+  update?: TodoListUpdateWithoutTodosDataInput;
+  upsert?: TodoListUpsertWithoutTodosInput;
+  delete?: Boolean;
+  disconnect?: Boolean;
+  connect?: TodoListWhereUniqueInput;
+}
+
+export interface TodoListUpdateWithoutTodosDataInput {
+  description?: String;
+  ownedBy?: UserUpdateManyWithoutTodoListsOwnedInput;
+  assignedTo?: UserUpdateManyWithoutTodoListsAssignedInput;
+  completed?: Boolean;
+  inTeam?: TeamUpdateOneWithoutTodoListsInput;
 }
 
 export interface TodoListUpsertWithoutTodosInput {
@@ -826,6 +1109,7 @@ export interface TodoListCreateInput {
   assignedTo?: UserCreateManyWithoutTodoListsAssignedInput;
   todos?: TodoCreateManyWithoutPartOfInput;
   completed?: Boolean;
+  inTeam?: TeamCreateOneWithoutTodoListsInput;
 }
 
 export interface TodoListUpdateInput {
@@ -834,6 +1118,7 @@ export interface TodoListUpdateInput {
   assignedTo?: UserUpdateManyWithoutTodoListsAssignedInput;
   todos?: TodoUpdateManyWithoutPartOfInput;
   completed?: Boolean;
+  inTeam?: TeamUpdateOneWithoutTodoListsInput;
 }
 
 export interface TodoListUpdateManyMutationInput {
@@ -845,16 +1130,29 @@ export interface UserCreateInput {
   name: String;
   todoListsOwned?: TodoListCreateManyWithoutOwnedByInput;
   todoListsAssigned?: TodoListCreateManyWithoutAssignedToInput;
+  inTeam?: TeamCreateOneWithoutMembersInput;
 }
 
 export interface UserUpdateInput {
   name?: String;
   todoListsOwned?: TodoListUpdateManyWithoutOwnedByInput;
   todoListsAssigned?: TodoListUpdateManyWithoutAssignedToInput;
+  inTeam?: TeamUpdateOneWithoutMembersInput;
 }
 
 export interface UserUpdateManyMutationInput {
   name?: String;
+}
+
+export interface TeamSubscriptionWhereInput {
+  mutation_in?: MutationType[] | MutationType;
+  updatedFields_contains?: String;
+  updatedFields_contains_every?: String[] | String;
+  updatedFields_contains_some?: String[] | String;
+  node?: TeamWhereInput;
+  AND?: TeamSubscriptionWhereInput[] | TeamSubscriptionWhereInput;
+  OR?: TeamSubscriptionWhereInput[] | TeamSubscriptionWhereInput;
+  NOT?: TeamSubscriptionWhereInput[] | TeamSubscriptionWhereInput;
 }
 
 export interface TodoSubscriptionWhereInput {
@@ -894,26 +1192,131 @@ export interface NodeNode {
   id: ID_Output;
 }
 
-export interface Todo {
+export interface Team {
   id: ID_Output;
-  description: String;
-  completed?: Boolean;
+  teamName: String;
 }
 
-export interface TodoPromise extends Promise<Todo>, Fragmentable {
+export interface TeamPromise extends Promise<Team>, Fragmentable {
   id: () => Promise<ID_Output>;
-  description: () => Promise<String>;
-  partOf: <T = TodoListPromise>() => T;
-  completed: () => Promise<Boolean>;
+  teamName: () => Promise<String>;
+  members: <T = FragmentableArray<User>>(
+    args?: {
+      where?: UserWhereInput;
+      orderBy?: UserOrderByInput;
+      skip?: Int;
+      after?: String;
+      before?: String;
+      first?: Int;
+      last?: Int;
+    }
+  ) => T;
+  todoLists: <T = FragmentableArray<TodoList>>(
+    args?: {
+      where?: TodoListWhereInput;
+      orderBy?: TodoListOrderByInput;
+      skip?: Int;
+      after?: String;
+      before?: String;
+      first?: Int;
+      last?: Int;
+    }
+  ) => T;
 }
 
-export interface TodoSubscription
-  extends Promise<AsyncIterator<Todo>>,
+export interface TeamSubscription
+  extends Promise<AsyncIterator<Team>>,
     Fragmentable {
   id: () => Promise<AsyncIterator<ID_Output>>;
-  description: () => Promise<AsyncIterator<String>>;
-  partOf: <T = TodoListSubscription>() => T;
-  completed: () => Promise<AsyncIterator<Boolean>>;
+  teamName: () => Promise<AsyncIterator<String>>;
+  members: <T = Promise<AsyncIterator<UserSubscription>>>(
+    args?: {
+      where?: UserWhereInput;
+      orderBy?: UserOrderByInput;
+      skip?: Int;
+      after?: String;
+      before?: String;
+      first?: Int;
+      last?: Int;
+    }
+  ) => T;
+  todoLists: <T = Promise<AsyncIterator<TodoListSubscription>>>(
+    args?: {
+      where?: TodoListWhereInput;
+      orderBy?: TodoListOrderByInput;
+      skip?: Int;
+      after?: String;
+      before?: String;
+      first?: Int;
+      last?: Int;
+    }
+  ) => T;
+}
+
+export interface User {
+  id: ID_Output;
+  createdAt: DateTimeOutput;
+  name: String;
+}
+
+export interface UserPromise extends Promise<User>, Fragmentable {
+  id: () => Promise<ID_Output>;
+  createdAt: () => Promise<DateTimeOutput>;
+  name: () => Promise<String>;
+  todoListsOwned: <T = FragmentableArray<TodoList>>(
+    args?: {
+      where?: TodoListWhereInput;
+      orderBy?: TodoListOrderByInput;
+      skip?: Int;
+      after?: String;
+      before?: String;
+      first?: Int;
+      last?: Int;
+    }
+  ) => T;
+  todoListsAssigned: <T = FragmentableArray<TodoList>>(
+    args?: {
+      where?: TodoListWhereInput;
+      orderBy?: TodoListOrderByInput;
+      skip?: Int;
+      after?: String;
+      before?: String;
+      first?: Int;
+      last?: Int;
+    }
+  ) => T;
+  inTeam: <T = TeamPromise>() => T;
+}
+
+export interface UserSubscription
+  extends Promise<AsyncIterator<User>>,
+    Fragmentable {
+  id: () => Promise<AsyncIterator<ID_Output>>;
+  createdAt: () => Promise<AsyncIterator<DateTimeOutput>>;
+  name: () => Promise<AsyncIterator<String>>;
+  todoListsOwned: <T = Promise<AsyncIterator<TodoListSubscription>>>(
+    args?: {
+      where?: TodoListWhereInput;
+      orderBy?: TodoListOrderByInput;
+      skip?: Int;
+      after?: String;
+      before?: String;
+      first?: Int;
+      last?: Int;
+    }
+  ) => T;
+  todoListsAssigned: <T = Promise<AsyncIterator<TodoListSubscription>>>(
+    args?: {
+      where?: TodoListWhereInput;
+      orderBy?: TodoListOrderByInput;
+      skip?: Int;
+      after?: String;
+      before?: String;
+      first?: Int;
+      last?: Int;
+    }
+  ) => T;
+  inTeam: <T = TeamSubscription>() => T;
 }
 
 export interface TodoList {
@@ -961,6 +1364,7 @@ export interface TodoListPromise extends Promise<TodoList>, Fragmentable {
     }
   ) => T;
   completed: () => Promise<Boolean>;
+  inTeam: <T = TeamPromise>() => T;
 }
 
 export interface TodoListSubscription
@@ -1003,91 +1407,50 @@ export interface TodoListSubscription
     }
   ) => T;
   completed: () => Promise<AsyncIterator<Boolean>>;
+  inTeam: <T = TeamSubscription>() => T;
 }
 
-export interface User {
+export interface Todo {
   id: ID_Output;
-  createdAt: DateTimeOutput;
-  name: String;
+  description: String;
+  completed?: Boolean;
 }
 
-export interface UserPromise extends Promise<User>, Fragmentable {
+export interface TodoPromise extends Promise<Todo>, Fragmentable {
   id: () => Promise<ID_Output>;
-  createdAt: () => Promise<DateTimeOutput>;
-  name: () => Promise<String>;
-  todoListsOwned: <T = FragmentableArray<TodoList>>(
-    args?: {
-      where?: TodoListWhereInput;
-      orderBy?: TodoListOrderByInput;
-      skip?: Int;
-      after?: String;
-      before?: String;
-      first?: Int;
-      last?: Int;
-    }
-  ) => T;
-  todoListsAssigned: <T = FragmentableArray<TodoList>>(
-    args?: {
-      where?: TodoListWhereInput;
-      orderBy?: TodoListOrderByInput;
-      skip?: Int;
-      after?: String;
-      before?: String;
-      first?: Int;
-      last?: Int;
-    }
-  ) => T;
+  description: () => Promise<String>;
+  partOf: <T = TodoListPromise>() => T;
+  completed: () => Promise<Boolean>;
 }
 
-export interface UserSubscription
-  extends Promise<AsyncIterator<User>>,
+export interface TodoSubscription
+  extends Promise<AsyncIterator<Todo>>,
     Fragmentable {
   id: () => Promise<AsyncIterator<ID_Output>>;
-  createdAt: () => Promise<AsyncIterator<DateTimeOutput>>;
-  name: () => Promise<AsyncIterator<String>>;
-  todoListsOwned: <T = Promise<AsyncIterator<TodoListSubscription>>>(
-    args?: {
-      where?: TodoListWhereInput;
-      orderBy?: TodoListOrderByInput;
-      skip?: Int;
-      after?: String;
-      before?: String;
-      first?: Int;
-      last?: Int;
-    }
-  ) => T;
-  todoListsAssigned: <T = Promise<AsyncIterator<TodoListSubscription>>>(
-    args?: {
-      where?: TodoListWhereInput;
-      orderBy?: TodoListOrderByInput;
-      skip?: Int;
-      after?: String;
-      before?: String;
-      first?: Int;
-      last?: Int;
-    }
-  ) => T;
+  description: () => Promise<AsyncIterator<String>>;
+  partOf: <T = TodoListSubscription>() => T;
+  completed: () => Promise<AsyncIterator<Boolean>>;
 }
 
-export interface TodoConnection {
+export interface TeamConnection {
   pageInfo: PageInfo;
-  edges: TodoEdge[];
+  edges: TeamEdge[];
 }
 
-export interface TodoConnectionPromise
-  extends Promise<TodoConnection>,
+export interface TeamConnectionPromise
+  extends Promise<TeamConnection>,
     Fragmentable {
   pageInfo: <T = PageInfoPromise>() => T;
-  edges: <T = FragmentableArray<TodoEdge>>() => T;
-  aggregate: <T = AggregateTodoPromise>() => T;
+  edges: <T = FragmentableArray<TeamEdge>>() => T;
+  aggregate: <T = AggregateTeamPromise>() => T;
 }
 
-export interface TodoConnectionSubscription
-  extends Promise<AsyncIterator<TodoConnection>>,
+export interface TeamConnectionSubscription
+  extends Promise<AsyncIterator<TeamConnection>>,
     Fragmentable {
   pageInfo: <T = PageInfoSubscription>() => T;
-  edges: <T = Promise<AsyncIterator<TodoEdgeSubscription>>>() => T;
-  aggregate: <T = AggregateTodoSubscription>() => T;
+  edges: <T = Promise<AsyncIterator<TeamEdgeSubscription>>>() => T;
+  aggregate: <T = AggregateTeamSubscription>() => T;
 }
 
 export interface PageInfo {
@@ -1111,6 +1474,60 @@ export interface PageInfoSubscription
   hasPreviousPage: () => Promise<AsyncIterator<Boolean>>;
   startCursor: () => Promise<AsyncIterator<String>>;
   endCursor: () => Promise<AsyncIterator<String>>;
+}
+
+export interface TeamEdge {
+  node: Team;
+  cursor: String;
+}
+
+export interface TeamEdgePromise extends Promise<TeamEdge>, Fragmentable {
+  node: <T = TeamPromise>() => T;
+  cursor: () => Promise<String>;
+}
+
+export interface TeamEdgeSubscription
+  extends Promise<AsyncIterator<TeamEdge>>,
+    Fragmentable {
+  node: <T = TeamSubscription>() => T;
+  cursor: () => Promise<AsyncIterator<String>>;
+}
+
+export interface AggregateTeam {
+  count: Int;
+}
+
+export interface AggregateTeamPromise
+  extends Promise<AggregateTeam>,
+    Fragmentable {
+  count: () => Promise<Int>;
+}
+
+export interface AggregateTeamSubscription
+  extends Promise<AsyncIterator<AggregateTeam>>,
+    Fragmentable {
+  count: () => Promise<AsyncIterator<Int>>;
+}
+
+export interface TodoConnection {
+  pageInfo: PageInfo;
+  edges: TodoEdge[];
+}
+
+export interface TodoConnectionPromise
+  extends Promise<TodoConnection>,
+    Fragmentable {
+  pageInfo: <T = PageInfoPromise>() => T;
+  edges: <T = FragmentableArray<TodoEdge>>() => T;
+  aggregate: <T = AggregateTodoPromise>() => T;
+}
+
+export interface TodoConnectionSubscription
+  extends Promise<AsyncIterator<TodoConnection>>,
+    Fragmentable {
+  pageInfo: <T = PageInfoSubscription>() => T;
+  edges: <T = Promise<AsyncIterator<TodoEdgeSubscription>>>() => T;
+  aggregate: <T = AggregateTodoSubscription>() => T;
 }
 
 export interface TodoEdge {
@@ -1270,6 +1687,50 @@ export interface BatchPayloadSubscription
   extends Promise<AsyncIterator<BatchPayload>>,
     Fragmentable {
   count: () => Promise<AsyncIterator<Long>>;
+}
+
+export interface TeamSubscriptionPayload {
+  mutation: MutationType;
+  node: Team;
+  updatedFields: String[];
+  previousValues: TeamPreviousValues;
+}
+
+export interface TeamSubscriptionPayloadPromise
+  extends Promise<TeamSubscriptionPayload>,
+    Fragmentable {
+  mutation: () => Promise<MutationType>;
+  node: <T = TeamPromise>() => T;
+  updatedFields: () => Promise<String[]>;
+  previousValues: <T = TeamPreviousValuesPromise>() => T;
+}
+
+export interface TeamSubscriptionPayloadSubscription
+  extends Promise<AsyncIterator<TeamSubscriptionPayload>>,
+    Fragmentable {
+  mutation: () => Promise<AsyncIterator<MutationType>>;
+  node: <T = TeamSubscription>() => T;
+  updatedFields: () => Promise<AsyncIterator<String[]>>;
+  previousValues: <T = TeamPreviousValuesSubscription>() => T;
+}
+
+export interface TeamPreviousValues {
+  id: ID_Output;
+  teamName: String;
+}
+
+export interface TeamPreviousValuesPromise
+  extends Promise<TeamPreviousValues>,
+    Fragmentable {
+  id: () => Promise<ID_Output>;
+  teamName: () => Promise<String>;
+}
+
+export interface TeamPreviousValuesSubscription
+  extends Promise<AsyncIterator<TeamPreviousValues>>,
+    Fragmentable {
+  id: () => Promise<AsyncIterator<ID_Output>>;
+  teamName: () => Promise<AsyncIterator<String>>;
 }
 
 export interface TodoSubscriptionPayload {
@@ -1464,6 +1925,10 @@ export const models: Model[] = [
   },
   {
     name: "User",
+    embedded: false
+  },
+  {
+    name: "Team",
     embedded: false
   }
 ];
