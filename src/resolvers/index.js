@@ -7,9 +7,9 @@ const TodoList = require('./TodoList.js');
 const resolvers = {
     Query,
     Mutation,
-    User,
-    Todo,
-    TodoList
+    // User,
+    // Todo,
+    // TodoList
 };
 
 module.exports = resolvers;
