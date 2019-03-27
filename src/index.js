@@ -1,4 +1,4 @@
-//require('dotenv').config();
+require('dotenv').config({ path: '../.env'});
 const createServer = require('./createServer');
 const configMiddleware = require('./config/express-middleware');
 
