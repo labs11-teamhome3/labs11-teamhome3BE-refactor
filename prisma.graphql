@@ -6,6 +6,7 @@ type TodoList {
     assignedTo: [User!]! @relation(name: "AssignedTo")
     todos: [Todo!]!
     completed: Boolean @default(value: "false")
+    inTeam: Team 
 }
 
 type Todo {
@@ -21,4 +22,12 @@ type User {
     name: String!
     todoListsOwned: [TodoList] @relation(name: "OwnedBy")
     todoListsAssigned: [TodoList] @relation(name: "AssignedTo")
+    inTeam: Team 
+}
+
+type Team {
+    id: ID! @unique
+    teamName: String!
+    members: [User!] 
+    todoLists: [TodoList!] 
 }
