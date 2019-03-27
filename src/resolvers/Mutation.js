@@ -59,11 +59,6 @@ async function createTodoList(parent, args, context, info) {
                 id: args.assignedTo
             }
         },
-        team: {
-            connect: {
-                id: args.team
-            }
-        }
     })
 }
 
@@ -85,16 +80,6 @@ async function updateTodoList(parent, args, context, info) {
 async function createTeam(parent, args, ctx, info) {
     return ctx.prisma.createTeam({
         teamName: args.teamName,
-        members: {
-            connect: {
-                id: args.members
-            }
-        },
-        todoLists: {
-            connect: {
-                id: args.todoList
-            }
-        }
     });
 }
 
@@ -113,6 +98,19 @@ async function updateTeam(parent, args, ctx, info) {
     });
 }
 
+function addUserToTeam(parent, args, context, info) {
+    return context.prisma.updateTeam({
+        where: {id: args.teamId},
+        data: {
+            members: {
+                connect: {
+                    id: args.userId
+                }
+            }
+        }
+    })
+}
+
 module.exports = {
    createUser,
    // updateUser,
@@ -124,5 +122,6 @@ module.exports = {
    updateTodoList,
    createTeam,
    deleteTeam,
-   updateTeam
+   updateTeam,
+   addUserToTeam
 };

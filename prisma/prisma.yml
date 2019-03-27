@@ -2,10 +2,10 @@
 #endpoint: ''
 
 # ****** Use this endpoint for production *****
-endpoint: https://manaje-be-8de8017c47.herokuapp.com/labs11-teamhome3BE-refactor/dev
+# endpoint: https://manaje-be-8de8017c47.herokuapp.com/labs11-teamhome3BE-refactor/dev
 
 # ****** Use this endpoint for development ******
-# endpoint: http://localhost:4466
+endpoint: http://localhost:4466
 
 # Points to the file that contains your datamodel
 datamodel: datamodel.prisma

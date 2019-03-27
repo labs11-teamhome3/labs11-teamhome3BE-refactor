@@ -1,14 +1,15 @@
 type Mutation {
-    createUser(name: String!, inTeam: ID!): User!
+    createUser(name: String!, inTeam: ID): User!
     createTodo(description: String!, partOf: ID!, completed: Boolean): Todo
     deleteTodo(id: String!): String!
     updateTodo(id: String!, description: String!, completed: Boolean): Todo
-    createTodoList(description: String!, ownedBy: String!, assignedTo: String!, completed: Boolean, inTeam: ID!): TodoList
+    createTodoList(description: String!, ownedBy: String!, assignedTo: String!, completed: Boolean): TodoList
     deleteTodoList(id: String!): String!
-    updateTodoList(id: String!, description: String!, completed: Boolean, inTeam: ID!): TodoList
+    updateTodoList(id: String!, description: String!, completed: Boolean): TodoList
     createTeam(teamName: String!): Team
     deleteTeam(id: String!): String!
-    updateTeam(id: String!, teamName: String!, members: [ID!]): Team
+    updateTeam(id: String!, teamName: String!, members: String): Team
+    addUserToTeam(userId: ID!, teamId: ID!): Team
 }
 
 type Query {
@@ -51,6 +52,6 @@ type User {
 type Team {
     id: ID!
     teamName: String!
-    members: [User!]
-    todoLists: [TodoList!]
+    members: [User!]!
+    todoLists: [TodoList]
 }
