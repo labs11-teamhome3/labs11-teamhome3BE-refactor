@@ -52,7 +52,7 @@ type User {
     name: String!
     todoListsOwned: [TodoList] 
     todoListsAssigned: [TodoList]
-    inTeam: Team!
+    inTeam: Team
 }
 
 type Team {

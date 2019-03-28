@@ -3,6 +3,7 @@
 
 # ****** Use this endpoint for production *****
 # endpoint: https://manaje-be-8de8017c47.herokuapp.com/labs11-teamhome3BE-refactor/dev
+#  http://localhost:4466
 
 # ****** Use this endpoint for development ******
 endpoint: http://localhost:4466
