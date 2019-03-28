@@ -1,24 +1,30 @@
-async function createUser(parent, args, ctx, info) {
-    return ctx.prisma.createUser({
-        name: args.name,
-        inTeam: {
-            connect: {
-                id: args.inTeam
-            }
-        }
-    });
-}
+const validateAndParseIdToken = require('../helpers/validateAndParseIdToken');
 
-/*
-async function updateUser(parent, args, context, info) {
-    return context.prisma.updateUser({
-        where: {id: args.id},
-        data: {
-            name: args.name,
-            inTeam: args.inTeam,
-        }
+async function createPrismaUser(context, idToken) {
+    const user = await context.prisma.createUser({
+        identity: idToken.sub.split(`|`)[0],
+        auth0id: idToken.sub.split(`|`)[1],
+        name: idToken.name,
+        email: idToken.email,
+        pictureUrl: idToken.picture
     })
-} */
+    return user;
+};
+
+async function authenticate(parent, {idToken}, context, info) {
+    let userToken  = null;
+    try {
+        userToken = await validateAndParseIdToken(idToken);
+      } catch (err) {
+        throw new Error(err.message)
+      }
+      const auth0id = userToken.sub.split("|")[1];
+      let user = await context.prisma.user({ auth0id }, info);
+      if (!user) {
+        user = createPrismaUser(context, userToken)
+      }
+      return user;
+};
 
 async function createTodo(parent, args, context, info) {
     return context.prisma.createTodo({
@@ -227,7 +233,8 @@ async function toggleTodoListComplete(parent, args, context, info) {
 }
 
 module.exports = {
-   createUser,
+   authenticate,
+    //createUser,
    // updateUser,
 
    createTodo,

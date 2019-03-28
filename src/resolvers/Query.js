@@ -1,5 +1,14 @@
 const info = () => `This is the API of Manaje`;
 
+//from map-scratcher
+const contextUser = context => {
+  return context.request.user 
+}
+
+const me = (parent, args, context, info) => {
+  return context.prisma.user({ id: contextUser(context).id })
+}
+
 const users = (parent, args, context, info) => {
   return context.prisma.users();
 };
@@ -36,6 +45,7 @@ const team = (parent, args, context, info) => {
 };
 
 module.exports = {
+  me,
   info,
   todoes,
   todo,

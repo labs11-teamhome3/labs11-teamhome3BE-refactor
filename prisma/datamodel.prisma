@@ -1,5 +1,6 @@
 type TodoList {
     id: ID! @unique
+    auth0id: String @unique
     createdAt: DateTime!
     description: String!
     ownedBy: [User!]! @relation(name: "OwnedBy")
