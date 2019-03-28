@@ -4,7 +4,7 @@ type TodoList {
     description: String!
     ownedBy: [User!]! @relation(name: "OwnedBy")
     assignedTo: [User!]! @relation(name: "AssignedTo")
-    todos: [Todo!]!
+    todos: [Todo!]! @relation(name: "TodosInList", onDelete: CASCADE)
     completed: Boolean @default(value: "false")
     inTeam: Team 
 }
@@ -12,7 +12,7 @@ type TodoList {
 type Todo {
     id: ID! @unique
     description: String!
-    partOf: TodoList
+    partOf: TodoList @relation(name: "TodosInList", onDelete: SET_NULL)
     completed: Boolean @default(value: "false")
 }
 
