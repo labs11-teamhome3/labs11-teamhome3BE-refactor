@@ -1,11 +1,6 @@
 async function createUser(parent, args, ctx, info) {
     return ctx.prisma.createUser({
         name: args.name,
-        inTeam: {
-            connect: {
-                id: args.inTeam
-            }
-        }
     });
 }
 
