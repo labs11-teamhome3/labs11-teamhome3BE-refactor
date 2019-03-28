@@ -11,6 +11,6 @@ const server = new GraphQLServer({
   context: { prisma },
 });
 
-server.express.use(jwtCheck);
+//server.express.use(jwtCheck);
 
 server.start(() => console.log(`Server is running on http://localhost:4000`));
