@@ -88,12 +88,11 @@ async function deleteTeam(parent, args, context, info) {
     return `Team ${args.id} deleted`
 }
 
-async function updateTeam(parent, args, ctx, info) {
+async function updateTeamName(parent, args, ctx, info) {
     return ctx.prisma.updateTeam({
         where: {id: args.id},
         data: {
             teamName: args.teamName,
-            members: args.members,
         }
     });
 }
@@ -104,6 +103,45 @@ function addUserToTeam(parent, args, context, info) {
         data: {
             members: {
                 connect: {
+                    id: args.userId
+                }
+            }
+        }
+    })
+}
+
+function addTodoListToTeam(parent, args, context, info) {
+    return context.prisma.updateTeam({
+        where: {id: args.teamId},
+        data: {
+            todoLists: {
+                connect: {
+                    id: args.todoListId
+                }
+            }
+        }
+    })
+}
+
+function removeTodoListFromTeam(parent, args, context, info) {
+    return context.prisma.updateTeam({
+        where: {id: args.teamId},
+        data: {
+            todoLists: {
+                disconnect: {
+                    id: args.todoListId
+                }
+            }
+        }
+    })
+}
+
+function removeUserFromTeam(parent, args, context, info) {
+    return context.prisma.updateTeam({
+        where: {id: args.teamId},
+        data: {
+            members: {
+                disconnect: {
                     id: args.userId
                 }
             }
@@ -191,16 +229,24 @@ async function toggleTodoListComplete(parent, args, context, info) {
 module.exports = {
    createUser,
    // updateUser,
+
    createTodo,
    deleteTodo,
    updateTodo,
+
    createTodoList,
    deleteTodoList,
    updateTodoList,
+
    createTeam,
    deleteTeam,
-   updateTeam,
+   updateTeamName,
+
    addUserToTeam,
+   addTodoListToTeam,
+   removeTodoListFromTeam,
+   removeUserFromTeam,
+
    toggleTodoComplete,
    toggleTodoListComplete,
    addUserToOwners,
@@ -208,3 +254,5 @@ module.exports = {
    removeUserFromOwners,
    removeUserFromAssignees
 };
+
+// Need to make users unique by adding email and phone numbers, finish CRUD on users
