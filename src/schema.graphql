@@ -1,4 +1,5 @@
 type Mutation {
+
     createUser(name: String!, inTeam: ID): User!
 
     createTodo(description: String!, partOf: ID!, completed: Boolean): Todo
@@ -17,9 +18,6 @@ type Mutation {
     removeTodoListFromTeam(teamId: ID!, todoListId: ID!): Team
     addUserToTeam(userId: ID!, teamId: ID!): Team
     removeUserFromTeam(userId: ID!, teamId: ID!): Team
-
-
-    
     
     toggleTodoComplete(todoId: ID!): Todo
     toggleTodoListComplete(todoListId: ID!): TodoList
@@ -30,45 +28,46 @@ type Mutation {
 }
 
 type Query {
-    info: String!
-    todoes: [Todo]
-    todo(id: ID!): Todo!
-    users: [User]
-    user(id: ID!): User!
-    todoLists: [TodoList]
-    todoList(id: ID!): TodoList!
-    teams: [Team]
-    team(id: ID!): Team!
+  info: String!
+  todoes: [Todo]
+  todo(id: ID!): Todo!
+  users: [User]
+  user(id: ID!): User!
+  todoLists(teamId: ID): [TodoList]
+  todoList(id: ID!): TodoList!
+  teams: [Team]
+  team(id: ID!): Team!
 }
 
 type TodoList {
-    id: ID!
-    description: String!
-    ownedBy: [User!]! 
-    assignedTo: [User!]! 
-    todos: [Todo!]!
-    completed: Boolean
-    inTeam: Team
+  id: ID!
+  description: String!
+  ownedBy: [User!]!
+  assignedTo: [User!]!
+  todos: [Todo!]!
+  completed: Boolean
+  inTeam: Team
 }
 
 type Todo {
-    id: ID!
-    description: String!
-    partOf: TodoList
-    completed: Boolean
+  id: ID!
+  description: String!
+  partOf: TodoList
+  completed: Boolean
 }
 
 type User {
-    id: ID!
-    name: String!
-    todoListsOwned: [TodoList] 
-    todoListsAssigned: [TodoList]
-    inTeam: Team
+
+  id: ID!
+  name: String!
+  todoListsOwned: [TodoList]
+  todoListsAssigned: [TodoList]
+  inTeam: Team!
 }
 
 type Team {
-    id: ID!
-    teamName: String!
-    members: [User!]!
-    todoLists: [TodoList]
+  id: ID!
+  teamName: String!
+  members: [User!]!
+  todoLists: [TodoList]
 }
