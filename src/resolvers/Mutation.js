@@ -84,8 +84,8 @@ async function createTeam(parent, args, ctx, info) {
 }
 
 async function deleteTeam(parent, args, context, info) {
-    await context.prisma.deleteTeam({id: args.id})
-    return `Team ${args.id} deleted`
+    return context.prisma.deleteTeam({id: args.id})
+    //return `Team ${args.id} deleted`
 }
 
 async function updateTeamName(parent, args, ctx, info) {
