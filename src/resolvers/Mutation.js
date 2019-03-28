@@ -143,9 +143,10 @@ async function addUserToAssignees(parent, args, context, info) {
 
 //add .ownedBy() for prisma-client, the todoList is not in an array, don't know how to check if last owner
 async function removeUserFromOwners(parent, args, context, info) {
-    const todoList = await context.db.query.todoList({ where: {id: args.todoListId }}, info);
-    console.log(todoList);
-    if (todoList.length < 2) {
+    const todoList = await context.db.query.todoList({ where: {id: args.todoListId }}, `{ownedBy { id }}`);
+    //const todoList = await context.db.query.todoList({ where: {id: args.todoListId }}, info);
+    console.log(todoList.ownedBy);
+    if (todoList.ownedBy.length < 2) {
         throw new Error('You can not delete the original owner of the list')
     } else {
         return context.db.mutation.updateTodoList({
