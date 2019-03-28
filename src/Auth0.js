@@ -1,4 +1,11 @@
-const contextAuth = async (req, prisma) => {
+const { GraphQLServer, AuthenticationError } = require('graphql-yoga');
+const jwt = require('jsonwebtoken');
+const jwksClient = require('jwks-rsa');
+const { prisma } = require('../prisma/generated/prisma-client');
+
+const { AUTH0_DOMAIN } = process.env; 
+
+async function contextAuth(req) {
     let currentUser;
 
     //req.headers.authorization
@@ -29,8 +36,11 @@ const contextAuth = async (req, prisma) => {
           if (err) {
             reject(err);
           }
-          return (
-            decoded
+
+          console.log('before decoded')
+          //return (
+              
+            //resolve(decoded)
             //find specific user in db and add token to that user
 
             // UserModel.findOne({ authId: decoded.sub }).then(
@@ -39,14 +49,14 @@ const contextAuth = async (req, prisma) => {
             //       ? resolve(existingUser) // adds user to Apollo context, giving all resolvers access to the user
             //       : resolve(decoded) // adds the decoded token to the Apollo context
             // )
-          )
+          //)
         })
       )
     } catch (err) {
       throw new AuthenticationError(`${err}`);
     }
     
-    return { ...req, user: currentUser, prisma };
+    return { ...req, user: currentUser};
 }
 
 module.export = contextAuth; 
