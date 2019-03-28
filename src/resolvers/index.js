@@ -8,10 +8,10 @@ const Team = require('./Team.js');
 const resolvers = {
     Query,
     Mutation,
-    User,
-    Todo,
-    TodoList,
-    Team
+    // User,
+    // Todo,
+    // TodoList,
+    // Team
 };
 
 module.exports = resolvers;

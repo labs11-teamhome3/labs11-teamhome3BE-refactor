@@ -1,12 +1,7 @@
-async function createUser(parent, args, ctx, info) {
+function createUser(parent, args, ctx, info) {
     return ctx.db.mutation.createUser({
-        name: args.name,
-        inTeam: {
-            connect: {
-                id: args.inTeam
-            }
-        }
-    });
+        data: {name: args.name}
+    }, info);
 }
 
 /*
@@ -22,18 +17,20 @@ async function updateUser(parent, args, context, info) {
 
 async function createTodo(parent, args, context, info) {
     return context.db.mutation.createTodo({
-        description: args.description,
-        partOf: {
-            connect: {
-                id: args.partOf
+        data: {
+            description: args.description,
+            partOf: {
+                connect: {
+                    id: args.partOf
+                }
             }
         }
     }, info)
 }
 
 async function deleteTodo(parent, args, context, info) {
-    await context.db.mutation.deleteTodo({id: args.id}, info)
-    return `Todo ${args.id} deleted`
+    return context.db.mutation.deleteTodo({where: {id: args.id}}, info)
+    //return `Todo ${args.id} deleted`
 }
 
 async function updateTodo(parent, args, context, info) {
@@ -48,23 +45,24 @@ async function updateTodo(parent, args, context, info) {
 
 async function createTodoList(parent, args, context, info) {
     return context.db.mutation.createTodoList({
-        description: args.description,
-        ownedBy: {
-            connect: {
-                id: args.ownedBy
-            }
-        },
-        assignedTo: {
-            connect: {
-                id: args.assignedTo
+        data: {
+            description: args.description,
+            ownedBy: {
+                connect: {
+                    id: args.ownedBy
+                }
+            },
+            assignedTo: {
+                connect: {
+                    id: args.assignedTo
+                }
             }
         }
     }, info)
 }
 
 async function deleteTodoList(parent, args, context , info) {
-   await context.db.mutation.deleteTodoList({id: args.id,}, info)
-   return `TodoList ${args.id} deleted`
+   return context.db.mutation.deleteTodoList({where: {id: args.id,}}, info)
 }
 
 async function updateTodoList(parent, args, context, info) {
@@ -78,26 +76,32 @@ async function updateTodoList(parent, args, context, info) {
 }
 
 async function createTeam(parent, args, ctx, info) {
-    return ctx.db.mutation.createTeam({
-        teamName: args.teamName,
-    });
+    return ctx.db.mutation.createTeam({data: {
+        teamName: args.teamName}
+    }, info);
 }
 
 async function deleteTeam(parent, args, context, info) {
-    await context.db.mutation.deleteTeam({id: args.id})
-    return `Team ${args.id} deleted`
+    return context.db.mutation.deleteTeam({where: {id: args.id}}, info)
+    //return `Team ${args.id} deleted`
 }
 
+//needs work
 async function updateTeam(parent, args, ctx, info) {
     return ctx.db.mutation.updateTeam({
-        where: {id: args.id},
+        where: {id: args.teamId},
         data: {
             teamName: args.teamName,
-            members: args.members,
+            members: {
+                connect: {
+                    id: args.userId
+                }
+            }
         }
-    });
+    }, info);
 }
 
+//works if userId and teamId are in the right order on mutation
 function addUserToTeam(parent, args, context, info) {
     return context.db.mutation.updateTeam({
         where: {id: args.teamId},
@@ -137,8 +141,10 @@ async function addUserToAssignees(parent, args, context, info) {
     })
 }
 
+//add .ownedBy() for prisma-client, the todoList is not in an array, don't know how to check if last owner
 async function removeUserFromOwners(parent, args, context, info) {
-    const todoList = await context.db.mutation.todoList({ id: args.todoListId }).ownedBy();
+    const todoList = await context.db.query.todoList({ where: {id: args.todoListId }}, info);
+    console.log(todoList);
     if (todoList.length < 2) {
         throw new Error('You can not delete the original owner of the list')
     } else {
@@ -151,7 +157,7 @@ async function removeUserFromOwners(parent, args, context, info) {
                     }
                 }
             }
-        })
+        }, info)
     }
 }
 
@@ -165,27 +171,27 @@ function removeUserFromAssignees(parent, args, context, info) {
                 }
             }
         }
-    })
+    }, info)
 }
 
 async function toggleTodoComplete(parent, args, context, info) {
-    const todo = await context.db.mutation.todo({ id: args.todoId })
+    const todo = await context.db.query.todo({ where: {id: args.todoId} })
     return context.db.mutation.updateTodo({
         where: {id: args.todoId},
         data: {
             completed: !todo.completed
         }
-    })
+    }, info)
 }
 
 async function toggleTodoListComplete(parent, args, context, info) {
-    const todoList = await context.db.mutation.todoList({ id: args.todoListId });
+    const todoList = await context.db.query.todoList({ where: {id: args.todoListId} });
     return context.db.mutation.updateTodoList({
         where: {id: args.todoListId},
         data: {
             completed: !todoList.completed
         }
-    })
+    }, info)
 }
 
 module.exports = {

@@ -2,7 +2,10 @@ const { GraphQLServer, AuthenticationError } = require('graphql-yoga');
 const jwt = require('jsonwebtoken');
 const jwksClient = require('jwks-rsa');
 
+
 const { AUTH0_DOMAIN } = process.env; 
+const Query = require('./resolvers/Query');
+const Mutation = require('./resolvers/Mutation');
 const resolvers = require('./resolvers');
 const db = require('./db');
 
@@ -11,13 +14,17 @@ const db = require('./db');
 function createServer() {
   return new GraphQLServer({
     typeDefs: 'src/schema.graphql',
-    resolvers,
+    resolvers: {
+      Mutation,
+      Query
+    },
     resolverValidationOptions: {
       requireResolversForResolveType: false,
-    }, context: req => ({...req, db})
-  // Uncomment and replace context property when development is ready to pass token on headers
+    },context: req => ({...req, db})})
+    
   //   context: async req => {
   //     let currentUser;
+
   //     const token = req.headers.authorization;
 
   //     const client = jwksClient({
@@ -33,25 +40,28 @@ function createServer() {
   //       );
       
   //     const options = {
-  //       aud: `https://labs-manaje.herokuapp.com`,
+  //       aud: `http://localhost:4466`,
   //       iss: `${AUTH0_DOMAIN}/`,
   //       algorithms: ['RS256']
   //     };
 
   //     try {
+  //       console.log('try')
   //       currentUser = await new Promise((resolve, reject) => 
   //         jwt.verify(token, getKey, options, (err, decoded) => {
   //           if (err) {
   //             reject(err);
   //           }
   //           return (
-  //             decoded &&
-  //             UserModel.findOne({ authId: decoded.sub }).then(
-  //               existingUser =>
-  //                 existingUser
-  //                   ? resolve(existingUser) // adds user to Apollo context, giving all resolvers access to the user
-  //                   : resolve(decoded) // adds the decoded token to the Apollo context
-  //             )
+  //             decoded
+  //             //find specific user in db and add token to that user
+
+  //             // UserModel.findOne({ authId: decoded.sub }).then(
+  //             //   existingUser =>
+  //             //     existingUser
+  //             //       ? resolve(existingUser) // adds user to Apollo context, giving all resolvers access to the user
+  //             //       : resolve(decoded) // adds the decoded token to the Apollo context
+  //             // )
   //           )
   //         })
   //       )
@@ -61,7 +71,7 @@ function createServer() {
       
   //     return { ...req, user: currentUser, db };
   // },
-  });
+  // });
 }
 
 module.exports = createServer;

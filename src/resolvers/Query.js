@@ -7,7 +7,7 @@ const users = (parent, args, context, info) => {
 }
 
 const user = (parent, args, context, info) => {
-        return context.db.query.user({ id: args.id });
+        return context.db.query.user({where:{ id: args.id }}, info);
 }
 
 const todoLists = (parent, args, context, info) => {
@@ -15,7 +15,7 @@ const todoLists = (parent, args, context, info) => {
 }
 
 const todoList = (parent, args, context, info) => {
-        return context.db.query.todoList({ id: args.id });
+        return context.db.query.todoList({where:{ id: args.id }}, info);
 }
 
 const todoes = (parent, args, context, info) => {
@@ -23,7 +23,7 @@ const todoes = (parent, args, context, info) => {
 }
 
 const todo = (parent, args, context, info) => {
-        return context.db.query.todo({ id: args.id });
+        return context.db.query.todo({where:{ id: args.id }}, info);
 }
 
 const teams = (parent, args, context, info) => {
@@ -31,7 +31,7 @@ const teams = (parent, args, context, info) => {
 }
 
 const team = (parent, args, context, info) => {
-        return context.db.query.team({ id: args.id });
+        return context.db.query.team({where: {id: args.id }}, info);
 }
 
 
