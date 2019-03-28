@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 const info = () => `This is the API of Manaje`;
 
 const users = (parent, args, context, info) => {
@@ -34,6 +35,44 @@ const teams = (parent, args, context, info) => {
 const team = (parent, args, context, info) => {
   return context.prisma.team({ id: args.id });
 };
+=======
+const {forwardTo} = require('prisma-binding')
+
+const info = () => `This is the API of Manaje`
+
+const users = (parent, args, context, info) => {
+        return context.db.query.users({}, info);
+}
+
+const user = (parent, args, context, info) => {
+        return context.db.query.user({where:{ id: args.id }}, info);
+}
+
+const todoLists = (parent, args, context, info) => {
+        return context.db.query.todoLists({}, info);
+}
+
+const todoList = (parent, args, context, info) => {
+        return context.db.query.todoList({where:{ id: args.id }}, info);
+}
+
+const todoes = (parent, args, context, info) => {
+        return context.db.query.todoes({}, info);
+}
+
+const todo = (parent, args, context, info) => {
+        return context.db.query.todo({where:{ id: args.id }}, info);
+}
+
+const teams = (parent, args, context, info) => {
+        return context.db.query.teams({}, info);
+}
+
+const team = (parent, args, context, info) => {
+        return context.db.query.team({where: {id: args.id }}, info);
+}
+
+>>>>>>> clint-kunz
 
 module.exports = {
   info,

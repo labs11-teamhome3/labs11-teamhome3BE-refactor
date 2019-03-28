@@ -1,17 +1,12 @@
-async function createUser(parent, args, ctx, info) {
-    return ctx.prisma.createUser({
-        name: args.name,
-        inTeam: {
-            connect: {
-                id: args.inTeam
-            }
-        }
-    });
+function createUser(parent, args, ctx, info) {
+    return ctx.db.mutation.createUser({
+        data: {name: args.name}
+    }, info);
 }
 
 /*
 async function updateUser(parent, args, context, info) {
-    return context.prisma.updateUser({
+    return context.db.mutation.updateUser({
         where: {id: args.id},
         data: {
             name: args.name,
@@ -21,54 +16,57 @@ async function updateUser(parent, args, context, info) {
 } */
 
 async function createTodo(parent, args, context, info) {
-    return context.prisma.createTodo({
-        description: args.description,
-        partOf: {
-            connect: {
-                id: args.partOf
+    return context.db.mutation.createTodo({
+        data: {
+            description: args.description,
+            partOf: {
+                connect: {
+                    id: args.partOf
+                }
             }
         }
-    })
+    }, info)
 }
 
 async function deleteTodo(parent, args, context, info) {
-    await context.prisma.deleteTodo({id: args.id})
-    return `Todo ${args.id} deleted`
+    return context.db.mutation.deleteTodo({where: {id: args.id}}, info)
+    //return `Todo ${args.id} deleted`
 }
 
 async function updateTodo(parent, args, context, info) {
-    return context.prisma.updateTodo({
+    return context.db.mutation.updateTodo({
         where: {id: args.id},
         data: {
             description: args.description,
             completed: args.completed
         }
-    })
+    }, info)
 }
 
 async function createTodoList(parent, args, context, info) {
-    return context.prisma.createTodoList({
-        description: args.description,
-        ownedBy: {
-            connect: {
-                id: args.ownedBy
+    return context.db.mutation.createTodoList({
+        data: {
+            description: args.description,
+            ownedBy: {
+                connect: {
+                    id: args.ownedBy
+                }
+            },
+            assignedTo: {
+                connect: {
+                    id: args.assignedTo
+                }
             }
-        },
-        assignedTo: {
-            connect: {
-                id: args.assignedTo
-            }
-        },
-    })
+        }
+    }, info)
 }
 
 async function deleteTodoList(parent, args, context , info) {
-   await context.prisma.deleteTodoList({id: args.id,})
-   return `TodoList ${args.id} deleted`
+   return context.db.mutation.deleteTodoList({where: {id: args.id,}}, info)
 }
 
 async function updateTodoList(parent, args, context, info) {
-    return context.prisma.updateTodoList({
+    return context.db.mutation.updateTodoList({
         where: {id: args.id},
         data: {
             description: args.description,
@@ -78,27 +76,42 @@ async function updateTodoList(parent, args, context, info) {
 }
 
 async function createTeam(parent, args, ctx, info) {
-    return ctx.prisma.createTeam({
-        teamName: args.teamName,
-    });
+    return ctx.db.mutation.createTeam({data: {
+        teamName: args.teamName}
+    }, info);
 }
 
 async function deleteTeam(parent, args, context, info) {
-    await context.prisma.deleteTeam({id: args.id})
-    return `Team ${args.id} deleted`
+    return context.db.mutation.deleteTeam({where: {id: args.id}}, info)
+    //return `Team ${args.id} deleted`
 }
 
+<<<<<<< HEAD
 async function updateTeamName(parent, args, ctx, info) {
     return ctx.prisma.updateTeam({
         where: {id: args.id},
         data: {
             teamName: args.teamName,
+=======
+//needs work
+async function updateTeam(parent, args, ctx, info) {
+    return ctx.db.mutation.updateTeam({
+        where: {id: args.teamId},
+        data: {
+            teamName: args.teamName,
+            members: {
+                connect: {
+                    id: args.userId
+                }
+            }
+>>>>>>> clint-kunz
         }
-    });
+    }, info);
 }
 
+//works if userId and teamId are in the right order on mutation
 function addUserToTeam(parent, args, context, info) {
-    return context.prisma.updateTeam({
+    return context.db.mutation.updateTeam({
         where: {id: args.teamId},
         data: {
             members: {
@@ -107,7 +120,7 @@ function addUserToTeam(parent, args, context, info) {
                 }
             }
         }
-    })
+    }, info)
 }
 
 function addTodoListToTeam(parent, args, context, info) {
@@ -150,7 +163,7 @@ function removeUserFromTeam(parent, args, context, info) {
 }
 
 function addUserToOwners(parent, args, context, info) {
-    return context.prisma.updateTodoList({
+    return context.db.mutation.updateTodoList({
         where: {id: args.todoListId},
         data: {
             ownedBy: {
@@ -163,7 +176,7 @@ function addUserToOwners(parent, args, context, info) {
 }
 
 async function addUserToAssignees(parent, args, context, info) {
-    return context.prisma.updateTodoList({
+    return context.db.mutation.updateTodoList({
         where: {id: args.todoListId},
         data: {
             assignedTo: {
@@ -175,12 +188,15 @@ async function addUserToAssignees(parent, args, context, info) {
     })
 }
 
+//add .ownedBy() for prisma-client, the todoList is not in an array, don't know how to check if last owner
 async function removeUserFromOwners(parent, args, context, info) {
-    const todoList = await context.prisma.todoList({ id: args.todoListId }).ownedBy();
-    if (todoList.length < 2) {
+    const todoList = await context.db.query.todoList({ where: {id: args.todoListId }}, `{ownedBy { id }}`);
+    //const todoList = await context.db.query.todoList({ where: {id: args.todoListId }}, info);
+    console.log(todoList.ownedBy);
+    if (todoList.ownedBy.length < 2) {
         throw new Error('You can not delete the original owner of the list')
     } else {
-        return context.prisma.updateTodoList({
+        return context.db.mutation.updateTodoList({
             where: { id: args.todoListId },
             data: {
                 ownedBy: {
@@ -189,12 +205,12 @@ async function removeUserFromOwners(parent, args, context, info) {
                     }
                 }
             }
-        })
+        }, info)
     }
 }
 
 function removeUserFromAssignees(parent, args, context, info) {
-    return context.prisma.updateTodoList({
+    return context.db.mutation.updateTodoList({
         where: { id: args.todoListId },
         data: {
             assignedTo: {
@@ -203,27 +219,27 @@ function removeUserFromAssignees(parent, args, context, info) {
                 }
             }
         }
-    })
+    }, info)
 }
 
 async function toggleTodoComplete(parent, args, context, info) {
-    const todo = await context.prisma.todo({ id: args.todoId })
-    return context.prisma.updateTodo({
+    const todo = await context.db.query.todo({ where: {id: args.todoId} })
+    return context.db.mutation.updateTodo({
         where: {id: args.todoId},
         data: {
             completed: !todo.completed
         }
-    })
+    }, info)
 }
 
 async function toggleTodoListComplete(parent, args, context, info) {
-    const todoList = await context.prisma.todoList({ id: args.todoListId });
-    return context.prisma.updateTodoList({
+    const todoList = await context.db.query.todoList({ where: {id: args.todoListId} });
+    return context.db.mutation.updateTodoList({
         where: {id: args.todoListId},
         data: {
             completed: !todoList.completed
         }
-    })
+    }, info)
 }
 
 module.exports = {
