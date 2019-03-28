@@ -26,6 +26,9 @@ type Mutation {
     addUserToAssignees(userId: ID!, todoListId: ID!): TodoList
     removeUserFromOwners(userId: ID!, todoListId: ID!): TodoList
     removeUserFromAssignees(userId: ID!, todoListId: ID!): TodoList
+
+    signup(email: String!, password: String!, name: String!): AuthPayload
+    login(email: String!, password:String!): AuthPayload
 }
 
 type Query {
@@ -63,6 +66,7 @@ type User {
     todoListsOwned: [TodoList] 
     todoListsAssigned: [TodoList]
     inTeam: Team
+    authId: String
 }
 
 type Team {
@@ -70,4 +74,9 @@ type Team {
     teamName: String!
     members: [User!]!
     todoLists: [TodoList]
+}
+
+type AuthPayload {
+    token: String
+    user: User
 }

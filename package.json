@@ -7,10 +7,13 @@
   "license": "MIT",
   "dependencies": {
     "apollo-server-express": "^2.4.8",
+    "bcryptjs": "^2.4.3",
     "dotenv": "^7.0.0",
     "global": "^4.3.2",
     "graphql": "^14.1.1",
     "graphql-yoga": "^1.17.4",
+    "jsonwebtoken": "^8.5.1",
+    "jwks-rsa": "^1.4.0",
     "prisma": "^1.29.2",
     "prisma-client-lib": "^1.29.1"
   },
