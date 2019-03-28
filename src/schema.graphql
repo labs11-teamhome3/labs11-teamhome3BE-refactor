@@ -1,15 +1,26 @@
 type Mutation {
     createUser(name: String!, inTeam: ID): User!
+
     createTodo(description: String!, partOf: ID!, completed: Boolean): Todo
     deleteTodo(id: String!): String!
     updateTodo(id: String!, description: String!, completed: Boolean): Todo
+    
     createTodoList(description: String!, ownedBy: String!, assignedTo: String!, completed: Boolean): TodoList
     deleteTodoList(id: String!): String!
     updateTodoList(id: String!, description: String!, completed: Boolean): TodoList
+    
     createTeam(teamName: String!): Team
     deleteTeam(id: String!): String!
-    updateTeam(id: String!, teamName: String!, members: String): Team
+    
+    updateTeamName(id: String!, teamName: String!): Team
+    addTodoListToTeam(teamId: ID!, todoListId: ID!): Team
+    removeTodoListFromTeam(teamId: ID!, todoListId: ID!): Team
     addUserToTeam(userId: ID!, teamId: ID!): Team
+    removeUserFromTeam(userId: ID!, teamId: ID!): Team
+
+
+    
+    
     toggleTodoComplete(todoId: ID!): Todo
     toggleTodoListComplete(todoListId: ID!): TodoList
     addUserToOwners(userId: ID!, todoListId: ID!): TodoList
