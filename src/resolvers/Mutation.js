@@ -250,14 +250,11 @@ async function toggleTodoListComplete(parent, args, context, info) {
 }
 
 module.exports = {
-<<<<<<< HEAD
    authenticate,
     //createUser,
    // updateUser,
-=======
   createUser,
   // updateUser,
->>>>>>> c3360b9428ec2b2aa77616570333feaec649a8d4
 
   createTodo,
   deleteTodo,
