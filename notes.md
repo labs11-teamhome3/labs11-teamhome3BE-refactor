@@ -1,7 +1,7 @@
 flow: 
 
-datamodel.prisma
+datamodel.prisma data types
+schema.graphql data types
 
-schema.graphql
-mutations
-resolvers
+mutations & queries in schema.graphql 
+resolvers: Mutation, Query, and individual Connections

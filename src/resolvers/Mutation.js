@@ -226,6 +226,47 @@ async function toggleTodoListComplete(parent, args, context, info) {
     })
 }
 
+async function createMessage(parent, args, ctx, info) {
+    return ctx.prisma.createMessage({
+        title: args.title,
+        inTeam: {
+            connect: {
+                id: args.teamId
+            }
+        },
+        creator: {
+            connect: {
+                id: args.userId
+            }
+        },
+        content: args.content,
+    });
+}
+
+function deleteMessage(parent, args, context , info) {
+    return context.prisma.deleteMessage({id: args.id,})
+ }
+
+ async function toggleTodoListComplete(parent, args, context, info) {
+    const todoList = await context.prisma.todoList({ id: args.todoListId });
+    return context.prisma.updateTodoList({
+        where: {id: args.todoListId},
+        data: {
+            completed: !todoList.completed
+        }
+    })
+}
+
+async function updateMessage(parent, args, context, info) {
+    return context.prisma.updateMessage({
+        where: {id: args.id},
+        data: {
+            title: args.title,
+            content: args.content,
+        }
+    })
+}
+
 module.exports = {
    createUser,
    // updateUser,
@@ -252,7 +293,11 @@ module.exports = {
    addUserToOwners,
    addUserToAssignees,
    removeUserFromOwners,
-   removeUserFromAssignees
+   removeUserFromAssignees,
+
+   createMessage,
+   deleteMessage,
+   updateMessage,
 };
 
-// Need to make users unique by adding email and phone numbers, finish CRUD on users
+// Need to make users unique by adding email and phone numbers, finish CRUD on users/

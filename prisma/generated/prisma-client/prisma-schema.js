@@ -3,7 +3,11 @@ module.exports = {
   // Please don't change this file manually but run `prisma generate` to update it.
   // For more information, please read the docs: https://www.prisma.io/docs/prisma-client/
 
-/* GraphQL */ `type AggregateTeam {
+/* GraphQL */ `type AggregateMessage {
+  count: Int!
+}
+
+type AggregateTeam {
   count: Int!
 }
 
@@ -27,7 +31,258 @@ scalar DateTime
 
 scalar Long
 
+type Message {
+  id: ID!
+  title: String!
+  creator: User!
+  inTeam: Team!
+  content: String!
+  createdAt: DateTime!
+}
+
+type MessageConnection {
+  pageInfo: PageInfo!
+  edges: [MessageEdge]!
+  aggregate: AggregateMessage!
+}
+
+input MessageCreateInput {
+  title: String!
+  creator: UserCreateOneInput!
+  inTeam: TeamCreateOneWithoutMessagesInput!
+  content: String!
+}
+
+input MessageCreateManyWithoutInTeamInput {
+  create: [MessageCreateWithoutInTeamInput!]
+  connect: [MessageWhereUniqueInput!]
+}
+
+input MessageCreateWithoutInTeamInput {
+  title: String!
+  creator: UserCreateOneInput!
+  content: String!
+}
+
+type MessageEdge {
+  node: Message!
+  cursor: String!
+}
+
+enum MessageOrderByInput {
+  id_ASC
+  id_DESC
+  title_ASC
+  title_DESC
+  content_ASC
+  content_DESC
+  createdAt_ASC
+  createdAt_DESC
+  updatedAt_ASC
+  updatedAt_DESC
+}
+
+type MessagePreviousValues {
+  id: ID!
+  title: String!
+  content: String!
+  createdAt: DateTime!
+}
+
+input MessageScalarWhereInput {
+  id: ID
+  id_not: ID
+  id_in: [ID!]
+  id_not_in: [ID!]
+  id_lt: ID
+  id_lte: ID
+  id_gt: ID
+  id_gte: ID
+  id_contains: ID
+  id_not_contains: ID
+  id_starts_with: ID
+  id_not_starts_with: ID
+  id_ends_with: ID
+  id_not_ends_with: ID
+  title: String
+  title_not: String
+  title_in: [String!]
+  title_not_in: [String!]
+  title_lt: String
+  title_lte: String
+  title_gt: String
+  title_gte: String
+  title_contains: String
+  title_not_contains: String
+  title_starts_with: String
+  title_not_starts_with: String
+  title_ends_with: String
+  title_not_ends_with: String
+  content: String
+  content_not: String
+  content_in: [String!]
+  content_not_in: [String!]
+  content_lt: String
+  content_lte: String
+  content_gt: String
+  content_gte: String
+  content_contains: String
+  content_not_contains: String
+  content_starts_with: String
+  content_not_starts_with: String
+  content_ends_with: String
+  content_not_ends_with: String
+  createdAt: DateTime
+  createdAt_not: DateTime
+  createdAt_in: [DateTime!]
+  createdAt_not_in: [DateTime!]
+  createdAt_lt: DateTime
+  createdAt_lte: DateTime
+  createdAt_gt: DateTime
+  createdAt_gte: DateTime
+  AND: [MessageScalarWhereInput!]
+  OR: [MessageScalarWhereInput!]
+  NOT: [MessageScalarWhereInput!]
+}
+
+type MessageSubscriptionPayload {
+  mutation: MutationType!
+  node: Message
+  updatedFields: [String!]
+  previousValues: MessagePreviousValues
+}
+
+input MessageSubscriptionWhereInput {
+  mutation_in: [MutationType!]
+  updatedFields_contains: String
+  updatedFields_contains_every: [String!]
+  updatedFields_contains_some: [String!]
+  node: MessageWhereInput
+  AND: [MessageSubscriptionWhereInput!]
+  OR: [MessageSubscriptionWhereInput!]
+  NOT: [MessageSubscriptionWhereInput!]
+}
+
+input MessageUpdateInput {
+  title: String
+  creator: UserUpdateOneRequiredInput
+  inTeam: TeamUpdateOneRequiredWithoutMessagesInput
+  content: String
+}
+
+input MessageUpdateManyDataInput {
+  title: String
+  content: String
+}
+
+input MessageUpdateManyMutationInput {
+  title: String
+  content: String
+}
+
+input MessageUpdateManyWithoutInTeamInput {
+  create: [MessageCreateWithoutInTeamInput!]
+  delete: [MessageWhereUniqueInput!]
+  connect: [MessageWhereUniqueInput!]
+  set: [MessageWhereUniqueInput!]
+  disconnect: [MessageWhereUniqueInput!]
+  update: [MessageUpdateWithWhereUniqueWithoutInTeamInput!]
+  upsert: [MessageUpsertWithWhereUniqueWithoutInTeamInput!]
+  deleteMany: [MessageScalarWhereInput!]
+  updateMany: [MessageUpdateManyWithWhereNestedInput!]
+}
+
+input MessageUpdateManyWithWhereNestedInput {
+  where: MessageScalarWhereInput!
+  data: MessageUpdateManyDataInput!
+}
+
+input MessageUpdateWithoutInTeamDataInput {
+  title: String
+  creator: UserUpdateOneRequiredInput
+  content: String
+}
+
+input MessageUpdateWithWhereUniqueWithoutInTeamInput {
+  where: MessageWhereUniqueInput!
+  data: MessageUpdateWithoutInTeamDataInput!
+}
+
+input MessageUpsertWithWhereUniqueWithoutInTeamInput {
+  where: MessageWhereUniqueInput!
+  update: MessageUpdateWithoutInTeamDataInput!
+  create: MessageCreateWithoutInTeamInput!
+}
+
+input MessageWhereInput {
+  id: ID
+  id_not: ID
+  id_in: [ID!]
+  id_not_in: [ID!]
+  id_lt: ID
+  id_lte: ID
+  id_gt: ID
+  id_gte: ID
+  id_contains: ID
+  id_not_contains: ID
+  id_starts_with: ID
+  id_not_starts_with: ID
+  id_ends_with: ID
+  id_not_ends_with: ID
+  title: String
+  title_not: String
+  title_in: [String!]
+  title_not_in: [String!]
+  title_lt: String
+  title_lte: String
+  title_gt: String
+  title_gte: String
+  title_contains: String
+  title_not_contains: String
+  title_starts_with: String
+  title_not_starts_with: String
+  title_ends_with: String
+  title_not_ends_with: String
+  creator: UserWhereInput
+  inTeam: TeamWhereInput
+  content: String
+  content_not: String
+  content_in: [String!]
+  content_not_in: [String!]
+  content_lt: String
+  content_lte: String
+  content_gt: String
+  content_gte: String
+  content_contains: String
+  content_not_contains: String
+  content_starts_with: String
+  content_not_starts_with: String
+  content_ends_with: String
+  content_not_ends_with: String
+  createdAt: DateTime
+  createdAt_not: DateTime
+  createdAt_in: [DateTime!]
+  createdAt_not_in: [DateTime!]
+  createdAt_lt: DateTime
+  createdAt_lte: DateTime
+  createdAt_gt: DateTime
+  createdAt_gte: DateTime
+  AND: [MessageWhereInput!]
+  OR: [MessageWhereInput!]
+  NOT: [MessageWhereInput!]
+}
+
+input MessageWhereUniqueInput {
+  id: ID
+}
+
 type Mutation {
+  createMessage(data: MessageCreateInput!): Message!
+  updateMessage(data: MessageUpdateInput!, where: MessageWhereUniqueInput!): Message
+  updateManyMessages(data: MessageUpdateManyMutationInput!, where: MessageWhereInput): BatchPayload!
+  upsertMessage(where: MessageWhereUniqueInput!, create: MessageCreateInput!, update: MessageUpdateInput!): Message!
+  deleteMessage(where: MessageWhereUniqueInput!): Message
+  deleteManyMessages(where: MessageWhereInput): BatchPayload!
   createTeam(data: TeamCreateInput!): Team!
   updateTeam(data: TeamUpdateInput!, where: TeamWhereUniqueInput!): Team
   updateManyTeams(data: TeamUpdateManyMutationInput!, where: TeamWhereInput): BatchPayload!
@@ -72,6 +327,9 @@ type PageInfo {
 }
 
 type Query {
+  message(where: MessageWhereUniqueInput!): Message
+  messages(where: MessageWhereInput, orderBy: MessageOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Message]!
+  messagesConnection(where: MessageWhereInput, orderBy: MessageOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): MessageConnection!
   team(where: TeamWhereUniqueInput!): Team
   teams(where: TeamWhereInput, orderBy: TeamOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Team]!
   teamsConnection(where: TeamWhereInput, orderBy: TeamOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): TeamConnection!
@@ -88,6 +346,7 @@ type Query {
 }
 
 type Subscription {
+  message(where: MessageSubscriptionWhereInput): MessageSubscriptionPayload
   team(where: TeamSubscriptionWhereInput): TeamSubscriptionPayload
   todo(where: TodoSubscriptionWhereInput): TodoSubscriptionPayload
   todoList(where: TodoListSubscriptionWhereInput): TodoListSubscriptionPayload
@@ -99,6 +358,7 @@ type Team {
   teamName: String!
   members(where: UserWhereInput, orderBy: UserOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [User!]
   todoLists(where: TodoListWhereInput, orderBy: TodoListOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [TodoList!]
+  messages(where: MessageWhereInput, orderBy: MessageOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Message!]
 }
 
 type TeamConnection {
@@ -111,10 +371,16 @@ input TeamCreateInput {
   teamName: String!
   members: UserCreateManyWithoutInTeamInput
   todoLists: TodoListCreateManyWithoutInTeamInput
+  messages: MessageCreateManyWithoutInTeamInput
 }
 
 input TeamCreateOneWithoutMembersInput {
   create: TeamCreateWithoutMembersInput
+  connect: TeamWhereUniqueInput
+}
+
+input TeamCreateOneWithoutMessagesInput {
+  create: TeamCreateWithoutMessagesInput
   connect: TeamWhereUniqueInput
 }
 
@@ -126,11 +392,19 @@ input TeamCreateOneWithoutTodoListsInput {
 input TeamCreateWithoutMembersInput {
   teamName: String!
   todoLists: TodoListCreateManyWithoutInTeamInput
+  messages: MessageCreateManyWithoutInTeamInput
+}
+
+input TeamCreateWithoutMessagesInput {
+  teamName: String!
+  members: UserCreateManyWithoutInTeamInput
+  todoLists: TodoListCreateManyWithoutInTeamInput
 }
 
 input TeamCreateWithoutTodoListsInput {
   teamName: String!
   members: UserCreateManyWithoutInTeamInput
+  messages: MessageCreateManyWithoutInTeamInput
 }
 
 type TeamEdge {
@@ -176,10 +450,18 @@ input TeamUpdateInput {
   teamName: String
   members: UserUpdateManyWithoutInTeamInput
   todoLists: TodoListUpdateManyWithoutInTeamInput
+  messages: MessageUpdateManyWithoutInTeamInput
 }
 
 input TeamUpdateManyMutationInput {
   teamName: String
+}
+
+input TeamUpdateOneRequiredWithoutMessagesInput {
+  create: TeamCreateWithoutMessagesInput
+  update: TeamUpdateWithoutMessagesDataInput
+  upsert: TeamUpsertWithoutMessagesInput
+  connect: TeamWhereUniqueInput
 }
 
 input TeamUpdateOneWithoutMembersInput {
@@ -203,16 +485,29 @@ input TeamUpdateOneWithoutTodoListsInput {
 input TeamUpdateWithoutMembersDataInput {
   teamName: String
   todoLists: TodoListUpdateManyWithoutInTeamInput
+  messages: MessageUpdateManyWithoutInTeamInput
+}
+
+input TeamUpdateWithoutMessagesDataInput {
+  teamName: String
+  members: UserUpdateManyWithoutInTeamInput
+  todoLists: TodoListUpdateManyWithoutInTeamInput
 }
 
 input TeamUpdateWithoutTodoListsDataInput {
   teamName: String
   members: UserUpdateManyWithoutInTeamInput
+  messages: MessageUpdateManyWithoutInTeamInput
 }
 
 input TeamUpsertWithoutMembersInput {
   update: TeamUpdateWithoutMembersDataInput!
   create: TeamCreateWithoutMembersInput!
+}
+
+input TeamUpsertWithoutMessagesInput {
+  update: TeamUpdateWithoutMessagesDataInput!
+  create: TeamCreateWithoutMessagesInput!
 }
 
 input TeamUpsertWithoutTodoListsInput {
@@ -255,6 +550,9 @@ input TeamWhereInput {
   todoLists_every: TodoListWhereInput
   todoLists_some: TodoListWhereInput
   todoLists_none: TodoListWhereInput
+  messages_every: MessageWhereInput
+  messages_some: MessageWhereInput
+  messages_none: MessageWhereInput
   AND: [TeamWhereInput!]
   OR: [TeamWhereInput!]
   NOT: [TeamWhereInput!]
@@ -860,6 +1158,11 @@ input UserCreateManyWithoutTodoListsOwnedInput {
   connect: [UserWhereUniqueInput!]
 }
 
+input UserCreateOneInput {
+  create: UserCreateInput
+  connect: UserWhereUniqueInput
+}
+
 input UserCreateWithoutInTeamInput {
   name: String!
   todoListsOwned: TodoListCreateManyWithoutOwnedByInput
@@ -960,6 +1263,13 @@ input UserSubscriptionWhereInput {
   NOT: [UserSubscriptionWhereInput!]
 }
 
+input UserUpdateDataInput {
+  name: String
+  todoListsOwned: TodoListUpdateManyWithoutOwnedByInput
+  todoListsAssigned: TodoListUpdateManyWithoutAssignedToInput
+  inTeam: TeamUpdateOneWithoutMembersInput
+}
+
 input UserUpdateInput {
   name: String
   todoListsOwned: TodoListUpdateManyWithoutOwnedByInput
@@ -1016,6 +1326,13 @@ input UserUpdateManyWithWhereNestedInput {
   data: UserUpdateManyDataInput!
 }
 
+input UserUpdateOneRequiredInput {
+  create: UserCreateInput
+  update: UserUpdateDataInput
+  upsert: UserUpsertNestedInput
+  connect: UserWhereUniqueInput
+}
+
 input UserUpdateWithoutInTeamDataInput {
   name: String
   todoListsOwned: TodoListUpdateManyWithoutOwnedByInput
@@ -1047,6 +1364,11 @@ input UserUpdateWithWhereUniqueWithoutTodoListsAssignedInput {
 input UserUpdateWithWhereUniqueWithoutTodoListsOwnedInput {
   where: UserWhereUniqueInput!
   data: UserUpdateWithoutTodoListsOwnedDataInput!
+}
+
+input UserUpsertNestedInput {
+  update: UserUpdateDataInput!
+  create: UserCreateInput!
 }
 
 input UserUpsertWithWhereUniqueWithoutInTeamInput {
