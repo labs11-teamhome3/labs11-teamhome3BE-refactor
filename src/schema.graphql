@@ -9,8 +9,8 @@ type Mutation {
     deleteTodo(id: String!): String!
     updateTodo(id: String!, description: String!, completed: Boolean): Todo
     
-    createTodoList(description: String!, ownedBy: String!, assignedTo: String!, completed: Boolean): TodoList
-    deleteTodoList(id: String!): String!
+    createTodoList(description: String!, ownedBy: String!, assignedTo: String!, completed: Boolean, inTeam: ID): TodoList
+    deleteTodoList(id: String!): TodoList!
     updateTodoList(id: String!, description: String!, completed: Boolean): TodoList
     
     createTeam(teamName: String!): Team
