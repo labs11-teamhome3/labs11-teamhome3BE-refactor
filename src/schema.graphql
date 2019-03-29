@@ -1,14 +1,11 @@
 type Mutation {
-<<<<<<< HEAD
     authenticate(idToken: String!): User
     #createUser(name: String!, inTeam: ID): User!
-=======
   createUser(name: String!, inTeam: ID): User!
 
   createTodo(description: String!, partOf: ID!, completed: Boolean): Todo
   deleteTodo(id: String!): String!
   updateTodo(id: String!, description: String!, completed: Boolean): Todo
->>>>>>> c3360b9428ec2b2aa77616570333feaec649a8d4
 
   createTodoList(
     description: String!

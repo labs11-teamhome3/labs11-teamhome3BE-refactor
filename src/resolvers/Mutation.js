@@ -1,6 +1,4 @@
-<<<<<<< HEAD
 const validateAndParseIdToken = require('../helpers/validateAndParseIdToken');
-=======
 async function createUser(parent, args, ctx, info) {
   return ctx.prisma.createUser({
     name: args.name,
@@ -11,7 +9,6 @@ async function createUser(parent, args, ctx, info) {
     },
   });
 }
->>>>>>> c3360b9428ec2b2aa77616570333feaec649a8d4
 
 async function createPrismaUser(context, idToken) {
     const user = await context.prisma.createUser({
