@@ -1370,7 +1370,7 @@ export interface TeamUpdateManyMutationInput {
 
 export interface TodoCreateInput {
   description: String;
-  partOf?: TodoListCreateOneWithoutTodosInput;
+  partOf: TodoListCreateOneWithoutTodosInput;
   completed?: Boolean;
 }
 
@@ -1389,16 +1389,14 @@ export interface TodoListCreateWithoutTodosInput {
 
 export interface TodoUpdateInput {
   description?: String;
-  partOf?: TodoListUpdateOneWithoutTodosInput;
+  partOf?: TodoListUpdateOneRequiredWithoutTodosInput;
   completed?: Boolean;
 }
 
-export interface TodoListUpdateOneWithoutTodosInput {
+export interface TodoListUpdateOneRequiredWithoutTodosInput {
   create?: TodoListCreateWithoutTodosInput;
   update?: TodoListUpdateWithoutTodosDataInput;
   upsert?: TodoListUpsertWithoutTodosInput;
-  delete?: Boolean;
-  disconnect?: Boolean;
   connect?: TodoListWhereUniqueInput;
 }
 

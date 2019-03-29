@@ -12,7 +12,7 @@ type TodoList {
 type Todo {
     id: ID! @unique
     description: String!
-    partOf: TodoList
+    partOf: TodoList!
     completed: Boolean @default(value: "false")
 }
 
