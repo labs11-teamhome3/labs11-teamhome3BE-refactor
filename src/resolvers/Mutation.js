@@ -68,8 +68,8 @@ async function createTodoList(parent, args, context, info) {
 }
 
 async function deleteTodoList(parent, args, context, info) {
-  await context.prisma.deleteTodoList({ id: args.id });
-  return `TodoList ${args.id} deleted`;
+  return context.prisma.deleteTodoList({ id: args.id });
+  // return `TodoList ${args.id} deleted`;
 }
 
 async function updateTodoList(parent, args, context, info) {

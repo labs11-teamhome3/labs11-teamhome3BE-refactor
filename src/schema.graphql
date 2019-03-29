@@ -12,7 +12,7 @@ type Mutation {
     completed: Boolean
     inTeam: ID
   ): TodoList
-  deleteTodoList(id: String!): String!
+  deleteTodoList(id: String!): TodoList!
   updateTodoList(
     id: String!
     description: String!
