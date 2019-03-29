@@ -4,6 +4,7 @@ const User = require('./User.js')
 const Todo = require('./Todo.js');
 const TodoList = require('./TodoList.js');
 const Team = require('./Team.js');
+const Message = require('./Message.js');
 
 const resolvers = {
     Query,
@@ -11,7 +12,8 @@ const resolvers = {
     User,
     Todo,
     TodoList,
-    Team
+    Team,
+    Message,
 };
 
 module.exports = resolvers;

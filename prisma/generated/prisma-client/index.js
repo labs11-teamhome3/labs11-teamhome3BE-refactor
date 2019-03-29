@@ -19,11 +19,15 @@ var models = [
   {
     name: "Team",
     embedded: false
+  },
+  {
+    name: "Message",
+    embedded: false
   }
 ];
 exports.Prisma = prisma_lib_1.makePrismaClientClass({
   typeDefs,
   models,
-  endpoint: `http://localhost:4466`
+  endpoint: `https://manaje-be-8de8017c47.herokuapp.com/labs11-teamhome3BE-refactor/dev`
 });
 exports.prisma = new exports.Prisma();

@@ -35,6 +35,18 @@ const team = (parent, args, context, info) => {
   return context.prisma.team({ id: args.id });
 };
 
+const messages = (parent, args, context, info) => {
+  if (args.teamId) {
+    return context.prisma.messages({ where: { inTeam: { id: args.teamId } } });
+  }
+  return context.prisma.todoLists();
+};
+
+const message = async (parent, args, context, info) => {
+  return context.prisma.message({ id: args.id });
+};
+
+
 module.exports = {
   info,
   todoes,
@@ -45,4 +57,6 @@ module.exports = {
   todoList,
   teams,
   team,
+  messages,
+  message
 };

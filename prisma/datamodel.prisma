@@ -29,5 +29,19 @@ type Team {
     id: ID! @unique
     teamName: String!
     members: [User!] 
-    todoLists: [TodoList!] 
+    todoLists: [TodoList!]
+    messages: [Message!]
+}
+
+type Message {
+    id: ID! @unique
+    title: String!
+    creator: User!
+    inTeam: Team!
+    content: String!
+    # images: [String]
+    # tag: Tag
+    # comments: [ID]
+    # subscribedUsers: [User]
+    createdAt: DateTime!
 }
