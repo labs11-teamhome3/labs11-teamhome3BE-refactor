@@ -1,5 +1,5 @@
 type Mutation {
-  createUser(name: String!, inTeam: ID): User!
+  createUser(name: String! authId: String!): User!
   createTodo(description: String!, partOf: ID!, completed: Boolean): Todo
   deleteTodo(id: String!): String!
   updateTodo(id: String!, description: String!, completed: Boolean): Todo
@@ -27,14 +27,14 @@ type Mutation {
 
   addEvent(userId: ID, teamId: ID!, action_string: String!, object_string: String!): Event
   deleteEvent(eventId: ID!): Event
-  addTag(name: String!, team: String): Tag
-  updateTag(tagId: ID!, name: String, team: String): Tag
+  addTag(name: String!, teamId: ID!): Tag
+  updateTag(tagId: ID!, name: String): Tag
   deleteTag(tagId: ID!): Tag
-  addMessageComment(messageId: ID!, content: String!, image: String): MessageComment
-  updateMessageComment(commentId: ID!, messageId: ID!, content: String, image: String, likes: [ID]): MessageComment
+  addMessageComment(messageId: ID!, userId: ID!, content: String!, image: String): MessageComment
+  updateMessageComment(commentId: ID!, content: String, image: String): MessageComment
   deleteMessageComment(commentId: ID!): MessageComment
-  likeMessageComment(commentId: ID!): MessageComment
-  unlikeMessageComment(commentId: ID!): MessageComment
+  likeMessageComment(commentId: ID!, userId: ID!): MessageComment
+  unlikeMessageComment(commentId: ID!, userId: ID!): MessageComment
 }
 
 type Query {
@@ -94,6 +94,8 @@ type Team {
   members: [User!]
   todoLists: [TodoList!]
   messages: [Message!]
+  events: [Event]
+  tags: [Tag]
 }
 
 type Message {

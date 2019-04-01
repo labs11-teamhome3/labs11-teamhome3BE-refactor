@@ -274,6 +274,108 @@ async function updateMessage(parent, args, context, info) {
     })
 }
 
+function addEvent(parent, args, context, info) {
+    return context.prisma.createEvent({
+        action_string: args.action_string,
+        object_string: args.object_string,
+        user: {
+            connect: {
+                id: args.userId
+            }
+        },
+        team: {
+            connect: {
+                id: args.teamId
+            }
+        },
+    })
+}
+
+function deleteEvent(parent, args, context, info) {
+    return context.prisma.deleteEvent({ id: args.eventId });
+}
+
+function addTag(parent, args, context, info) {
+    return context.prisma.createTag({
+        name: args.name,
+        team: {
+            connect: {
+                id: args.teamId
+            }
+        }
+    })
+}
+
+function updateTag(parent, args, context, info) {
+    return context.prisma.updateTag({
+        where: { id: args.tagId },
+        data: {
+            name: args.name
+        }
+    })
+}
+
+function deleteTag(parent, args, context, info) {
+    return context.prisma.deleteTag({ id: args.tagId })
+}
+
+function addMessageComment(parent, args, context, info) {
+    return context.prisma.createMessageComment({
+        content: args.content,
+        image: args.image,
+        message: {
+            connect: {
+                id: args.messageId
+            }
+        },
+        user: {
+            connect: {
+                id: args.userId
+            }
+        }
+    })
+}
+
+function updateMessageComment(parent, args, context, info) {
+    return context.prisma.updateMessageComment({
+        where: { id: args.commentId },
+        data: {
+            content: args.content,
+            image: args.image
+        }
+    })
+}
+
+function deleteMessageComment(parent, args, context, info) {
+    return context.prisma.deleteMessageComment({ id: args.commentId });
+}
+
+function likeMessageComment(parent, args, context, info) {
+    return context.prisma.updateMessageComment({
+        where: { id: args.commentId },
+        data: {
+            likes: {
+                connect: {
+                    id: args.userId
+                }
+            }
+        }
+    })
+}
+
+function unlikeMessageComment(parent, args, context, info) {
+    return context.prisma.updateMessageComment({
+        where: { id: args.commentId },
+        data: {
+            likes: {
+                disconnect: {
+                    id: args.userId
+                }
+            }
+        }
+    })
+}
+
 module.exports = {
   createUser,
   // updateUser,
@@ -305,6 +407,26 @@ module.exports = {
    createMessage,
    deleteMessage,
    updateMessage,
+
+   addEvent,
+   deleteEvent,
+
+   addTag,
+   updateTag,
+   deleteTag,
+
+   addMessageComment,
+   updateMessageComment,
+   deleteMessageComment,
+   likeMessageComment,
+   unlikeMessageComment
+
+
+
+
+
+
+
 };
 
 // Need to make users unique by adding email and phone numbers, finish CRUD on users/
