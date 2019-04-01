@@ -49,9 +49,6 @@ type Query {
   team(id: ID!): Team!
   messages(teamId: ID!): [Message]
   message(id: ID!): Message
-
-  # need to write the queries for everything below here
-
   events: [Event]
   findEventById(eventId: ID!): Event
   findEventsByTeam(teamId: ID!): [Event]
