@@ -33,14 +33,9 @@ type Mutation {
     removeUserFromOwners(userId: ID!, todoListId: ID!): TodoList
     removeUserFromAssignees(userId: ID!, todoListId: ID!): TodoList
 
-<<<<<<< HEAD
-    signup(email: String!, password: String!, name: String!): AuthPayload
-    login(email: String!, password:String!): AuthPayload
-=======
     createMessage(title: String!, teamId: ID!, userId: ID!, content: String!): Message
     deleteMessage(id: ID!): Message
     updateMessage(id: ID!, title: String, content: String): Message
->>>>>>> 9a517d493a1806f7d31b6a7b2c43f55a8391451c
 }
 
 type Query {
