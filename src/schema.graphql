@@ -1,24 +1,30 @@
 type Mutation {
+<<<<<<< HEAD
     createUser(name: String!): User!
+=======
+  createUser(name: String!, inTeam: ID): User!
+
+  createTodo(description: String!, partOf: ID!, completed: Boolean): Todo
+  deleteTodo(id: String!): String!
+  updateTodo(id: String!, description: String!, completed: Boolean): Todo
+
+>>>>>>> 9a517d493a1806f7d31b6a7b2c43f55a8391451c
     createTodo(description: String!, partOf: ID!, completed: Boolean): Todo
     deleteTodo(id: String!): String!
     updateTodo(id: String!, description: String!, completed: Boolean): Todo
     
-    createTodoList(description: String!, ownedBy: String!, assignedTo: String!, completed: Boolean): TodoList
-    deleteTodoList(id: String!): String!
+    createTodoList(description: String!, ownedBy: String!, assignedTo: String!, completed: Boolean, inTeam: ID): TodoList
+    deleteTodoList(id: String!): TodoList!
     updateTodoList(id: String!, description: String!, completed: Boolean): TodoList
     
     createTeam(teamName: String!): Team
-    deleteTeam(id: String!): String!
+    deleteTeam(id: ID!): Team
     
-    updateTeamName(id: String!, teamName: String!): Team
+    updateTeamName(id: ID!, teamName: ID!): Team
     addTodoListToTeam(teamId: ID!, todoListId: ID!): Team
     removeTodoListFromTeam(teamId: ID!, todoListId: ID!): Team
     addUserToTeam(userId: ID!, teamId: ID!): Team
     removeUserFromTeam(userId: ID!, teamId: ID!): Team
-
-
-    
     
     toggleTodoComplete(todoId: ID!): Todo
     toggleTodoListComplete(todoListId: ID!): TodoList
@@ -27,56 +33,76 @@ type Mutation {
     removeUserFromOwners(userId: ID!, todoListId: ID!): TodoList
     removeUserFromAssignees(userId: ID!, todoListId: ID!): TodoList
 
+<<<<<<< HEAD
     signup(email: String!, password: String!, name: String!): AuthPayload
     login(email: String!, password:String!): AuthPayload
+=======
+    createMessage(title: String!, teamId: ID!, userId: ID!, content: String!): Message
+    deleteMessage(id: ID!): Message
+    updateMessage(id: ID!, title: String, content: String): Message
+>>>>>>> 9a517d493a1806f7d31b6a7b2c43f55a8391451c
 }
 
 type Query {
-    info: String!
-    todoes: [Todo]
-    todo(id: ID!): Todo!
-    users: [User]
-    user(id: ID!): User!
-    todoLists: [TodoList]
-    todoList(id: ID!): TodoList!
-    teams: [Team]
-    team(id: ID!): Team!
+  info: String!
+
+  todoes: [Todo]
+  todo(id: ID!): Todo!
+
+  users: [User]
+  user(id: ID!): User!
+
+  todoLists(teamId: ID): [TodoList]
+  todoList(id: ID!): TodoList!
+
+  teams: [Team]
+  team(id: ID!): Team!
+
+  messages(teamId: ID!): [Message]
+  message(id: ID!): Message
 }
 
 type TodoList {
-    id: ID!
-    description: String!
-    ownedBy: [User!]! 
-    assignedTo: [User!]! 
-    todos: [Todo!]!
-    completed: Boolean
-    inTeam: Team
+  id: ID!
+  description: String!
+  ownedBy: [User!]!
+  assignedTo: [User!]!
+  todos: [Todo!]!
+  completed: Boolean
+  inTeam: Team
 }
 
 type Todo {
-    id: ID!
-    description: String!
-    partOf: TodoList
-    completed: Boolean
+  id: ID!
+  description: String!
+  partOf: TodoList
+  completed: Boolean
 }
 
 type User {
-    id: ID!
-    name: String!
-    todoListsOwned: [TodoList] 
-    todoListsAssigned: [TodoList]
-    inTeam: Team
-    authId: String
+  id: ID!
+  name: String!
+  todoListsOwned: [TodoList]
+  todoListsAssigned: [TodoList]
+  inTeam: Team
 }
 
 type Team {
-    id: ID!
-    teamName: String!
-    members: [User!]!
-    todoLists: [TodoList]
+  id: ID!
+  teamName: String!
+  members: [User!]
+  todoLists: [TodoList!]
+  messages: [Message!]
 }
 
-type AuthPayload {
-    token: String
-    user: User
+type Message {
+  id: ID!
+  title: String!
+  creator: User!
+  inTeam: Team!
+  content: String!
+  # images: [String]
+  # tag: Tag
+  # comments: [ID]
+  # subscribedUsers: [User]
 }
