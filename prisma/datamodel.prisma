@@ -18,6 +18,7 @@ type Todo {
 
 type User {
     id: ID! @unique
+    authId: String
     createdAt: DateTime!
     name: String!
     todoListsOwned: [TodoList] @relation(name: "OwnedBy")
@@ -36,12 +37,37 @@ type Team {
 type Message {
     id: ID! @unique
     title: String!
-    creator: User!
+    creator: User! @relation(name: "Creator")
     inTeam: Team!
     content: String!
-    # images: [String]
-    # tag: Tag
-    # comments: [ID]
-    # subscribedUsers: [User]
+    images: [String]
+    tag: Tag
+    comments: [MessageComment]
+    subscribedUsers: [User] @relation(name: "Subscribed")
+    createdAt: DateTime!
+}
+
+type MessageComment {
+    id: ID! @unique
+    content: String!
+    user: User! @relation(name: "Commentor")
+    message: Message!
+    image: String
+    likes: [User] @relation(name: "Likes")
+    createdAt: DateTime!
+}
+
+type Tag {
+    id: ID! @unique
+    name: String!
+    team: Team
+}
+
+type Event {
+    id: ID! @unique
+    team: Team!
+    user: User
+    action_string: String!
+    object_string: String!
     createdAt: DateTime!
 }

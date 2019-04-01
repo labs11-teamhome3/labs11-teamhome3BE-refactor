@@ -1,58 +1,39 @@
 type Mutation {
-<<<<<<< HEAD
-    createUser(name: String!): User!
-=======
   createUser(name: String!, inTeam: ID): User!
-
   createTodo(description: String!, partOf: ID!, completed: Boolean): Todo
   deleteTodo(id: String!): String!
   updateTodo(id: String!, description: String!, completed: Boolean): Todo
-
->>>>>>> 9a517d493a1806f7d31b6a7b2c43f55a8391451c
-    createTodo(description: String!, partOf: ID!, completed: Boolean): Todo
-    deleteTodo(id: String!): String!
-    updateTodo(id: String!, description: String!, completed: Boolean): Todo
-    
-    createTodoList(description: String!, ownedBy: String!, assignedTo: String!, completed: Boolean, inTeam: ID): TodoList
-    deleteTodoList(id: String!): TodoList!
-    updateTodoList(id: String!, description: String!, completed: Boolean): TodoList
-    
-    createTeam(teamName: String!): Team
-    deleteTeam(id: ID!): Team
-    
-    updateTeamName(id: ID!, teamName: ID!): Team
-    addTodoListToTeam(teamId: ID!, todoListId: ID!): Team
-    removeTodoListFromTeam(teamId: ID!, todoListId: ID!): Team
-    addUserToTeam(userId: ID!, teamId: ID!): Team
-    removeUserFromTeam(userId: ID!, teamId: ID!): Team
-    
-    toggleTodoComplete(todoId: ID!): Todo
-    toggleTodoListComplete(todoListId: ID!): TodoList
-    addUserToOwners(userId: ID!, todoListId: ID!): TodoList
-    addUserToAssignees(userId: ID!, todoListId: ID!): TodoList
-    removeUserFromOwners(userId: ID!, todoListId: ID!): TodoList
-    removeUserFromAssignees(userId: ID!, todoListId: ID!): TodoList
-
-    createMessage(title: String!, teamId: ID!, userId: ID!, content: String!): Message
-    deleteMessage(id: ID!): Message
-    updateMessage(id: ID!, title: String, content: String): Message
+  createTodoList(description: String!, ownedBy: String!, assignedTo: String!, completed: Boolean, inTeam: ID): TodoList
+  deleteTodoList(id: String!): TodoList!
+  updateTodoList(id: String!, description: String!, completed: Boolean): TodoList
+  createTeam(teamName: String!): Team
+  deleteTeam(id: ID!): Team
+  updateTeamName(id: ID!, teamName: ID!): Team
+  addTodoListToTeam(teamId: ID!, todoListId: ID!): Team
+  removeTodoListFromTeam(teamId: ID!, todoListId: ID!): Team
+  addUserToTeam(userId: ID!, teamId: ID!): Team
+  removeUserFromTeam(userId: ID!, teamId: ID!): Team
+  toggleTodoComplete(todoId: ID!): Todo
+  toggleTodoListComplete(todoListId: ID!): TodoList
+  addUserToOwners(userId: ID!, todoListId: ID!): TodoList
+  addUserToAssignees(userId: ID!, todoListId: ID!): TodoList
+  removeUserFromOwners(userId: ID!, todoListId: ID!): TodoList
+  removeUserFromAssignees(userId: ID!, todoListId: ID!): TodoList
+  createMessage(title: String!, teamId: ID!, userId: ID!, content: String!): Message
+  deleteMessage(id: ID!): Message
+  updateMessage(id: ID!, title: String, content: String): Message
 }
 
 type Query {
   info: String!
-
   todoes: [Todo]
   todo(id: ID!): Todo!
-
   users: [User]
   user(id: ID!): User!
-
   todoLists(teamId: ID): [TodoList]
   todoList(id: ID!): TodoList!
-
   teams: [Team]
   team(id: ID!): Team!
-
   messages(teamId: ID!): [Message]
   message(id: ID!): Message
 }
@@ -76,6 +57,7 @@ type Todo {
 
 type User {
   id: ID!
+  authId: String
   name: String!
   todoListsOwned: [TodoList]
   todoListsAssigned: [TodoList]
@@ -96,8 +78,31 @@ type Message {
   creator: User!
   inTeam: Team!
   content: String!
-  # images: [String]
-  # tag: Tag
-  # comments: [ID]
-  # subscribedUsers: [User]
+  images: [String]
+  tag: Tag
+  comments: [MessageComment]
+  subscribedUsers: [User]
+}
+
+type MessageComment {
+  id: ID!
+  content: String!
+  user: User!
+  message: Message!
+  image: String
+  likes: [User]
+}
+
+type Tag {
+  id: ID!
+  name: String!
+  team: Team
+}
+
+type Event {
+  id: ID!
+  team: Team!
+  user: User
+  action_string: String!
+  object_string: String!
 }
