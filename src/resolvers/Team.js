@@ -10,8 +10,18 @@ function messages(parent, args, context) {
     return context.prisma.team({ id: parent.id }).messages()
 }
 
+function events(parent, args, context) {
+    return context.prisma.team({ id: parent.id }).events()
+}
+
+function tags(parent, args, context) {
+    return context.prisma.team({ id: parent.id }).tags();
+}
+
 module.exports = {
     members,
     todoLists, 
-    messages
+    messages,
+    events,
+    tags
 }

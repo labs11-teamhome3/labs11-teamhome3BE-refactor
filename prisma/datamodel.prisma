@@ -32,6 +32,8 @@ type Team {
     members: [User!] 
     todoLists: [TodoList!]
     messages: [Message!]
+    events: [Event]
+    tags: [Tag]
 }
 
 type Message {

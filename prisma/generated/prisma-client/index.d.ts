@@ -708,6 +708,12 @@ export interface TeamWhereInput {
   messages_every?: MessageWhereInput;
   messages_some?: MessageWhereInput;
   messages_none?: MessageWhereInput;
+  events_every?: EventWhereInput;
+  events_some?: EventWhereInput;
+  events_none?: EventWhereInput;
+  tags_every?: TagWhereInput;
+  tags_some?: TagWhereInput;
+  tags_none?: TagWhereInput;
   AND?: TeamWhereInput[] | TeamWhereInput;
   OR?: TeamWhereInput[] | TeamWhereInput;
   NOT?: TeamWhereInput[] | TeamWhereInput;
@@ -961,22 +967,23 @@ export type UserWhereUniqueInput = AtLeastOne<{
 }>;
 
 export interface EventCreateInput {
-  team: TeamCreateOneInput;
+  team: TeamCreateOneWithoutEventsInput;
   user?: UserCreateOneInput;
   action_string: String;
   object_string: String;
 }
 
-export interface TeamCreateOneInput {
-  create?: TeamCreateInput;
+export interface TeamCreateOneWithoutEventsInput {
+  create?: TeamCreateWithoutEventsInput;
   connect?: TeamWhereUniqueInput;
 }
 
-export interface TeamCreateInput {
+export interface TeamCreateWithoutEventsInput {
   teamName: String;
   members?: UserCreateManyWithoutInTeamInput;
   todoLists?: TodoListCreateManyWithoutInTeamInput;
   messages?: MessageCreateManyWithoutInTeamInput;
+  tags?: TagCreateManyWithoutTeamInput;
 }
 
 export interface UserCreateManyWithoutInTeamInput {
@@ -1029,6 +1036,8 @@ export interface TeamCreateWithoutMembersInput {
   teamName: String;
   todoLists?: TodoListCreateManyWithoutInTeamInput;
   messages?: MessageCreateManyWithoutInTeamInput;
+  events?: EventCreateManyWithoutTeamInput;
+  tags?: TagCreateManyWithoutTeamInput;
 }
 
 export interface TodoListCreateManyWithoutInTeamInput {
@@ -1094,6 +1103,8 @@ export interface TeamCreateWithoutTodoListsInput {
   teamName: String;
   members?: UserCreateManyWithoutInTeamInput;
   messages?: MessageCreateManyWithoutInTeamInput;
+  events?: EventCreateManyWithoutTeamInput;
+  tags?: TagCreateManyWithoutTeamInput;
 }
 
 export interface MessageCreateManyWithoutInTeamInput {
@@ -1135,7 +1146,31 @@ export interface TagCreateOneInput {
 
 export interface TagCreateInput {
   name: String;
-  team?: TeamCreateOneInput;
+  team?: TeamCreateOneWithoutTagsInput;
+}
+
+export interface TeamCreateOneWithoutTagsInput {
+  create?: TeamCreateWithoutTagsInput;
+  connect?: TeamWhereUniqueInput;
+}
+
+export interface TeamCreateWithoutTagsInput {
+  teamName: String;
+  members?: UserCreateManyWithoutInTeamInput;
+  todoLists?: TodoListCreateManyWithoutInTeamInput;
+  messages?: MessageCreateManyWithoutInTeamInput;
+  events?: EventCreateManyWithoutTeamInput;
+}
+
+export interface EventCreateManyWithoutTeamInput {
+  create?: EventCreateWithoutTeamInput[] | EventCreateWithoutTeamInput;
+  connect?: EventWhereUniqueInput[] | EventWhereUniqueInput;
+}
+
+export interface EventCreateWithoutTeamInput {
+  user?: UserCreateOneInput;
+  action_string: String;
+  object_string: String;
 }
 
 export interface MessageCommentCreateManyWithoutMessageInput {
@@ -1157,25 +1192,35 @@ export interface UserCreateManyInput {
   connect?: UserWhereUniqueInput[] | UserWhereUniqueInput;
 }
 
+export interface TagCreateManyWithoutTeamInput {
+  create?: TagCreateWithoutTeamInput[] | TagCreateWithoutTeamInput;
+  connect?: TagWhereUniqueInput[] | TagWhereUniqueInput;
+}
+
+export interface TagCreateWithoutTeamInput {
+  name: String;
+}
+
 export interface EventUpdateInput {
-  team?: TeamUpdateOneRequiredInput;
+  team?: TeamUpdateOneRequiredWithoutEventsInput;
   user?: UserUpdateOneInput;
   action_string?: String;
   object_string?: String;
 }
 
-export interface TeamUpdateOneRequiredInput {
-  create?: TeamCreateInput;
-  update?: TeamUpdateDataInput;
-  upsert?: TeamUpsertNestedInput;
+export interface TeamUpdateOneRequiredWithoutEventsInput {
+  create?: TeamCreateWithoutEventsInput;
+  update?: TeamUpdateWithoutEventsDataInput;
+  upsert?: TeamUpsertWithoutEventsInput;
   connect?: TeamWhereUniqueInput;
 }
 
-export interface TeamUpdateDataInput {
+export interface TeamUpdateWithoutEventsDataInput {
   teamName?: String;
   members?: UserUpdateManyWithoutInTeamInput;
   todoLists?: TodoListUpdateManyWithoutInTeamInput;
   messages?: MessageUpdateManyWithoutInTeamInput;
+  tags?: TagUpdateManyWithoutTeamInput;
 }
 
 export interface UserUpdateManyWithoutInTeamInput {
@@ -1286,6 +1331,8 @@ export interface TeamUpdateWithoutMembersDataInput {
   teamName?: String;
   todoLists?: TodoListUpdateManyWithoutInTeamInput;
   messages?: MessageUpdateManyWithoutInTeamInput;
+  events?: EventUpdateManyWithoutTeamInput;
+  tags?: TagUpdateManyWithoutTeamInput;
 }
 
 export interface TodoListUpdateManyWithoutInTeamInput {
@@ -1479,6 +1526,8 @@ export interface TeamUpdateWithoutTodoListsDataInput {
   teamName?: String;
   members?: UserUpdateManyWithoutInTeamInput;
   messages?: MessageUpdateManyWithoutInTeamInput;
+  events?: EventUpdateManyWithoutTeamInput;
+  tags?: TagUpdateManyWithoutTeamInput;
 }
 
 export interface MessageUpdateManyWithoutInTeamInput {
@@ -1549,21 +1598,139 @@ export interface TagUpdateOneInput {
 
 export interface TagUpdateDataInput {
   name?: String;
-  team?: TeamUpdateOneInput;
+  team?: TeamUpdateOneWithoutTagsInput;
 }
 
-export interface TeamUpdateOneInput {
-  create?: TeamCreateInput;
-  update?: TeamUpdateDataInput;
-  upsert?: TeamUpsertNestedInput;
+export interface TeamUpdateOneWithoutTagsInput {
+  create?: TeamCreateWithoutTagsInput;
+  update?: TeamUpdateWithoutTagsDataInput;
+  upsert?: TeamUpsertWithoutTagsInput;
   delete?: Boolean;
   disconnect?: Boolean;
   connect?: TeamWhereUniqueInput;
 }
 
-export interface TeamUpsertNestedInput {
-  update: TeamUpdateDataInput;
-  create: TeamCreateInput;
+export interface TeamUpdateWithoutTagsDataInput {
+  teamName?: String;
+  members?: UserUpdateManyWithoutInTeamInput;
+  todoLists?: TodoListUpdateManyWithoutInTeamInput;
+  messages?: MessageUpdateManyWithoutInTeamInput;
+  events?: EventUpdateManyWithoutTeamInput;
+}
+
+export interface EventUpdateManyWithoutTeamInput {
+  create?: EventCreateWithoutTeamInput[] | EventCreateWithoutTeamInput;
+  delete?: EventWhereUniqueInput[] | EventWhereUniqueInput;
+  connect?: EventWhereUniqueInput[] | EventWhereUniqueInput;
+  set?: EventWhereUniqueInput[] | EventWhereUniqueInput;
+  disconnect?: EventWhereUniqueInput[] | EventWhereUniqueInput;
+  update?:
+    | EventUpdateWithWhereUniqueWithoutTeamInput[]
+    | EventUpdateWithWhereUniqueWithoutTeamInput;
+  upsert?:
+    | EventUpsertWithWhereUniqueWithoutTeamInput[]
+    | EventUpsertWithWhereUniqueWithoutTeamInput;
+  deleteMany?: EventScalarWhereInput[] | EventScalarWhereInput;
+  updateMany?:
+    | EventUpdateManyWithWhereNestedInput[]
+    | EventUpdateManyWithWhereNestedInput;
+}
+
+export interface EventUpdateWithWhereUniqueWithoutTeamInput {
+  where: EventWhereUniqueInput;
+  data: EventUpdateWithoutTeamDataInput;
+}
+
+export interface EventUpdateWithoutTeamDataInput {
+  user?: UserUpdateOneInput;
+  action_string?: String;
+  object_string?: String;
+}
+
+export interface UserUpdateOneInput {
+  create?: UserCreateInput;
+  update?: UserUpdateDataInput;
+  upsert?: UserUpsertNestedInput;
+  delete?: Boolean;
+  disconnect?: Boolean;
+  connect?: UserWhereUniqueInput;
+}
+
+export interface EventUpsertWithWhereUniqueWithoutTeamInput {
+  where: EventWhereUniqueInput;
+  update: EventUpdateWithoutTeamDataInput;
+  create: EventCreateWithoutTeamInput;
+}
+
+export interface EventScalarWhereInput {
+  id?: ID_Input;
+  id_not?: ID_Input;
+  id_in?: ID_Input[] | ID_Input;
+  id_not_in?: ID_Input[] | ID_Input;
+  id_lt?: ID_Input;
+  id_lte?: ID_Input;
+  id_gt?: ID_Input;
+  id_gte?: ID_Input;
+  id_contains?: ID_Input;
+  id_not_contains?: ID_Input;
+  id_starts_with?: ID_Input;
+  id_not_starts_with?: ID_Input;
+  id_ends_with?: ID_Input;
+  id_not_ends_with?: ID_Input;
+  action_string?: String;
+  action_string_not?: String;
+  action_string_in?: String[] | String;
+  action_string_not_in?: String[] | String;
+  action_string_lt?: String;
+  action_string_lte?: String;
+  action_string_gt?: String;
+  action_string_gte?: String;
+  action_string_contains?: String;
+  action_string_not_contains?: String;
+  action_string_starts_with?: String;
+  action_string_not_starts_with?: String;
+  action_string_ends_with?: String;
+  action_string_not_ends_with?: String;
+  object_string?: String;
+  object_string_not?: String;
+  object_string_in?: String[] | String;
+  object_string_not_in?: String[] | String;
+  object_string_lt?: String;
+  object_string_lte?: String;
+  object_string_gt?: String;
+  object_string_gte?: String;
+  object_string_contains?: String;
+  object_string_not_contains?: String;
+  object_string_starts_with?: String;
+  object_string_not_starts_with?: String;
+  object_string_ends_with?: String;
+  object_string_not_ends_with?: String;
+  createdAt?: DateTimeInput;
+  createdAt_not?: DateTimeInput;
+  createdAt_in?: DateTimeInput[] | DateTimeInput;
+  createdAt_not_in?: DateTimeInput[] | DateTimeInput;
+  createdAt_lt?: DateTimeInput;
+  createdAt_lte?: DateTimeInput;
+  createdAt_gt?: DateTimeInput;
+  createdAt_gte?: DateTimeInput;
+  AND?: EventScalarWhereInput[] | EventScalarWhereInput;
+  OR?: EventScalarWhereInput[] | EventScalarWhereInput;
+  NOT?: EventScalarWhereInput[] | EventScalarWhereInput;
+}
+
+export interface EventUpdateManyWithWhereNestedInput {
+  where: EventScalarWhereInput;
+  data: EventUpdateManyDataInput;
+}
+
+export interface EventUpdateManyDataInput {
+  action_string?: String;
+  object_string?: String;
+}
+
+export interface TeamUpsertWithoutTagsInput {
+  update: TeamUpdateWithoutTagsDataInput;
+  create: TeamCreateWithoutTagsInput;
 }
 
 export interface TagUpsertNestedInput {
@@ -1847,6 +2014,82 @@ export interface MessageUpdateManyDataInput {
   images?: MessageUpdateimagesInput;
 }
 
+export interface TagUpdateManyWithoutTeamInput {
+  create?: TagCreateWithoutTeamInput[] | TagCreateWithoutTeamInput;
+  delete?: TagWhereUniqueInput[] | TagWhereUniqueInput;
+  connect?: TagWhereUniqueInput[] | TagWhereUniqueInput;
+  set?: TagWhereUniqueInput[] | TagWhereUniqueInput;
+  disconnect?: TagWhereUniqueInput[] | TagWhereUniqueInput;
+  update?:
+    | TagUpdateWithWhereUniqueWithoutTeamInput[]
+    | TagUpdateWithWhereUniqueWithoutTeamInput;
+  upsert?:
+    | TagUpsertWithWhereUniqueWithoutTeamInput[]
+    | TagUpsertWithWhereUniqueWithoutTeamInput;
+  deleteMany?: TagScalarWhereInput[] | TagScalarWhereInput;
+  updateMany?:
+    | TagUpdateManyWithWhereNestedInput[]
+    | TagUpdateManyWithWhereNestedInput;
+}
+
+export interface TagUpdateWithWhereUniqueWithoutTeamInput {
+  where: TagWhereUniqueInput;
+  data: TagUpdateWithoutTeamDataInput;
+}
+
+export interface TagUpdateWithoutTeamDataInput {
+  name?: String;
+}
+
+export interface TagUpsertWithWhereUniqueWithoutTeamInput {
+  where: TagWhereUniqueInput;
+  update: TagUpdateWithoutTeamDataInput;
+  create: TagCreateWithoutTeamInput;
+}
+
+export interface TagScalarWhereInput {
+  id?: ID_Input;
+  id_not?: ID_Input;
+  id_in?: ID_Input[] | ID_Input;
+  id_not_in?: ID_Input[] | ID_Input;
+  id_lt?: ID_Input;
+  id_lte?: ID_Input;
+  id_gt?: ID_Input;
+  id_gte?: ID_Input;
+  id_contains?: ID_Input;
+  id_not_contains?: ID_Input;
+  id_starts_with?: ID_Input;
+  id_not_starts_with?: ID_Input;
+  id_ends_with?: ID_Input;
+  id_not_ends_with?: ID_Input;
+  name?: String;
+  name_not?: String;
+  name_in?: String[] | String;
+  name_not_in?: String[] | String;
+  name_lt?: String;
+  name_lte?: String;
+  name_gt?: String;
+  name_gte?: String;
+  name_contains?: String;
+  name_not_contains?: String;
+  name_starts_with?: String;
+  name_not_starts_with?: String;
+  name_ends_with?: String;
+  name_not_ends_with?: String;
+  AND?: TagScalarWhereInput[] | TagScalarWhereInput;
+  OR?: TagScalarWhereInput[] | TagScalarWhereInput;
+  NOT?: TagScalarWhereInput[] | TagScalarWhereInput;
+}
+
+export interface TagUpdateManyWithWhereNestedInput {
+  where: TagScalarWhereInput;
+  data: TagUpdateManyDataInput;
+}
+
+export interface TagUpdateManyDataInput {
+  name?: String;
+}
+
 export interface TeamUpsertWithoutTodoListsInput {
   update: TeamUpdateWithoutTodoListsDataInput;
   create: TeamCreateWithoutTodoListsInput;
@@ -1947,13 +2190,9 @@ export interface UserUpsertWithWhereUniqueWithoutInTeamInput {
   create: UserCreateWithoutInTeamInput;
 }
 
-export interface UserUpdateOneInput {
-  create?: UserCreateInput;
-  update?: UserUpdateDataInput;
-  upsert?: UserUpsertNestedInput;
-  delete?: Boolean;
-  disconnect?: Boolean;
-  connect?: UserWhereUniqueInput;
+export interface TeamUpsertWithoutEventsInput {
+  update: TeamUpdateWithoutEventsDataInput;
+  create: TeamCreateWithoutEventsInput;
 }
 
 export interface EventUpdateManyMutationInput {
@@ -1981,6 +2220,8 @@ export interface TeamCreateWithoutMessagesInput {
   teamName: String;
   members?: UserCreateManyWithoutInTeamInput;
   todoLists?: TodoListCreateManyWithoutInTeamInput;
+  events?: EventCreateManyWithoutTeamInput;
+  tags?: TagCreateManyWithoutTeamInput;
 }
 
 export interface MessageUpdateInput {
@@ -2005,6 +2246,8 @@ export interface TeamUpdateWithoutMessagesDataInput {
   teamName?: String;
   members?: UserUpdateManyWithoutInTeamInput;
   todoLists?: TodoListUpdateManyWithoutInTeamInput;
+  events?: EventUpdateManyWithoutTeamInput;
+  tags?: TagUpdateManyWithoutTeamInput;
 }
 
 export interface TeamUpsertWithoutMessagesInput {
@@ -2078,11 +2321,20 @@ export interface MessageCommentUpdateManyMutationInput {
 
 export interface TagUpdateInput {
   name?: String;
-  team?: TeamUpdateOneInput;
+  team?: TeamUpdateOneWithoutTagsInput;
 }
 
 export interface TagUpdateManyMutationInput {
   name?: String;
+}
+
+export interface TeamCreateInput {
+  teamName: String;
+  members?: UserCreateManyWithoutInTeamInput;
+  todoLists?: TodoListCreateManyWithoutInTeamInput;
+  messages?: MessageCreateManyWithoutInTeamInput;
+  events?: EventCreateManyWithoutTeamInput;
+  tags?: TagCreateManyWithoutTeamInput;
 }
 
 export interface TeamUpdateInput {
@@ -2090,6 +2342,8 @@ export interface TeamUpdateInput {
   members?: UserUpdateManyWithoutInTeamInput;
   todoLists?: TodoListUpdateManyWithoutInTeamInput;
   messages?: MessageUpdateManyWithoutInTeamInput;
+  events?: EventUpdateManyWithoutTeamInput;
+  tags?: TagUpdateManyWithoutTeamInput;
 }
 
 export interface TeamUpdateManyMutationInput {
@@ -2350,6 +2604,28 @@ export interface TeamPromise extends Promise<Team>, Fragmentable {
       last?: Int;
     }
   ) => T;
+  events: <T = FragmentableArray<Event>>(
+    args?: {
+      where?: EventWhereInput;
+      orderBy?: EventOrderByInput;
+      skip?: Int;
+      after?: String;
+      before?: String;
+      first?: Int;
+      last?: Int;
+    }
+  ) => T;
+  tags: <T = FragmentableArray<Tag>>(
+    args?: {
+      where?: TagWhereInput;
+      orderBy?: TagOrderByInput;
+      skip?: Int;
+      after?: String;
+      before?: String;
+      first?: Int;
+      last?: Int;
+    }
+  ) => T;
 }
 
 export interface TeamSubscription
@@ -2383,6 +2659,28 @@ export interface TeamSubscription
     args?: {
       where?: MessageWhereInput;
       orderBy?: MessageOrderByInput;
+      skip?: Int;
+      after?: String;
+      before?: String;
+      first?: Int;
+      last?: Int;
+    }
+  ) => T;
+  events: <T = Promise<AsyncIterator<EventSubscription>>>(
+    args?: {
+      where?: EventWhereInput;
+      orderBy?: EventOrderByInput;
+      skip?: Int;
+      after?: String;
+      before?: String;
+      first?: Int;
+      last?: Int;
+    }
+  ) => T;
+  tags: <T = Promise<AsyncIterator<TagSubscription>>>(
+    args?: {
+      where?: TagWhereInput;
+      orderBy?: TagOrderByInput;
       skip?: Int;
       after?: String;
       before?: String;
