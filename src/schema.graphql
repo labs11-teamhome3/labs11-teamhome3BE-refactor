@@ -22,6 +22,19 @@ type Mutation {
   createMessage(title: String!, teamId: ID!, userId: ID!, content: String!): Message
   deleteMessage(id: ID!): Message
   updateMessage(id: ID!, title: String, content: String): Message
+
+  ## Need to write mutations for all below here
+
+  addEvent(userId: ID, teamId: ID!, action_string: String!, object_string: String!): Event
+  deleteEvent(eventId: ID!): Event
+  addTag(name: String!, team: String): Tag
+  updateTag(tagId: ID!, name: String, team: String): Tag
+  deleteTag(tagId: ID!): Tag
+  addMessageComment(messageId: ID!, content: String!, image: String): MessageComment
+  updateMessageComment(commentId: ID!, messageId: ID!, content: String, image: String, likes: [ID]): MessageComment
+  deleteMessageComment(commentId: ID!): MessageComment
+  likeMessageComment(commentId: ID!): MessageComment
+  unlikeMessageComment(commentId: ID!): MessageComment
 }
 
 type Query {
@@ -36,6 +49,20 @@ type Query {
   team(id: ID!): Team!
   messages(teamId: ID!): [Message]
   message(id: ID!): Message
+
+  # need to write the queries for everything below here
+
+  events: [Event]
+  findEventById(eventId: ID!): Event
+  findEventsByTeam(teamId: ID!): [Event]
+  findEventsByUser(userId: ID!): [Event]
+  tags: [Tag]
+  findTagsByTeam(teamId: ID!): [Tag]
+  findTag(tagId: ID!): Tag
+  messageComments: [MessageComment]
+  findMessageCommentsByMessage(messageId: ID!): [MessageComment]
+  findMessageComment(commentId: ID!): MessageComment
+
 }
 
 type TodoList {
