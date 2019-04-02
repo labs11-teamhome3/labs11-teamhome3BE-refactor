@@ -1,3 +1,5 @@
+scalar Date
+
 type Mutation {
   createUser(authId: String!): User!
   authenticateUser(idToken: String!): User
@@ -43,7 +45,12 @@ type Mutation {
 
   createFolder(title: String!, userId: ID!, teamId: ID!): Folder
   deleteFolder(folderId: ID!): Folder
-  updateFolderTitle(folderId: ID!, title: String!): Folder
+  updateFolderTitle(folderId: ID!, title: String): Folder
+
+  addTagToMessage(messageId: ID!, tagId: ID!): Message
+  removeTagFromMessage(messageId: ID!): Message
+  addTagToDocument(documentId: ID!, tagId: ID!): Document
+  removeTagFromDocument(documentId: ID!): Document
 }
 
 type Query {
@@ -56,19 +63,16 @@ type Query {
   todoList(id: ID!): TodoList!
   teamsByUser(userId: ID): [Team]
   team(id: ID!): Team!
-  messages(teamId: ID!): [Message]
+  messages(teamId: ID): [Message]
   message(id: ID!): Message
   findEventById(eventId: ID!): Event
   findEventsByTeam(teamId: ID): [Event]
   findEventsByUser(userId: ID!): [Event]
-  tags: [Tag]
   findTagsByTeam(teamId: ID!): [Tag]
   findTag(tagId: ID!): Tag
-  messageComments: [MessageComment]
   findMessageCommentsByMessage(messageId: ID!): [MessageComment]
   findMessageComment(commentId: ID!): MessageComment
 
-  documents: [Document]
   findDocument(id: ID!): Document
   findDocumentsByTeam(teamId: ID): [Document]
   findDocumentsByUser(userId: ID): [Document]
@@ -79,13 +83,13 @@ type Query {
   findDocumentCommentsByUser(userId: ID): [DocumentComment]
   findDocumentCommentsByTeam(teamId: ID): [DocumentComment]
 
-  folders: [Folder]
   findFolder(id: ID): Folder
   findFoldersByTeam(teamId: ID): [Folder]
 }
 
 type TodoList {
   id: ID!
+  createdAt: Date
   description: String!
   ownedBy: [User!]!
   assignedTo: [User!]!
@@ -96,6 +100,7 @@ type TodoList {
 
 type Todo {
   id: ID!
+  createdAt: Date
   description: String!
   partOf: TodoList
   completed: Boolean
@@ -103,6 +108,7 @@ type Todo {
 
 type User {
   id: ID!
+  createdAt: Date
   identity: String
   authId: String
   name: String!
@@ -113,16 +119,20 @@ type User {
 
 type Team {
   id: ID!
+  createdAt: Date
   teamName: String!
   members: [User!]
   todoLists: [TodoList!]
   messages: [Message!]
   events: [Event]
   tags: [Tag]
+  documents: [Document]
+  folders: [Folder]
 }
 
 type Message {
   id: ID!
+  createdAt: Date
   title: String!
   creator: User!
   inTeam: Team!
@@ -135,6 +145,7 @@ type Message {
 
 type MessageComment {
   id: ID!
+  createdAt: Date
   content: String!
   user: User!
   message: Message!
@@ -144,12 +155,14 @@ type MessageComment {
 
 type Tag {
   id: ID!
+  createdAt: Date
   name: String!
   team: Team
 }
 
 type Event {
   id: ID!
+  createdAt: Date
   team: Team!
   user: User
   action_string: String!
@@ -158,6 +171,7 @@ type Event {
 
 type Document {
   id: ID!
+  createdAt: Date
   doc_url: String!
   user: User!
   folder: Folder
@@ -172,6 +186,7 @@ type Document {
 
 type DocumentComment {
   id: ID! 
+  createdAt: Date
   user: User!
   document: Document!
   content: String!
@@ -181,6 +196,7 @@ type DocumentComment {
 
 type Folder {
   id: ID!
+  createdAt: Date
   title: String!
   user: User!
   team: Team!
