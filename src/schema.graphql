@@ -4,34 +4,30 @@ type Mutation {
   createTodo(description: String!, partOf: ID!, completed: Boolean): Todo
   deleteTodo(id: String!): String!
   updateTodo(id: String!, description: String!, completed: Boolean): Todo
+  
+  createTodoList(description: String!, ownedBy: String!, assignedTo: String!, completed: Boolean, inTeam: ID): TodoList
+  deleteTodoList(id: String!): TodoList!
+  updateTodoList(id: String!, description: String!, completed: Boolean): TodoList
+  
+  createTeam(teamName: String!): Team
+  deleteTeam(id: ID!): Team
+  
+  updateTeamName(id: ID!, teamName: ID!): Team
+  addTodoListToTeam(teamId: ID!, todoListId: ID!): Team
+  removeTodoListFromTeam(teamId: ID!, todoListId: ID!): Team
+  addUserToTeam(userId: ID!, teamId: ID!): Team
+  removeUserFromTeam(userId: ID!, teamId: ID!): Team
+  
+  toggleTodoComplete(todoId: ID!): Todo
+  toggleTodoListComplete(todoListId: ID!): TodoList
+  addUserToOwners(userId: ID!, todoListId: ID!): TodoList
+  addUserToAssignees(userId: ID!, todoListId: ID!): TodoList
+  removeUserFromOwners(userId: ID!, todoListId: ID!): TodoList
+  removeUserFromAssignees(userId: ID!, todoListId: ID!): TodoList
 
-    createTodo(description: String!, partOf: ID!, completed: Boolean): Todo
-    deleteTodo(id: String!): String!
-    updateTodo(id: String!, description: String!, completed: Boolean): Todo
-    
-    createTodoList(description: String!, ownedBy: String!, assignedTo: String!, completed: Boolean, inTeam: ID): TodoList
-    deleteTodoList(id: String!): TodoList!
-    updateTodoList(id: String!, description: String!, completed: Boolean): TodoList
-    
-    createTeam(teamName: String!): Team
-    deleteTeam(id: ID!): Team
-    
-    updateTeamName(id: ID!, teamName: ID!): Team
-    addTodoListToTeam(teamId: ID!, todoListId: ID!): Team
-    removeTodoListFromTeam(teamId: ID!, todoListId: ID!): Team
-    addUserToTeam(userId: ID!, teamId: ID!): Team
-    removeUserFromTeam(userId: ID!, teamId: ID!): Team
-    
-    toggleTodoComplete(todoId: ID!): Todo
-    toggleTodoListComplete(todoListId: ID!): TodoList
-    addUserToOwners(userId: ID!, todoListId: ID!): TodoList
-    addUserToAssignees(userId: ID!, todoListId: ID!): TodoList
-    removeUserFromOwners(userId: ID!, todoListId: ID!): TodoList
-    removeUserFromAssignees(userId: ID!, todoListId: ID!): TodoList
-
-    createMessage(title: String!, teamId: ID!, userId: ID!, content: String!): Message
-    deleteMessage(id: ID!): Message
-    updateMessage(id: ID!, title: String, content: String): Message
+  createMessage(title: String!, teamId: ID!, userId: ID!, content: String!): Message
+  deleteMessage(id: ID!): Message
+  updateMessage(id: ID!, title: String, content: String): Message
 }
 
 type Query {
