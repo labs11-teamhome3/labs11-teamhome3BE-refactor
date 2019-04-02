@@ -71,3 +71,36 @@ type Event {
     object_string: String!
     createdAt: DateTime!
 }
+
+type Document {
+    id: ID! @unique
+    doc_url: String!
+    user: User!
+    folder: Folder
+    team: Team!
+    title: String!
+    textContent: String!
+    tag: Tag
+    images: [String]
+    comments: [DocumentComment]
+    subscribedUsers: [User]
+    createdAt: DateTime!
+}
+
+type DocumentComment {
+    id: ID! @unique
+    user: User!
+    document: Document!
+    content: String!
+    image: String
+    likes: [User]
+    createdAt: DateTime!
+}
+
+type Folder {
+    id: ID! @unique
+    title: String!
+    user: User!
+    team: Team!
+    createdAt: DateTime!
+}

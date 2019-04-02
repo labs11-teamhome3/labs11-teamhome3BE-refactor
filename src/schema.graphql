@@ -130,3 +130,33 @@ type Event {
   action_string: String!
   object_string: String!
 }
+
+type Document {
+  id: ID!
+  doc_url: String!
+  user: User!
+  folder: Folder
+  team: Team!
+  title: String!
+  textContent: String!
+  tag: Tag
+  images: [String]
+  comments: [DocumentComment]
+  subscribedUsers: [User]
+}
+
+type DocumentComment {
+  id: ID! 
+  user: User!
+  document: Document!
+  content: String!
+  image: String
+  likes: [User]
+}
+
+type Folder {
+  id: ID!
+  title: String!
+  user: User!
+  team: Team!
+}
