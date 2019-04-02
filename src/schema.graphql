@@ -48,6 +48,8 @@ type Mutation {
   createFolder(title: String!, userId: ID!, teamId: ID!): Folder
   deleteFolder(folderId: ID!): Folder
   updateFolderTitle(folderId: ID!, title: String): Folder
+  addDocumentToFolder(folderId: ID!, documentId: ID!): Document
+  removeDocumentFromFolder(folderId: ID!, documentId: ID!): Document
 
   addTagToMessage(messageId: ID!, tagId: ID!): Message
   removeTagFromMessage(messageId: ID!): Message
