@@ -22,6 +22,7 @@ type Mutation {
   createMessage(title: String!, teamId: ID!, userId: ID!, content: String!): Message
   deleteMessage(id: ID!): Message
   updateMessage(id: ID!, title: String, content: String): Message
+
   addEvent(userId: ID, teamId: ID!, action_string: String!, object_string: String!): Event
   deleteEvent(eventId: ID!): Event
   addTag(name: String!, teamId: ID!): Tag
@@ -32,6 +33,18 @@ type Mutation {
   deleteMessageComment(commentId: ID!): MessageComment
   likeMessageComment(commentId: ID!, userId: ID!): MessageComment
   unlikeMessageComment(commentId: ID!, userId: ID!): MessageComment
+
+  addDocument(userId: ID!, doc_url: String!, folderId: ID, teamId: ID!, title: String!, textContent: String!, tagId: ID): Document
+  deleteDocument(documentId: ID!): Document
+  ## Need to add ability to subscribe users and add images 
+
+  addDocumentComment(userId: ID!, documentId: ID!, content: String!): DocumentComment
+  deleteDocumentComment(documentCommentId: ID!): DocumentComment
+  ## Need to add ability to like comments and add images
+
+  addFolder(title: String!, userId: ID!, teamId: ID!): Folder
+  deleteFolder(folderId: ID!): Folder
+  updateFolderTitle(folderId: ID!, title: String!): Folder
 }
 
 type Query {
@@ -56,7 +69,7 @@ type Query {
   messageComments: [MessageComment]
   findMessageCommentsByMessage(messageId: ID!): [MessageComment]
   findMessageComment(commentId: ID!): MessageComment
-
+  ## Need to add queries for Documents, DocComments, Folders
 }
 
 type TodoList {
@@ -128,4 +141,34 @@ type Event {
   user: User
   action_string: String!
   object_string: String!
+}
+
+type Document {
+  id: ID!
+  doc_url: String!
+  user: User!
+  folder: Folder
+  team: Team!
+  title: String!
+  textContent: String!
+  tag: Tag
+  images: [String]
+  comments: [DocumentComment]
+  subscribedUsers: [User]
+}
+
+type DocumentComment {
+  id: ID! 
+  user: User!
+  document: Document!
+  content: String!
+  image: String
+  likes: [User]
+}
+
+type Folder {
+  id: ID!
+  title: String!
+  user: User!
+  team: Team!
 }
