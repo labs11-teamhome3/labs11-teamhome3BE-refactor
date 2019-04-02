@@ -2292,10 +2292,6 @@ input TeamUpdateManyDataInput {
   teamName: String
 }
 
-input TeamUpdateManyDataInput {
-  teamName: String
-}
-
 input TeamUpdateManyMutationInput {
   teamName: String
 }
