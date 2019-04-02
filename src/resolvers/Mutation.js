@@ -23,8 +23,10 @@ async function authenticateUser(parent, {idToken}, ctx, info) {
  }
 
  const id = userToken.sub.split("|")[1];
+ //this function needs to be a query, how do I do that?
  //let user = await ctx.prisma.user({ where: {authId: id}}, info);
  //if(!user) {
+   //error says that prisma is not defined, is this a binding issue?
    let user = createUser(ctx, userToken)
  //}
  return user; 
