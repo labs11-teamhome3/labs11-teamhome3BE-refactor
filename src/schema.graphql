@@ -56,7 +56,7 @@ type Query {
   user(authId: String, id: ID): User!
   todoLists(teamId: ID): [TodoList]
   todoList(id: ID!): TodoList!
-  teams: [Team]
+  teamsByUser(userId: ID!): [Team]
   team(id: ID!): Team!
   messages(teamId: ID!): [Message]
   message(id: ID!): Message
