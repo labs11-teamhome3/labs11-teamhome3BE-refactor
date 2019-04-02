@@ -3,7 +3,19 @@ module.exports = {
   // Please don't change this file manually but run `prisma generate` to update it.
   // For more information, please read the docs: https://www.prisma.io/docs/prisma-client/
 
-/* GraphQL */ `type AggregateMessage {
+/* GraphQL */ `type AggregateEvent {
+  count: Int!
+}
+
+type AggregateMessage {
+  count: Int!
+}
+
+type AggregateMessageComment {
+  count: Int!
+}
+
+type AggregateTag {
   count: Int!
 }
 
@@ -29,6 +41,251 @@ type BatchPayload {
 
 scalar DateTime
 
+type Event {
+  id: ID!
+  team: Team!
+  user: User
+  action_string: String!
+  object_string: String!
+  createdAt: DateTime!
+}
+
+type EventConnection {
+  pageInfo: PageInfo!
+  edges: [EventEdge]!
+  aggregate: AggregateEvent!
+}
+
+input EventCreateInput {
+  team: TeamCreateOneWithoutEventsInput!
+  user: UserCreateOneInput
+  action_string: String!
+  object_string: String!
+}
+
+input EventCreateManyWithoutTeamInput {
+  create: [EventCreateWithoutTeamInput!]
+  connect: [EventWhereUniqueInput!]
+}
+
+input EventCreateWithoutTeamInput {
+  user: UserCreateOneInput
+  action_string: String!
+  object_string: String!
+}
+
+type EventEdge {
+  node: Event!
+  cursor: String!
+}
+
+enum EventOrderByInput {
+  id_ASC
+  id_DESC
+  action_string_ASC
+  action_string_DESC
+  object_string_ASC
+  object_string_DESC
+  createdAt_ASC
+  createdAt_DESC
+  updatedAt_ASC
+  updatedAt_DESC
+}
+
+type EventPreviousValues {
+  id: ID!
+  action_string: String!
+  object_string: String!
+  createdAt: DateTime!
+}
+
+input EventScalarWhereInput {
+  id: ID
+  id_not: ID
+  id_in: [ID!]
+  id_not_in: [ID!]
+  id_lt: ID
+  id_lte: ID
+  id_gt: ID
+  id_gte: ID
+  id_contains: ID
+  id_not_contains: ID
+  id_starts_with: ID
+  id_not_starts_with: ID
+  id_ends_with: ID
+  id_not_ends_with: ID
+  action_string: String
+  action_string_not: String
+  action_string_in: [String!]
+  action_string_not_in: [String!]
+  action_string_lt: String
+  action_string_lte: String
+  action_string_gt: String
+  action_string_gte: String
+  action_string_contains: String
+  action_string_not_contains: String
+  action_string_starts_with: String
+  action_string_not_starts_with: String
+  action_string_ends_with: String
+  action_string_not_ends_with: String
+  object_string: String
+  object_string_not: String
+  object_string_in: [String!]
+  object_string_not_in: [String!]
+  object_string_lt: String
+  object_string_lte: String
+  object_string_gt: String
+  object_string_gte: String
+  object_string_contains: String
+  object_string_not_contains: String
+  object_string_starts_with: String
+  object_string_not_starts_with: String
+  object_string_ends_with: String
+  object_string_not_ends_with: String
+  createdAt: DateTime
+  createdAt_not: DateTime
+  createdAt_in: [DateTime!]
+  createdAt_not_in: [DateTime!]
+  createdAt_lt: DateTime
+  createdAt_lte: DateTime
+  createdAt_gt: DateTime
+  createdAt_gte: DateTime
+  AND: [EventScalarWhereInput!]
+  OR: [EventScalarWhereInput!]
+  NOT: [EventScalarWhereInput!]
+}
+
+type EventSubscriptionPayload {
+  mutation: MutationType!
+  node: Event
+  updatedFields: [String!]
+  previousValues: EventPreviousValues
+}
+
+input EventSubscriptionWhereInput {
+  mutation_in: [MutationType!]
+  updatedFields_contains: String
+  updatedFields_contains_every: [String!]
+  updatedFields_contains_some: [String!]
+  node: EventWhereInput
+  AND: [EventSubscriptionWhereInput!]
+  OR: [EventSubscriptionWhereInput!]
+  NOT: [EventSubscriptionWhereInput!]
+}
+
+input EventUpdateInput {
+  team: TeamUpdateOneRequiredWithoutEventsInput
+  user: UserUpdateOneInput
+  action_string: String
+  object_string: String
+}
+
+input EventUpdateManyDataInput {
+  action_string: String
+  object_string: String
+}
+
+input EventUpdateManyMutationInput {
+  action_string: String
+  object_string: String
+}
+
+input EventUpdateManyWithoutTeamInput {
+  create: [EventCreateWithoutTeamInput!]
+  delete: [EventWhereUniqueInput!]
+  connect: [EventWhereUniqueInput!]
+  set: [EventWhereUniqueInput!]
+  disconnect: [EventWhereUniqueInput!]
+  update: [EventUpdateWithWhereUniqueWithoutTeamInput!]
+  upsert: [EventUpsertWithWhereUniqueWithoutTeamInput!]
+  deleteMany: [EventScalarWhereInput!]
+  updateMany: [EventUpdateManyWithWhereNestedInput!]
+}
+
+input EventUpdateManyWithWhereNestedInput {
+  where: EventScalarWhereInput!
+  data: EventUpdateManyDataInput!
+}
+
+input EventUpdateWithoutTeamDataInput {
+  user: UserUpdateOneInput
+  action_string: String
+  object_string: String
+}
+
+input EventUpdateWithWhereUniqueWithoutTeamInput {
+  where: EventWhereUniqueInput!
+  data: EventUpdateWithoutTeamDataInput!
+}
+
+input EventUpsertWithWhereUniqueWithoutTeamInput {
+  where: EventWhereUniqueInput!
+  update: EventUpdateWithoutTeamDataInput!
+  create: EventCreateWithoutTeamInput!
+}
+
+input EventWhereInput {
+  id: ID
+  id_not: ID
+  id_in: [ID!]
+  id_not_in: [ID!]
+  id_lt: ID
+  id_lte: ID
+  id_gt: ID
+  id_gte: ID
+  id_contains: ID
+  id_not_contains: ID
+  id_starts_with: ID
+  id_not_starts_with: ID
+  id_ends_with: ID
+  id_not_ends_with: ID
+  team: TeamWhereInput
+  user: UserWhereInput
+  action_string: String
+  action_string_not: String
+  action_string_in: [String!]
+  action_string_not_in: [String!]
+  action_string_lt: String
+  action_string_lte: String
+  action_string_gt: String
+  action_string_gte: String
+  action_string_contains: String
+  action_string_not_contains: String
+  action_string_starts_with: String
+  action_string_not_starts_with: String
+  action_string_ends_with: String
+  action_string_not_ends_with: String
+  object_string: String
+  object_string_not: String
+  object_string_in: [String!]
+  object_string_not_in: [String!]
+  object_string_lt: String
+  object_string_lte: String
+  object_string_gt: String
+  object_string_gte: String
+  object_string_contains: String
+  object_string_not_contains: String
+  object_string_starts_with: String
+  object_string_not_starts_with: String
+  object_string_ends_with: String
+  object_string_not_ends_with: String
+  createdAt: DateTime
+  createdAt_not: DateTime
+  createdAt_in: [DateTime!]
+  createdAt_not_in: [DateTime!]
+  createdAt_lt: DateTime
+  createdAt_lte: DateTime
+  createdAt_gt: DateTime
+  createdAt_gte: DateTime
+  AND: [EventWhereInput!]
+  OR: [EventWhereInput!]
+  NOT: [EventWhereInput!]
+}
+
+input EventWhereUniqueInput {
+  id: ID
+}
+
 scalar Long
 
 type Message {
@@ -37,7 +294,264 @@ type Message {
   creator: User!
   inTeam: Team!
   content: String!
+  images: [String!]!
+  tag: Tag
+  comments(where: MessageCommentWhereInput, orderBy: MessageCommentOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [MessageComment!]
+  subscribedUsers(where: UserWhereInput, orderBy: UserOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [User!]
   createdAt: DateTime!
+}
+
+type MessageComment {
+  id: ID!
+  content: String!
+  user: User!
+  message: Message!
+  image: String
+  likes(where: UserWhereInput, orderBy: UserOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [User!]
+  createdAt: DateTime!
+}
+
+type MessageCommentConnection {
+  pageInfo: PageInfo!
+  edges: [MessageCommentEdge]!
+  aggregate: AggregateMessageComment!
+}
+
+input MessageCommentCreateInput {
+  content: String!
+  user: UserCreateOneInput!
+  message: MessageCreateOneWithoutCommentsInput!
+  image: String
+  likes: UserCreateManyInput
+}
+
+input MessageCommentCreateManyWithoutMessageInput {
+  create: [MessageCommentCreateWithoutMessageInput!]
+  connect: [MessageCommentWhereUniqueInput!]
+}
+
+input MessageCommentCreateWithoutMessageInput {
+  content: String!
+  user: UserCreateOneInput!
+  image: String
+  likes: UserCreateManyInput
+}
+
+type MessageCommentEdge {
+  node: MessageComment!
+  cursor: String!
+}
+
+enum MessageCommentOrderByInput {
+  id_ASC
+  id_DESC
+  content_ASC
+  content_DESC
+  image_ASC
+  image_DESC
+  createdAt_ASC
+  createdAt_DESC
+  updatedAt_ASC
+  updatedAt_DESC
+}
+
+type MessageCommentPreviousValues {
+  id: ID!
+  content: String!
+  image: String
+  createdAt: DateTime!
+}
+
+input MessageCommentScalarWhereInput {
+  id: ID
+  id_not: ID
+  id_in: [ID!]
+  id_not_in: [ID!]
+  id_lt: ID
+  id_lte: ID
+  id_gt: ID
+  id_gte: ID
+  id_contains: ID
+  id_not_contains: ID
+  id_starts_with: ID
+  id_not_starts_with: ID
+  id_ends_with: ID
+  id_not_ends_with: ID
+  content: String
+  content_not: String
+  content_in: [String!]
+  content_not_in: [String!]
+  content_lt: String
+  content_lte: String
+  content_gt: String
+  content_gte: String
+  content_contains: String
+  content_not_contains: String
+  content_starts_with: String
+  content_not_starts_with: String
+  content_ends_with: String
+  content_not_ends_with: String
+  image: String
+  image_not: String
+  image_in: [String!]
+  image_not_in: [String!]
+  image_lt: String
+  image_lte: String
+  image_gt: String
+  image_gte: String
+  image_contains: String
+  image_not_contains: String
+  image_starts_with: String
+  image_not_starts_with: String
+  image_ends_with: String
+  image_not_ends_with: String
+  createdAt: DateTime
+  createdAt_not: DateTime
+  createdAt_in: [DateTime!]
+  createdAt_not_in: [DateTime!]
+  createdAt_lt: DateTime
+  createdAt_lte: DateTime
+  createdAt_gt: DateTime
+  createdAt_gte: DateTime
+  AND: [MessageCommentScalarWhereInput!]
+  OR: [MessageCommentScalarWhereInput!]
+  NOT: [MessageCommentScalarWhereInput!]
+}
+
+type MessageCommentSubscriptionPayload {
+  mutation: MutationType!
+  node: MessageComment
+  updatedFields: [String!]
+  previousValues: MessageCommentPreviousValues
+}
+
+input MessageCommentSubscriptionWhereInput {
+  mutation_in: [MutationType!]
+  updatedFields_contains: String
+  updatedFields_contains_every: [String!]
+  updatedFields_contains_some: [String!]
+  node: MessageCommentWhereInput
+  AND: [MessageCommentSubscriptionWhereInput!]
+  OR: [MessageCommentSubscriptionWhereInput!]
+  NOT: [MessageCommentSubscriptionWhereInput!]
+}
+
+input MessageCommentUpdateInput {
+  content: String
+  user: UserUpdateOneRequiredInput
+  message: MessageUpdateOneRequiredWithoutCommentsInput
+  image: String
+  likes: UserUpdateManyInput
+}
+
+input MessageCommentUpdateManyDataInput {
+  content: String
+  image: String
+}
+
+input MessageCommentUpdateManyMutationInput {
+  content: String
+  image: String
+}
+
+input MessageCommentUpdateManyWithoutMessageInput {
+  create: [MessageCommentCreateWithoutMessageInput!]
+  delete: [MessageCommentWhereUniqueInput!]
+  connect: [MessageCommentWhereUniqueInput!]
+  set: [MessageCommentWhereUniqueInput!]
+  disconnect: [MessageCommentWhereUniqueInput!]
+  update: [MessageCommentUpdateWithWhereUniqueWithoutMessageInput!]
+  upsert: [MessageCommentUpsertWithWhereUniqueWithoutMessageInput!]
+  deleteMany: [MessageCommentScalarWhereInput!]
+  updateMany: [MessageCommentUpdateManyWithWhereNestedInput!]
+}
+
+input MessageCommentUpdateManyWithWhereNestedInput {
+  where: MessageCommentScalarWhereInput!
+  data: MessageCommentUpdateManyDataInput!
+}
+
+input MessageCommentUpdateWithoutMessageDataInput {
+  content: String
+  user: UserUpdateOneRequiredInput
+  image: String
+  likes: UserUpdateManyInput
+}
+
+input MessageCommentUpdateWithWhereUniqueWithoutMessageInput {
+  where: MessageCommentWhereUniqueInput!
+  data: MessageCommentUpdateWithoutMessageDataInput!
+}
+
+input MessageCommentUpsertWithWhereUniqueWithoutMessageInput {
+  where: MessageCommentWhereUniqueInput!
+  update: MessageCommentUpdateWithoutMessageDataInput!
+  create: MessageCommentCreateWithoutMessageInput!
+}
+
+input MessageCommentWhereInput {
+  id: ID
+  id_not: ID
+  id_in: [ID!]
+  id_not_in: [ID!]
+  id_lt: ID
+  id_lte: ID
+  id_gt: ID
+  id_gte: ID
+  id_contains: ID
+  id_not_contains: ID
+  id_starts_with: ID
+  id_not_starts_with: ID
+  id_ends_with: ID
+  id_not_ends_with: ID
+  content: String
+  content_not: String
+  content_in: [String!]
+  content_not_in: [String!]
+  content_lt: String
+  content_lte: String
+  content_gt: String
+  content_gte: String
+  content_contains: String
+  content_not_contains: String
+  content_starts_with: String
+  content_not_starts_with: String
+  content_ends_with: String
+  content_not_ends_with: String
+  user: UserWhereInput
+  message: MessageWhereInput
+  image: String
+  image_not: String
+  image_in: [String!]
+  image_not_in: [String!]
+  image_lt: String
+  image_lte: String
+  image_gt: String
+  image_gte: String
+  image_contains: String
+  image_not_contains: String
+  image_starts_with: String
+  image_not_starts_with: String
+  image_ends_with: String
+  image_not_ends_with: String
+  likes_every: UserWhereInput
+  likes_some: UserWhereInput
+  likes_none: UserWhereInput
+  createdAt: DateTime
+  createdAt_not: DateTime
+  createdAt_in: [DateTime!]
+  createdAt_not_in: [DateTime!]
+  createdAt_lt: DateTime
+  createdAt_lte: DateTime
+  createdAt_gt: DateTime
+  createdAt_gte: DateTime
+  AND: [MessageCommentWhereInput!]
+  OR: [MessageCommentWhereInput!]
+  NOT: [MessageCommentWhereInput!]
+}
+
+input MessageCommentWhereUniqueInput {
+  id: ID
 }
 
 type MessageConnection {
@@ -46,11 +560,19 @@ type MessageConnection {
   aggregate: AggregateMessage!
 }
 
+input MessageCreateimagesInput {
+  set: [String!]
+}
+
 input MessageCreateInput {
   title: String!
   creator: UserCreateOneInput!
   inTeam: TeamCreateOneWithoutMessagesInput!
   content: String!
+  images: MessageCreateimagesInput
+  tag: TagCreateOneInput
+  comments: MessageCommentCreateManyWithoutMessageInput
+  subscribedUsers: UserCreateManyInput
 }
 
 input MessageCreateManyWithoutInTeamInput {
@@ -58,10 +580,29 @@ input MessageCreateManyWithoutInTeamInput {
   connect: [MessageWhereUniqueInput!]
 }
 
+input MessageCreateOneWithoutCommentsInput {
+  create: MessageCreateWithoutCommentsInput
+  connect: MessageWhereUniqueInput
+}
+
+input MessageCreateWithoutCommentsInput {
+  title: String!
+  creator: UserCreateOneInput!
+  inTeam: TeamCreateOneWithoutMessagesInput!
+  content: String!
+  images: MessageCreateimagesInput
+  tag: TagCreateOneInput
+  subscribedUsers: UserCreateManyInput
+}
+
 input MessageCreateWithoutInTeamInput {
   title: String!
   creator: UserCreateOneInput!
   content: String!
+  images: MessageCreateimagesInput
+  tag: TagCreateOneInput
+  comments: MessageCommentCreateManyWithoutMessageInput
+  subscribedUsers: UserCreateManyInput
 }
 
 type MessageEdge {
@@ -86,6 +627,7 @@ type MessagePreviousValues {
   id: ID!
   title: String!
   content: String!
+  images: [String!]!
   createdAt: DateTime!
 }
 
@@ -163,21 +705,31 @@ input MessageSubscriptionWhereInput {
   NOT: [MessageSubscriptionWhereInput!]
 }
 
+input MessageUpdateimagesInput {
+  set: [String!]
+}
+
 input MessageUpdateInput {
   title: String
   creator: UserUpdateOneRequiredInput
   inTeam: TeamUpdateOneRequiredWithoutMessagesInput
   content: String
+  images: MessageUpdateimagesInput
+  tag: TagUpdateOneInput
+  comments: MessageCommentUpdateManyWithoutMessageInput
+  subscribedUsers: UserUpdateManyInput
 }
 
 input MessageUpdateManyDataInput {
   title: String
   content: String
+  images: MessageUpdateimagesInput
 }
 
 input MessageUpdateManyMutationInput {
   title: String
   content: String
+  images: MessageUpdateimagesInput
 }
 
 input MessageUpdateManyWithoutInTeamInput {
@@ -197,15 +749,41 @@ input MessageUpdateManyWithWhereNestedInput {
   data: MessageUpdateManyDataInput!
 }
 
+input MessageUpdateOneRequiredWithoutCommentsInput {
+  create: MessageCreateWithoutCommentsInput
+  update: MessageUpdateWithoutCommentsDataInput
+  upsert: MessageUpsertWithoutCommentsInput
+  connect: MessageWhereUniqueInput
+}
+
+input MessageUpdateWithoutCommentsDataInput {
+  title: String
+  creator: UserUpdateOneRequiredInput
+  inTeam: TeamUpdateOneRequiredWithoutMessagesInput
+  content: String
+  images: MessageUpdateimagesInput
+  tag: TagUpdateOneInput
+  subscribedUsers: UserUpdateManyInput
+}
+
 input MessageUpdateWithoutInTeamDataInput {
   title: String
   creator: UserUpdateOneRequiredInput
   content: String
+  images: MessageUpdateimagesInput
+  tag: TagUpdateOneInput
+  comments: MessageCommentUpdateManyWithoutMessageInput
+  subscribedUsers: UserUpdateManyInput
 }
 
 input MessageUpdateWithWhereUniqueWithoutInTeamInput {
   where: MessageWhereUniqueInput!
   data: MessageUpdateWithoutInTeamDataInput!
+}
+
+input MessageUpsertWithoutCommentsInput {
+  update: MessageUpdateWithoutCommentsDataInput!
+  create: MessageCreateWithoutCommentsInput!
 }
 
 input MessageUpsertWithWhereUniqueWithoutInTeamInput {
@@ -259,6 +837,13 @@ input MessageWhereInput {
   content_not_starts_with: String
   content_ends_with: String
   content_not_ends_with: String
+  tag: TagWhereInput
+  comments_every: MessageCommentWhereInput
+  comments_some: MessageCommentWhereInput
+  comments_none: MessageCommentWhereInput
+  subscribedUsers_every: UserWhereInput
+  subscribedUsers_some: UserWhereInput
+  subscribedUsers_none: UserWhereInput
   createdAt: DateTime
   createdAt_not: DateTime
   createdAt_in: [DateTime!]
@@ -277,12 +862,30 @@ input MessageWhereUniqueInput {
 }
 
 type Mutation {
+  createEvent(data: EventCreateInput!): Event!
+  updateEvent(data: EventUpdateInput!, where: EventWhereUniqueInput!): Event
+  updateManyEvents(data: EventUpdateManyMutationInput!, where: EventWhereInput): BatchPayload!
+  upsertEvent(where: EventWhereUniqueInput!, create: EventCreateInput!, update: EventUpdateInput!): Event!
+  deleteEvent(where: EventWhereUniqueInput!): Event
+  deleteManyEvents(where: EventWhereInput): BatchPayload!
   createMessage(data: MessageCreateInput!): Message!
   updateMessage(data: MessageUpdateInput!, where: MessageWhereUniqueInput!): Message
   updateManyMessages(data: MessageUpdateManyMutationInput!, where: MessageWhereInput): BatchPayload!
   upsertMessage(where: MessageWhereUniqueInput!, create: MessageCreateInput!, update: MessageUpdateInput!): Message!
   deleteMessage(where: MessageWhereUniqueInput!): Message
   deleteManyMessages(where: MessageWhereInput): BatchPayload!
+  createMessageComment(data: MessageCommentCreateInput!): MessageComment!
+  updateMessageComment(data: MessageCommentUpdateInput!, where: MessageCommentWhereUniqueInput!): MessageComment
+  updateManyMessageComments(data: MessageCommentUpdateManyMutationInput!, where: MessageCommentWhereInput): BatchPayload!
+  upsertMessageComment(where: MessageCommentWhereUniqueInput!, create: MessageCommentCreateInput!, update: MessageCommentUpdateInput!): MessageComment!
+  deleteMessageComment(where: MessageCommentWhereUniqueInput!): MessageComment
+  deleteManyMessageComments(where: MessageCommentWhereInput): BatchPayload!
+  createTag(data: TagCreateInput!): Tag!
+  updateTag(data: TagUpdateInput!, where: TagWhereUniqueInput!): Tag
+  updateManyTags(data: TagUpdateManyMutationInput!, where: TagWhereInput): BatchPayload!
+  upsertTag(where: TagWhereUniqueInput!, create: TagCreateInput!, update: TagUpdateInput!): Tag!
+  deleteTag(where: TagWhereUniqueInput!): Tag
+  deleteManyTags(where: TagWhereInput): BatchPayload!
   createTeam(data: TeamCreateInput!): Team!
   updateTeam(data: TeamUpdateInput!, where: TeamWhereUniqueInput!): Team
   updateManyTeams(data: TeamUpdateManyMutationInput!, where: TeamWhereInput): BatchPayload!
@@ -327,9 +930,18 @@ type PageInfo {
 }
 
 type Query {
+  event(where: EventWhereUniqueInput!): Event
+  events(where: EventWhereInput, orderBy: EventOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Event]!
+  eventsConnection(where: EventWhereInput, orderBy: EventOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): EventConnection!
   message(where: MessageWhereUniqueInput!): Message
   messages(where: MessageWhereInput, orderBy: MessageOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Message]!
   messagesConnection(where: MessageWhereInput, orderBy: MessageOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): MessageConnection!
+  messageComment(where: MessageCommentWhereUniqueInput!): MessageComment
+  messageComments(where: MessageCommentWhereInput, orderBy: MessageCommentOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [MessageComment]!
+  messageCommentsConnection(where: MessageCommentWhereInput, orderBy: MessageCommentOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): MessageCommentConnection!
+  tag(where: TagWhereUniqueInput!): Tag
+  tags(where: TagWhereInput, orderBy: TagOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Tag]!
+  tagsConnection(where: TagWhereInput, orderBy: TagOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): TagConnection!
   team(where: TeamWhereUniqueInput!): Team
   teams(where: TeamWhereInput, orderBy: TeamOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Team]!
   teamsConnection(where: TeamWhereInput, orderBy: TeamOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): TeamConnection!
@@ -346,11 +958,221 @@ type Query {
 }
 
 type Subscription {
+  event(where: EventSubscriptionWhereInput): EventSubscriptionPayload
   message(where: MessageSubscriptionWhereInput): MessageSubscriptionPayload
+  messageComment(where: MessageCommentSubscriptionWhereInput): MessageCommentSubscriptionPayload
+  tag(where: TagSubscriptionWhereInput): TagSubscriptionPayload
   team(where: TeamSubscriptionWhereInput): TeamSubscriptionPayload
   todo(where: TodoSubscriptionWhereInput): TodoSubscriptionPayload
   todoList(where: TodoListSubscriptionWhereInput): TodoListSubscriptionPayload
   user(where: UserSubscriptionWhereInput): UserSubscriptionPayload
+}
+
+type Tag {
+  id: ID!
+  name: String!
+  team: Team
+}
+
+type TagConnection {
+  pageInfo: PageInfo!
+  edges: [TagEdge]!
+  aggregate: AggregateTag!
+}
+
+input TagCreateInput {
+  name: String!
+  team: TeamCreateOneWithoutTagsInput
+}
+
+input TagCreateManyWithoutTeamInput {
+  create: [TagCreateWithoutTeamInput!]
+  connect: [TagWhereUniqueInput!]
+}
+
+input TagCreateOneInput {
+  create: TagCreateInput
+  connect: TagWhereUniqueInput
+}
+
+input TagCreateWithoutTeamInput {
+  name: String!
+}
+
+type TagEdge {
+  node: Tag!
+  cursor: String!
+}
+
+enum TagOrderByInput {
+  id_ASC
+  id_DESC
+  name_ASC
+  name_DESC
+  createdAt_ASC
+  createdAt_DESC
+  updatedAt_ASC
+  updatedAt_DESC
+}
+
+type TagPreviousValues {
+  id: ID!
+  name: String!
+}
+
+input TagScalarWhereInput {
+  id: ID
+  id_not: ID
+  id_in: [ID!]
+  id_not_in: [ID!]
+  id_lt: ID
+  id_lte: ID
+  id_gt: ID
+  id_gte: ID
+  id_contains: ID
+  id_not_contains: ID
+  id_starts_with: ID
+  id_not_starts_with: ID
+  id_ends_with: ID
+  id_not_ends_with: ID
+  name: String
+  name_not: String
+  name_in: [String!]
+  name_not_in: [String!]
+  name_lt: String
+  name_lte: String
+  name_gt: String
+  name_gte: String
+  name_contains: String
+  name_not_contains: String
+  name_starts_with: String
+  name_not_starts_with: String
+  name_ends_with: String
+  name_not_ends_with: String
+  AND: [TagScalarWhereInput!]
+  OR: [TagScalarWhereInput!]
+  NOT: [TagScalarWhereInput!]
+}
+
+type TagSubscriptionPayload {
+  mutation: MutationType!
+  node: Tag
+  updatedFields: [String!]
+  previousValues: TagPreviousValues
+}
+
+input TagSubscriptionWhereInput {
+  mutation_in: [MutationType!]
+  updatedFields_contains: String
+  updatedFields_contains_every: [String!]
+  updatedFields_contains_some: [String!]
+  node: TagWhereInput
+  AND: [TagSubscriptionWhereInput!]
+  OR: [TagSubscriptionWhereInput!]
+  NOT: [TagSubscriptionWhereInput!]
+}
+
+input TagUpdateDataInput {
+  name: String
+  team: TeamUpdateOneWithoutTagsInput
+}
+
+input TagUpdateInput {
+  name: String
+  team: TeamUpdateOneWithoutTagsInput
+}
+
+input TagUpdateManyDataInput {
+  name: String
+}
+
+input TagUpdateManyMutationInput {
+  name: String
+}
+
+input TagUpdateManyWithoutTeamInput {
+  create: [TagCreateWithoutTeamInput!]
+  delete: [TagWhereUniqueInput!]
+  connect: [TagWhereUniqueInput!]
+  set: [TagWhereUniqueInput!]
+  disconnect: [TagWhereUniqueInput!]
+  update: [TagUpdateWithWhereUniqueWithoutTeamInput!]
+  upsert: [TagUpsertWithWhereUniqueWithoutTeamInput!]
+  deleteMany: [TagScalarWhereInput!]
+  updateMany: [TagUpdateManyWithWhereNestedInput!]
+}
+
+input TagUpdateManyWithWhereNestedInput {
+  where: TagScalarWhereInput!
+  data: TagUpdateManyDataInput!
+}
+
+input TagUpdateOneInput {
+  create: TagCreateInput
+  update: TagUpdateDataInput
+  upsert: TagUpsertNestedInput
+  delete: Boolean
+  disconnect: Boolean
+  connect: TagWhereUniqueInput
+}
+
+input TagUpdateWithoutTeamDataInput {
+  name: String
+}
+
+input TagUpdateWithWhereUniqueWithoutTeamInput {
+  where: TagWhereUniqueInput!
+  data: TagUpdateWithoutTeamDataInput!
+}
+
+input TagUpsertNestedInput {
+  update: TagUpdateDataInput!
+  create: TagCreateInput!
+}
+
+input TagUpsertWithWhereUniqueWithoutTeamInput {
+  where: TagWhereUniqueInput!
+  update: TagUpdateWithoutTeamDataInput!
+  create: TagCreateWithoutTeamInput!
+}
+
+input TagWhereInput {
+  id: ID
+  id_not: ID
+  id_in: [ID!]
+  id_not_in: [ID!]
+  id_lt: ID
+  id_lte: ID
+  id_gt: ID
+  id_gte: ID
+  id_contains: ID
+  id_not_contains: ID
+  id_starts_with: ID
+  id_not_starts_with: ID
+  id_ends_with: ID
+  id_not_ends_with: ID
+  name: String
+  name_not: String
+  name_in: [String!]
+  name_not_in: [String!]
+  name_lt: String
+  name_lte: String
+  name_gt: String
+  name_gte: String
+  name_contains: String
+  name_not_contains: String
+  name_starts_with: String
+  name_not_starts_with: String
+  name_ends_with: String
+  name_not_ends_with: String
+  team: TeamWhereInput
+  AND: [TagWhereInput!]
+  OR: [TagWhereInput!]
+  NOT: [TagWhereInput!]
+}
+
+input TagWhereUniqueInput {
+  id: ID
 }
 
 type Team {
@@ -359,6 +1181,8 @@ type Team {
   members(where: UserWhereInput, orderBy: UserOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [User!]
   todoLists(where: TodoListWhereInput, orderBy: TodoListOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [TodoList!]
   messages(where: MessageWhereInput, orderBy: MessageOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Message!]
+  events(where: EventWhereInput, orderBy: EventOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Event!]
+  tags(where: TagWhereInput, orderBy: TagOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Tag!]
 }
 
 type TeamConnection {
@@ -372,6 +1196,13 @@ input TeamCreateInput {
   members: UserCreateManyWithoutInTeamInput
   todoLists: TodoListCreateManyWithoutInTeamInput
   messages: MessageCreateManyWithoutInTeamInput
+  events: EventCreateManyWithoutTeamInput
+  tags: TagCreateManyWithoutTeamInput
+}
+
+input TeamCreateOneWithoutEventsInput {
+  create: TeamCreateWithoutEventsInput
+  connect: TeamWhereUniqueInput
 }
 
 input TeamCreateOneWithoutMembersInput {
@@ -384,27 +1215,54 @@ input TeamCreateOneWithoutMessagesInput {
   connect: TeamWhereUniqueInput
 }
 
+input TeamCreateOneWithoutTagsInput {
+  create: TeamCreateWithoutTagsInput
+  connect: TeamWhereUniqueInput
+}
+
 input TeamCreateOneWithoutTodoListsInput {
   create: TeamCreateWithoutTodoListsInput
   connect: TeamWhereUniqueInput
+}
+
+input TeamCreateWithoutEventsInput {
+  teamName: String!
+  members: UserCreateManyWithoutInTeamInput
+  todoLists: TodoListCreateManyWithoutInTeamInput
+  messages: MessageCreateManyWithoutInTeamInput
+  tags: TagCreateManyWithoutTeamInput
 }
 
 input TeamCreateWithoutMembersInput {
   teamName: String!
   todoLists: TodoListCreateManyWithoutInTeamInput
   messages: MessageCreateManyWithoutInTeamInput
+  events: EventCreateManyWithoutTeamInput
+  tags: TagCreateManyWithoutTeamInput
 }
 
 input TeamCreateWithoutMessagesInput {
   teamName: String!
   members: UserCreateManyWithoutInTeamInput
   todoLists: TodoListCreateManyWithoutInTeamInput
+  events: EventCreateManyWithoutTeamInput
+  tags: TagCreateManyWithoutTeamInput
+}
+
+input TeamCreateWithoutTagsInput {
+  teamName: String!
+  members: UserCreateManyWithoutInTeamInput
+  todoLists: TodoListCreateManyWithoutInTeamInput
+  messages: MessageCreateManyWithoutInTeamInput
+  events: EventCreateManyWithoutTeamInput
 }
 
 input TeamCreateWithoutTodoListsInput {
   teamName: String!
   members: UserCreateManyWithoutInTeamInput
   messages: MessageCreateManyWithoutInTeamInput
+  events: EventCreateManyWithoutTeamInput
+  tags: TagCreateManyWithoutTeamInput
 }
 
 type TeamEdge {
@@ -451,10 +1309,19 @@ input TeamUpdateInput {
   members: UserUpdateManyWithoutInTeamInput
   todoLists: TodoListUpdateManyWithoutInTeamInput
   messages: MessageUpdateManyWithoutInTeamInput
+  events: EventUpdateManyWithoutTeamInput
+  tags: TagUpdateManyWithoutTeamInput
 }
 
 input TeamUpdateManyMutationInput {
   teamName: String
+}
+
+input TeamUpdateOneRequiredWithoutEventsInput {
+  create: TeamCreateWithoutEventsInput
+  update: TeamUpdateWithoutEventsDataInput
+  upsert: TeamUpsertWithoutEventsInput
+  connect: TeamWhereUniqueInput
 }
 
 input TeamUpdateOneRequiredWithoutMessagesInput {
@@ -473,6 +1340,15 @@ input TeamUpdateOneWithoutMembersInput {
   connect: TeamWhereUniqueInput
 }
 
+input TeamUpdateOneWithoutTagsInput {
+  create: TeamCreateWithoutTagsInput
+  update: TeamUpdateWithoutTagsDataInput
+  upsert: TeamUpsertWithoutTagsInput
+  delete: Boolean
+  disconnect: Boolean
+  connect: TeamWhereUniqueInput
+}
+
 input TeamUpdateOneWithoutTodoListsInput {
   create: TeamCreateWithoutTodoListsInput
   update: TeamUpdateWithoutTodoListsDataInput
@@ -482,22 +1358,49 @@ input TeamUpdateOneWithoutTodoListsInput {
   connect: TeamWhereUniqueInput
 }
 
+input TeamUpdateWithoutEventsDataInput {
+  teamName: String
+  members: UserUpdateManyWithoutInTeamInput
+  todoLists: TodoListUpdateManyWithoutInTeamInput
+  messages: MessageUpdateManyWithoutInTeamInput
+  tags: TagUpdateManyWithoutTeamInput
+}
+
 input TeamUpdateWithoutMembersDataInput {
   teamName: String
   todoLists: TodoListUpdateManyWithoutInTeamInput
   messages: MessageUpdateManyWithoutInTeamInput
+  events: EventUpdateManyWithoutTeamInput
+  tags: TagUpdateManyWithoutTeamInput
 }
 
 input TeamUpdateWithoutMessagesDataInput {
   teamName: String
   members: UserUpdateManyWithoutInTeamInput
   todoLists: TodoListUpdateManyWithoutInTeamInput
+  events: EventUpdateManyWithoutTeamInput
+  tags: TagUpdateManyWithoutTeamInput
+}
+
+input TeamUpdateWithoutTagsDataInput {
+  teamName: String
+  members: UserUpdateManyWithoutInTeamInput
+  todoLists: TodoListUpdateManyWithoutInTeamInput
+  messages: MessageUpdateManyWithoutInTeamInput
+  events: EventUpdateManyWithoutTeamInput
 }
 
 input TeamUpdateWithoutTodoListsDataInput {
   teamName: String
   members: UserUpdateManyWithoutInTeamInput
   messages: MessageUpdateManyWithoutInTeamInput
+  events: EventUpdateManyWithoutTeamInput
+  tags: TagUpdateManyWithoutTeamInput
+}
+
+input TeamUpsertWithoutEventsInput {
+  update: TeamUpdateWithoutEventsDataInput!
+  create: TeamCreateWithoutEventsInput!
 }
 
 input TeamUpsertWithoutMembersInput {
@@ -508,6 +1411,11 @@ input TeamUpsertWithoutMembersInput {
 input TeamUpsertWithoutMessagesInput {
   update: TeamUpdateWithoutMessagesDataInput!
   create: TeamCreateWithoutMessagesInput!
+}
+
+input TeamUpsertWithoutTagsInput {
+  update: TeamUpdateWithoutTagsDataInput!
+  create: TeamCreateWithoutTagsInput!
 }
 
 input TeamUpsertWithoutTodoListsInput {
@@ -553,6 +1461,12 @@ input TeamWhereInput {
   messages_every: MessageWhereInput
   messages_some: MessageWhereInput
   messages_none: MessageWhereInput
+  events_every: EventWhereInput
+  events_some: EventWhereInput
+  events_none: EventWhereInput
+  tags_every: TagWhereInput
+  tags_some: TagWhereInput
+  tags_none: TagWhereInput
   AND: [TeamWhereInput!]
   OR: [TeamWhereInput!]
   NOT: [TeamWhereInput!]
@@ -1123,6 +2037,7 @@ input TodoWhereUniqueInput {
 
 type User {
   id: ID!
+  authId: String
   createdAt: DateTime!
   name: String!
   todoListsOwned(where: TodoListWhereInput, orderBy: TodoListOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [TodoList!]
@@ -1137,10 +2052,16 @@ type UserConnection {
 }
 
 input UserCreateInput {
+  authId: String
   name: String!
   todoListsOwned: TodoListCreateManyWithoutOwnedByInput
   todoListsAssigned: TodoListCreateManyWithoutAssignedToInput
   inTeam: TeamCreateOneWithoutMembersInput
+}
+
+input UserCreateManyInput {
+  create: [UserCreateInput!]
+  connect: [UserWhereUniqueInput!]
 }
 
 input UserCreateManyWithoutInTeamInput {
@@ -1164,18 +2085,21 @@ input UserCreateOneInput {
 }
 
 input UserCreateWithoutInTeamInput {
+  authId: String
   name: String!
   todoListsOwned: TodoListCreateManyWithoutOwnedByInput
   todoListsAssigned: TodoListCreateManyWithoutAssignedToInput
 }
 
 input UserCreateWithoutTodoListsAssignedInput {
+  authId: String
   name: String!
   todoListsOwned: TodoListCreateManyWithoutOwnedByInput
   inTeam: TeamCreateOneWithoutMembersInput
 }
 
 input UserCreateWithoutTodoListsOwnedInput {
+  authId: String
   name: String!
   todoListsAssigned: TodoListCreateManyWithoutAssignedToInput
   inTeam: TeamCreateOneWithoutMembersInput
@@ -1189,6 +2113,8 @@ type UserEdge {
 enum UserOrderByInput {
   id_ASC
   id_DESC
+  authId_ASC
+  authId_DESC
   createdAt_ASC
   createdAt_DESC
   name_ASC
@@ -1199,6 +2125,7 @@ enum UserOrderByInput {
 
 type UserPreviousValues {
   id: ID!
+  authId: String
   createdAt: DateTime!
   name: String!
 }
@@ -1218,6 +2145,20 @@ input UserScalarWhereInput {
   id_not_starts_with: ID
   id_ends_with: ID
   id_not_ends_with: ID
+  authId: String
+  authId_not: String
+  authId_in: [String!]
+  authId_not_in: [String!]
+  authId_lt: String
+  authId_lte: String
+  authId_gt: String
+  authId_gte: String
+  authId_contains: String
+  authId_not_contains: String
+  authId_starts_with: String
+  authId_not_starts_with: String
+  authId_ends_with: String
+  authId_not_ends_with: String
   createdAt: DateTime
   createdAt_not: DateTime
   createdAt_in: [DateTime!]
@@ -1264,6 +2205,7 @@ input UserSubscriptionWhereInput {
 }
 
 input UserUpdateDataInput {
+  authId: String
   name: String
   todoListsOwned: TodoListUpdateManyWithoutOwnedByInput
   todoListsAssigned: TodoListUpdateManyWithoutAssignedToInput
@@ -1271,6 +2213,7 @@ input UserUpdateDataInput {
 }
 
 input UserUpdateInput {
+  authId: String
   name: String
   todoListsOwned: TodoListUpdateManyWithoutOwnedByInput
   todoListsAssigned: TodoListUpdateManyWithoutAssignedToInput
@@ -1278,10 +2221,24 @@ input UserUpdateInput {
 }
 
 input UserUpdateManyDataInput {
+  authId: String
   name: String
 }
 
+input UserUpdateManyInput {
+  create: [UserCreateInput!]
+  update: [UserUpdateWithWhereUniqueNestedInput!]
+  upsert: [UserUpsertWithWhereUniqueNestedInput!]
+  delete: [UserWhereUniqueInput!]
+  connect: [UserWhereUniqueInput!]
+  set: [UserWhereUniqueInput!]
+  disconnect: [UserWhereUniqueInput!]
+  deleteMany: [UserScalarWhereInput!]
+  updateMany: [UserUpdateManyWithWhereNestedInput!]
+}
+
 input UserUpdateManyMutationInput {
+  authId: String
   name: String
 }
 
@@ -1326,6 +2283,15 @@ input UserUpdateManyWithWhereNestedInput {
   data: UserUpdateManyDataInput!
 }
 
+input UserUpdateOneInput {
+  create: UserCreateInput
+  update: UserUpdateDataInput
+  upsert: UserUpsertNestedInput
+  delete: Boolean
+  disconnect: Boolean
+  connect: UserWhereUniqueInput
+}
+
 input UserUpdateOneRequiredInput {
   create: UserCreateInput
   update: UserUpdateDataInput
@@ -1334,21 +2300,29 @@ input UserUpdateOneRequiredInput {
 }
 
 input UserUpdateWithoutInTeamDataInput {
+  authId: String
   name: String
   todoListsOwned: TodoListUpdateManyWithoutOwnedByInput
   todoListsAssigned: TodoListUpdateManyWithoutAssignedToInput
 }
 
 input UserUpdateWithoutTodoListsAssignedDataInput {
+  authId: String
   name: String
   todoListsOwned: TodoListUpdateManyWithoutOwnedByInput
   inTeam: TeamUpdateOneWithoutMembersInput
 }
 
 input UserUpdateWithoutTodoListsOwnedDataInput {
+  authId: String
   name: String
   todoListsAssigned: TodoListUpdateManyWithoutAssignedToInput
   inTeam: TeamUpdateOneWithoutMembersInput
+}
+
+input UserUpdateWithWhereUniqueNestedInput {
+  where: UserWhereUniqueInput!
+  data: UserUpdateDataInput!
 }
 
 input UserUpdateWithWhereUniqueWithoutInTeamInput {
@@ -1367,6 +2341,12 @@ input UserUpdateWithWhereUniqueWithoutTodoListsOwnedInput {
 }
 
 input UserUpsertNestedInput {
+  update: UserUpdateDataInput!
+  create: UserCreateInput!
+}
+
+input UserUpsertWithWhereUniqueNestedInput {
+  where: UserWhereUniqueInput!
   update: UserUpdateDataInput!
   create: UserCreateInput!
 }
@@ -1404,6 +2384,20 @@ input UserWhereInput {
   id_not_starts_with: ID
   id_ends_with: ID
   id_not_ends_with: ID
+  authId: String
+  authId_not: String
+  authId_in: [String!]
+  authId_not_in: [String!]
+  authId_lt: String
+  authId_lte: String
+  authId_gt: String
+  authId_gte: String
+  authId_contains: String
+  authId_not_contains: String
+  authId_starts_with: String
+  authId_not_starts_with: String
+  authId_ends_with: String
+  authId_not_ends_with: String
   createdAt: DateTime
   createdAt_not: DateTime
   createdAt_in: [DateTime!]

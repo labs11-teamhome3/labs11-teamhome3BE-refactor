@@ -14,7 +14,10 @@ export type AtLeastOne<T, U = { [K in keyof T]: Pick<T, K> }> = Partial<T> &
   U[keyof U];
 
 export interface Exists {
+  event: (where?: EventWhereInput) => Promise<boolean>;
   message: (where?: MessageWhereInput) => Promise<boolean>;
+  messageComment: (where?: MessageCommentWhereInput) => Promise<boolean>;
+  tag: (where?: TagWhereInput) => Promise<boolean>;
   team: (where?: TeamWhereInput) => Promise<boolean>;
   todo: (where?: TodoWhereInput) => Promise<boolean>;
   todoList: (where?: TodoListWhereInput) => Promise<boolean>;
@@ -40,6 +43,29 @@ export interface Prisma {
    * Queries
    */
 
+  event: (where: EventWhereUniqueInput) => EventPromise;
+  events: (
+    args?: {
+      where?: EventWhereInput;
+      orderBy?: EventOrderByInput;
+      skip?: Int;
+      after?: String;
+      before?: String;
+      first?: Int;
+      last?: Int;
+    }
+  ) => FragmentableArray<Event>;
+  eventsConnection: (
+    args?: {
+      where?: EventWhereInput;
+      orderBy?: EventOrderByInput;
+      skip?: Int;
+      after?: String;
+      before?: String;
+      first?: Int;
+      last?: Int;
+    }
+  ) => EventConnectionPromise;
   message: (where: MessageWhereUniqueInput) => MessagePromise;
   messages: (
     args?: {
@@ -63,6 +89,54 @@ export interface Prisma {
       last?: Int;
     }
   ) => MessageConnectionPromise;
+  messageComment: (
+    where: MessageCommentWhereUniqueInput
+  ) => MessageCommentPromise;
+  messageComments: (
+    args?: {
+      where?: MessageCommentWhereInput;
+      orderBy?: MessageCommentOrderByInput;
+      skip?: Int;
+      after?: String;
+      before?: String;
+      first?: Int;
+      last?: Int;
+    }
+  ) => FragmentableArray<MessageComment>;
+  messageCommentsConnection: (
+    args?: {
+      where?: MessageCommentWhereInput;
+      orderBy?: MessageCommentOrderByInput;
+      skip?: Int;
+      after?: String;
+      before?: String;
+      first?: Int;
+      last?: Int;
+    }
+  ) => MessageCommentConnectionPromise;
+  tag: (where: TagWhereUniqueInput) => TagPromise;
+  tags: (
+    args?: {
+      where?: TagWhereInput;
+      orderBy?: TagOrderByInput;
+      skip?: Int;
+      after?: String;
+      before?: String;
+      first?: Int;
+      last?: Int;
+    }
+  ) => FragmentableArray<Tag>;
+  tagsConnection: (
+    args?: {
+      where?: TagWhereInput;
+      orderBy?: TagOrderByInput;
+      skip?: Int;
+      after?: String;
+      before?: String;
+      first?: Int;
+      last?: Int;
+    }
+  ) => TagConnectionPromise;
   team: (where: TeamWhereUniqueInput) => TeamPromise;
   teams: (
     args?: {
@@ -161,6 +235,22 @@ export interface Prisma {
    * Mutations
    */
 
+  createEvent: (data: EventCreateInput) => EventPromise;
+  updateEvent: (
+    args: { data: EventUpdateInput; where: EventWhereUniqueInput }
+  ) => EventPromise;
+  updateManyEvents: (
+    args: { data: EventUpdateManyMutationInput; where?: EventWhereInput }
+  ) => BatchPayloadPromise;
+  upsertEvent: (
+    args: {
+      where: EventWhereUniqueInput;
+      create: EventCreateInput;
+      update: EventUpdateInput;
+    }
+  ) => EventPromise;
+  deleteEvent: (where: EventWhereUniqueInput) => EventPromise;
+  deleteManyEvents: (where?: EventWhereInput) => BatchPayloadPromise;
   createMessage: (data: MessageCreateInput) => MessagePromise;
   updateMessage: (
     args: { data: MessageUpdateInput; where: MessageWhereUniqueInput }
@@ -177,6 +267,50 @@ export interface Prisma {
   ) => MessagePromise;
   deleteMessage: (where: MessageWhereUniqueInput) => MessagePromise;
   deleteManyMessages: (where?: MessageWhereInput) => BatchPayloadPromise;
+  createMessageComment: (
+    data: MessageCommentCreateInput
+  ) => MessageCommentPromise;
+  updateMessageComment: (
+    args: {
+      data: MessageCommentUpdateInput;
+      where: MessageCommentWhereUniqueInput;
+    }
+  ) => MessageCommentPromise;
+  updateManyMessageComments: (
+    args: {
+      data: MessageCommentUpdateManyMutationInput;
+      where?: MessageCommentWhereInput;
+    }
+  ) => BatchPayloadPromise;
+  upsertMessageComment: (
+    args: {
+      where: MessageCommentWhereUniqueInput;
+      create: MessageCommentCreateInput;
+      update: MessageCommentUpdateInput;
+    }
+  ) => MessageCommentPromise;
+  deleteMessageComment: (
+    where: MessageCommentWhereUniqueInput
+  ) => MessageCommentPromise;
+  deleteManyMessageComments: (
+    where?: MessageCommentWhereInput
+  ) => BatchPayloadPromise;
+  createTag: (data: TagCreateInput) => TagPromise;
+  updateTag: (
+    args: { data: TagUpdateInput; where: TagWhereUniqueInput }
+  ) => TagPromise;
+  updateManyTags: (
+    args: { data: TagUpdateManyMutationInput; where?: TagWhereInput }
+  ) => BatchPayloadPromise;
+  upsertTag: (
+    args: {
+      where: TagWhereUniqueInput;
+      create: TagCreateInput;
+      update: TagUpdateInput;
+    }
+  ) => TagPromise;
+  deleteTag: (where: TagWhereUniqueInput) => TagPromise;
+  deleteManyTags: (where?: TagWhereInput) => BatchPayloadPromise;
   createTeam: (data: TeamCreateInput) => TeamPromise;
   updateTeam: (
     args: { data: TeamUpdateInput; where: TeamWhereUniqueInput }
@@ -250,9 +384,18 @@ export interface Prisma {
 }
 
 export interface Subscription {
+  event: (
+    where?: EventSubscriptionWhereInput
+  ) => EventSubscriptionPayloadSubscription;
   message: (
     where?: MessageSubscriptionWhereInput
   ) => MessageSubscriptionPayloadSubscription;
+  messageComment: (
+    where?: MessageCommentSubscriptionWhereInput
+  ) => MessageCommentSubscriptionPayloadSubscription;
+  tag: (
+    where?: TagSubscriptionWhereInput
+  ) => TagSubscriptionPayloadSubscription;
   team: (
     where?: TeamSubscriptionWhereInput
   ) => TeamSubscriptionPayloadSubscription;
@@ -275,6 +418,18 @@ export interface ClientConstructor<T> {
  * Types
  */
 
+export type UserOrderByInput =
+  | "id_ASC"
+  | "id_DESC"
+  | "authId_ASC"
+  | "authId_DESC"
+  | "createdAt_ASC"
+  | "createdAt_DESC"
+  | "name_ASC"
+  | "name_DESC"
+  | "updatedAt_ASC"
+  | "updatedAt_DESC";
+
 export type TodoListOrderByInput =
   | "id_ASC"
   | "id_DESC"
@@ -284,16 +439,6 @@ export type TodoListOrderByInput =
   | "description_DESC"
   | "completed_ASC"
   | "completed_DESC"
-  | "updatedAt_ASC"
-  | "updatedAt_DESC";
-
-export type UserOrderByInput =
-  | "id_ASC"
-  | "id_DESC"
-  | "createdAt_ASC"
-  | "createdAt_DESC"
-  | "name_ASC"
-  | "name_DESC"
   | "updatedAt_ASC"
   | "updatedAt_DESC";
 
@@ -321,6 +466,40 @@ export type MessageOrderByInput =
   | "updatedAt_ASC"
   | "updatedAt_DESC";
 
+export type MessageCommentOrderByInput =
+  | "id_ASC"
+  | "id_DESC"
+  | "content_ASC"
+  | "content_DESC"
+  | "image_ASC"
+  | "image_DESC"
+  | "createdAt_ASC"
+  | "createdAt_DESC"
+  | "updatedAt_ASC"
+  | "updatedAt_DESC";
+
+export type EventOrderByInput =
+  | "id_ASC"
+  | "id_DESC"
+  | "action_string_ASC"
+  | "action_string_DESC"
+  | "object_string_ASC"
+  | "object_string_DESC"
+  | "createdAt_ASC"
+  | "createdAt_DESC"
+  | "updatedAt_ASC"
+  | "updatedAt_DESC";
+
+export type TagOrderByInput =
+  | "id_ASC"
+  | "id_DESC"
+  | "name_ASC"
+  | "name_DESC"
+  | "createdAt_ASC"
+  | "createdAt_DESC"
+  | "updatedAt_ASC"
+  | "updatedAt_DESC";
+
 export type TeamOrderByInput =
   | "id_ASC"
   | "id_DESC"
@@ -333,9 +512,72 @@ export type TeamOrderByInput =
 
 export type MutationType = "CREATED" | "UPDATED" | "DELETED";
 
-export type MessageWhereUniqueInput = AtLeastOne<{
+export type EventWhereUniqueInput = AtLeastOne<{
   id: ID_Input;
 }>;
+
+export interface UserWhereInput {
+  id?: ID_Input;
+  id_not?: ID_Input;
+  id_in?: ID_Input[] | ID_Input;
+  id_not_in?: ID_Input[] | ID_Input;
+  id_lt?: ID_Input;
+  id_lte?: ID_Input;
+  id_gt?: ID_Input;
+  id_gte?: ID_Input;
+  id_contains?: ID_Input;
+  id_not_contains?: ID_Input;
+  id_starts_with?: ID_Input;
+  id_not_starts_with?: ID_Input;
+  id_ends_with?: ID_Input;
+  id_not_ends_with?: ID_Input;
+  authId?: String;
+  authId_not?: String;
+  authId_in?: String[] | String;
+  authId_not_in?: String[] | String;
+  authId_lt?: String;
+  authId_lte?: String;
+  authId_gt?: String;
+  authId_gte?: String;
+  authId_contains?: String;
+  authId_not_contains?: String;
+  authId_starts_with?: String;
+  authId_not_starts_with?: String;
+  authId_ends_with?: String;
+  authId_not_ends_with?: String;
+  createdAt?: DateTimeInput;
+  createdAt_not?: DateTimeInput;
+  createdAt_in?: DateTimeInput[] | DateTimeInput;
+  createdAt_not_in?: DateTimeInput[] | DateTimeInput;
+  createdAt_lt?: DateTimeInput;
+  createdAt_lte?: DateTimeInput;
+  createdAt_gt?: DateTimeInput;
+  createdAt_gte?: DateTimeInput;
+  name?: String;
+  name_not?: String;
+  name_in?: String[] | String;
+  name_not_in?: String[] | String;
+  name_lt?: String;
+  name_lte?: String;
+  name_gt?: String;
+  name_gte?: String;
+  name_contains?: String;
+  name_not_contains?: String;
+  name_starts_with?: String;
+  name_not_starts_with?: String;
+  name_ends_with?: String;
+  name_not_ends_with?: String;
+  todoListsOwned_every?: TodoListWhereInput;
+  todoListsOwned_some?: TodoListWhereInput;
+  todoListsOwned_none?: TodoListWhereInput;
+  todoListsAssigned_every?: TodoListWhereInput;
+  todoListsAssigned_some?: TodoListWhereInput;
+  todoListsAssigned_none?: TodoListWhereInput;
+  inTeam?: TeamWhereInput;
+  AND?: UserWhereInput[] | UserWhereInput;
+  OR?: UserWhereInput[] | UserWhereInput;
+  NOT?: UserWhereInput[] | UserWhereInput;
+}
 
 export interface TodoListWhereInput {
   id?: ID_Input;
@@ -391,7 +633,7 @@ export interface TodoListWhereInput {
   NOT?: TodoListWhereInput[] | TodoListWhereInput;
 }
 
-export interface UserWhereInput {
+export interface TodoWhereInput {
   id?: ID_Input;
   id_not?: ID_Input;
   id_in?: ID_Input[] | ID_Input;
@@ -406,38 +648,26 @@ export interface UserWhereInput {
   id_not_starts_with?: ID_Input;
   id_ends_with?: ID_Input;
   id_not_ends_with?: ID_Input;
-  createdAt?: DateTimeInput;
-  createdAt_not?: DateTimeInput;
-  createdAt_in?: DateTimeInput[] | DateTimeInput;
-  createdAt_not_in?: DateTimeInput[] | DateTimeInput;
-  createdAt_lt?: DateTimeInput;
-  createdAt_lte?: DateTimeInput;
-  createdAt_gt?: DateTimeInput;
-  createdAt_gte?: DateTimeInput;
-  name?: String;
-  name_not?: String;
-  name_in?: String[] | String;
-  name_not_in?: String[] | String;
-  name_lt?: String;
-  name_lte?: String;
-  name_gt?: String;
-  name_gte?: String;
-  name_contains?: String;
-  name_not_contains?: String;
-  name_starts_with?: String;
-  name_not_starts_with?: String;
-  name_ends_with?: String;
-  name_not_ends_with?: String;
-  todoListsOwned_every?: TodoListWhereInput;
-  todoListsOwned_some?: TodoListWhereInput;
-  todoListsOwned_none?: TodoListWhereInput;
-  todoListsAssigned_every?: TodoListWhereInput;
-  todoListsAssigned_some?: TodoListWhereInput;
-  todoListsAssigned_none?: TodoListWhereInput;
-  inTeam?: TeamWhereInput;
-  AND?: UserWhereInput[] | UserWhereInput;
-  OR?: UserWhereInput[] | UserWhereInput;
-  NOT?: UserWhereInput[] | UserWhereInput;
+  description?: String;
+  description_not?: String;
+  description_in?: String[] | String;
+  description_not_in?: String[] | String;
+  description_lt?: String;
+  description_lte?: String;
+  description_gt?: String;
+  description_gte?: String;
+  description_contains?: String;
+  description_not_contains?: String;
+  description_starts_with?: String;
+  description_not_starts_with?: String;
+  description_ends_with?: String;
+  description_not_ends_with?: String;
+  partOf?: TodoListWhereInput;
+  completed?: Boolean;
+  completed_not?: Boolean;
+  AND?: TodoWhereInput[] | TodoWhereInput;
+  OR?: TodoWhereInput[] | TodoWhereInput;
+  NOT?: TodoWhereInput[] | TodoWhereInput;
 }
 
 export interface TeamWhereInput {
@@ -478,6 +708,12 @@ export interface TeamWhereInput {
   messages_every?: MessageWhereInput;
   messages_some?: MessageWhereInput;
   messages_none?: MessageWhereInput;
+  events_every?: EventWhereInput;
+  events_some?: EventWhereInput;
+  events_none?: EventWhereInput;
+  tags_every?: TagWhereInput;
+  tags_some?: TagWhereInput;
+  tags_none?: TagWhereInput;
   AND?: TeamWhereInput[] | TeamWhereInput;
   OR?: TeamWhereInput[] | TeamWhereInput;
   NOT?: TeamWhereInput[] | TeamWhereInput;
@@ -528,6 +764,13 @@ export interface MessageWhereInput {
   content_not_starts_with?: String;
   content_ends_with?: String;
   content_not_ends_with?: String;
+  tag?: TagWhereInput;
+  comments_every?: MessageCommentWhereInput;
+  comments_some?: MessageCommentWhereInput;
+  comments_none?: MessageCommentWhereInput;
+  subscribedUsers_every?: UserWhereInput;
+  subscribedUsers_some?: UserWhereInput;
+  subscribedUsers_none?: UserWhereInput;
   createdAt?: DateTimeInput;
   createdAt_not?: DateTimeInput;
   createdAt_in?: DateTimeInput[] | DateTimeInput;
@@ -541,7 +784,7 @@ export interface MessageWhereInput {
   NOT?: MessageWhereInput[] | MessageWhereInput;
 }
 
-export interface TodoWhereInput {
+export interface TagWhereInput {
   id?: ID_Input;
   id_not?: ID_Input;
   id_in?: ID_Input[] | ID_Input;
@@ -556,27 +799,156 @@ export interface TodoWhereInput {
   id_not_starts_with?: ID_Input;
   id_ends_with?: ID_Input;
   id_not_ends_with?: ID_Input;
-  description?: String;
-  description_not?: String;
-  description_in?: String[] | String;
-  description_not_in?: String[] | String;
-  description_lt?: String;
-  description_lte?: String;
-  description_gt?: String;
-  description_gte?: String;
-  description_contains?: String;
-  description_not_contains?: String;
-  description_starts_with?: String;
-  description_not_starts_with?: String;
-  description_ends_with?: String;
-  description_not_ends_with?: String;
-  partOf?: TodoListWhereInput;
-  completed?: Boolean;
-  completed_not?: Boolean;
-  AND?: TodoWhereInput[] | TodoWhereInput;
-  OR?: TodoWhereInput[] | TodoWhereInput;
-  NOT?: TodoWhereInput[] | TodoWhereInput;
+  name?: String;
+  name_not?: String;
+  name_in?: String[] | String;
+  name_not_in?: String[] | String;
+  name_lt?: String;
+  name_lte?: String;
+  name_gt?: String;
+  name_gte?: String;
+  name_contains?: String;
+  name_not_contains?: String;
+  name_starts_with?: String;
+  name_not_starts_with?: String;
+  name_ends_with?: String;
+  name_not_ends_with?: String;
+  team?: TeamWhereInput;
+  AND?: TagWhereInput[] | TagWhereInput;
+  OR?: TagWhereInput[] | TagWhereInput;
+  NOT?: TagWhereInput[] | TagWhereInput;
 }
+
+export interface MessageCommentWhereInput {
+  id?: ID_Input;
+  id_not?: ID_Input;
+  id_in?: ID_Input[] | ID_Input;
+  id_not_in?: ID_Input[] | ID_Input;
+  id_lt?: ID_Input;
+  id_lte?: ID_Input;
+  id_gt?: ID_Input;
+  id_gte?: ID_Input;
+  id_contains?: ID_Input;
+  id_not_contains?: ID_Input;
+  id_starts_with?: ID_Input;
+  id_not_starts_with?: ID_Input;
+  id_ends_with?: ID_Input;
+  id_not_ends_with?: ID_Input;
+  content?: String;
+  content_not?: String;
+  content_in?: String[] | String;
+  content_not_in?: String[] | String;
+  content_lt?: String;
+  content_lte?: String;
+  content_gt?: String;
+  content_gte?: String;
+  content_contains?: String;
+  content_not_contains?: String;
+  content_starts_with?: String;
+  content_not_starts_with?: String;
+  content_ends_with?: String;
+  content_not_ends_with?: String;
+  user?: UserWhereInput;
+  message?: MessageWhereInput;
+  image?: String;
+  image_not?: String;
+  image_in?: String[] | String;
+  image_not_in?: String[] | String;
+  image_lt?: String;
+  image_lte?: String;
+  image_gt?: String;
+  image_gte?: String;
+  image_contains?: String;
+  image_not_contains?: String;
+  image_starts_with?: String;
+  image_not_starts_with?: String;
+  image_ends_with?: String;
+  image_not_ends_with?: String;
+  likes_every?: UserWhereInput;
+  likes_some?: UserWhereInput;
+  likes_none?: UserWhereInput;
+  createdAt?: DateTimeInput;
+  createdAt_not?: DateTimeInput;
+  createdAt_in?: DateTimeInput[] | DateTimeInput;
+  createdAt_not_in?: DateTimeInput[] | DateTimeInput;
+  createdAt_lt?: DateTimeInput;
+  createdAt_lte?: DateTimeInput;
+  createdAt_gt?: DateTimeInput;
+  createdAt_gte?: DateTimeInput;
+  AND?: MessageCommentWhereInput[] | MessageCommentWhereInput;
+  OR?: MessageCommentWhereInput[] | MessageCommentWhereInput;
+  NOT?: MessageCommentWhereInput[] | MessageCommentWhereInput;
+}
+
+export interface EventWhereInput {
+  id?: ID_Input;
+  id_not?: ID_Input;
+  id_in?: ID_Input[] | ID_Input;
+  id_not_in?: ID_Input[] | ID_Input;
+  id_lt?: ID_Input;
+  id_lte?: ID_Input;
+  id_gt?: ID_Input;
+  id_gte?: ID_Input;
+  id_contains?: ID_Input;
+  id_not_contains?: ID_Input;
+  id_starts_with?: ID_Input;
+  id_not_starts_with?: ID_Input;
+  id_ends_with?: ID_Input;
+  id_not_ends_with?: ID_Input;
+  team?: TeamWhereInput;
+  user?: UserWhereInput;
+  action_string?: String;
+  action_string_not?: String;
+  action_string_in?: String[] | String;
+  action_string_not_in?: String[] | String;
+  action_string_lt?: String;
+  action_string_lte?: String;
+  action_string_gt?: String;
+  action_string_gte?: String;
+  action_string_contains?: String;
+  action_string_not_contains?: String;
+  action_string_starts_with?: String;
+  action_string_not_starts_with?: String;
+  action_string_ends_with?: String;
+  action_string_not_ends_with?: String;
+  object_string?: String;
+  object_string_not?: String;
+  object_string_in?: String[] | String;
+  object_string_not_in?: String[] | String;
+  object_string_lt?: String;
+  object_string_lte?: String;
+  object_string_gt?: String;
+  object_string_gte?: String;
+  object_string_contains?: String;
+  object_string_not_contains?: String;
+  object_string_starts_with?: String;
+  object_string_not_starts_with?: String;
+  object_string_ends_with?: String;
+  object_string_not_ends_with?: String;
+  createdAt?: DateTimeInput;
+  createdAt_not?: DateTimeInput;
+  createdAt_in?: DateTimeInput[] | DateTimeInput;
+  createdAt_not_in?: DateTimeInput[] | DateTimeInput;
+  createdAt_lt?: DateTimeInput;
+  createdAt_lte?: DateTimeInput;
+  createdAt_gt?: DateTimeInput;
+  createdAt_gte?: DateTimeInput;
+  AND?: EventWhereInput[] | EventWhereInput;
+  OR?: EventWhereInput[] | EventWhereInput;
+  NOT?: EventWhereInput[] | EventWhereInput;
+}
+
+export type MessageWhereUniqueInput = AtLeastOne<{
+  id: ID_Input;
+}>;
+
+export type MessageCommentWhereUniqueInput = AtLeastOne<{
+  id: ID_Input;
+}>;
+
+export type TagWhereUniqueInput = AtLeastOne<{
+  id: ID_Input;
+}>;
 
 export type TeamWhereUniqueInput = AtLeastOne<{
   id: ID_Input;
@@ -594,23 +966,36 @@ export type UserWhereUniqueInput = AtLeastOne<{
   id: ID_Input;
 }>;
 
-export interface MessageCreateInput {
-  title: String;
-  creator: UserCreateOneInput;
-  inTeam: TeamCreateOneWithoutMessagesInput;
-  content: String;
+export interface EventCreateInput {
+  team: TeamCreateOneWithoutEventsInput;
+  user?: UserCreateOneInput;
+  action_string: String;
+  object_string: String;
 }
 
-export interface UserCreateOneInput {
-  create?: UserCreateInput;
-  connect?: UserWhereUniqueInput;
+export interface TeamCreateOneWithoutEventsInput {
+  create?: TeamCreateWithoutEventsInput;
+  connect?: TeamWhereUniqueInput;
 }
 
-export interface UserCreateInput {
+export interface TeamCreateWithoutEventsInput {
+  teamName: String;
+  members?: UserCreateManyWithoutInTeamInput;
+  todoLists?: TodoListCreateManyWithoutInTeamInput;
+  messages?: MessageCreateManyWithoutInTeamInput;
+  tags?: TagCreateManyWithoutTeamInput;
+}
+
+export interface UserCreateManyWithoutInTeamInput {
+  create?: UserCreateWithoutInTeamInput[] | UserCreateWithoutInTeamInput;
+  connect?: UserWhereUniqueInput[] | UserWhereUniqueInput;
+}
+
+export interface UserCreateWithoutInTeamInput {
+  authId?: String;
   name: String;
   todoListsOwned?: TodoListCreateManyWithoutOwnedByInput;
   todoListsAssigned?: TodoListCreateManyWithoutAssignedToInput;
-  inTeam?: TeamCreateOneWithoutMembersInput;
 }
 
 export interface TodoListCreateManyWithoutOwnedByInput {
@@ -636,6 +1021,7 @@ export interface UserCreateManyWithoutTodoListsAssignedInput {
 }
 
 export interface UserCreateWithoutTodoListsAssignedInput {
+  authId?: String;
   name: String;
   todoListsOwned?: TodoListCreateManyWithoutOwnedByInput;
   inTeam?: TeamCreateOneWithoutMembersInput;
@@ -650,6 +1036,8 @@ export interface TeamCreateWithoutMembersInput {
   teamName: String;
   todoLists?: TodoListCreateManyWithoutInTeamInput;
   messages?: MessageCreateManyWithoutInTeamInput;
+  events?: EventCreateManyWithoutTeamInput;
+  tags?: TagCreateManyWithoutTeamInput;
 }
 
 export interface TodoListCreateManyWithoutInTeamInput {
@@ -675,6 +1063,7 @@ export interface UserCreateManyWithoutTodoListsOwnedInput {
 }
 
 export interface UserCreateWithoutTodoListsOwnedInput {
+  authId?: String;
   name: String;
   todoListsAssigned?: TodoListCreateManyWithoutAssignedToInput;
   inTeam?: TeamCreateOneWithoutMembersInput;
@@ -714,17 +1103,8 @@ export interface TeamCreateWithoutTodoListsInput {
   teamName: String;
   members?: UserCreateManyWithoutInTeamInput;
   messages?: MessageCreateManyWithoutInTeamInput;
-}
-
-export interface UserCreateManyWithoutInTeamInput {
-  create?: UserCreateWithoutInTeamInput[] | UserCreateWithoutInTeamInput;
-  connect?: UserWhereUniqueInput[] | UserWhereUniqueInput;
-}
-
-export interface UserCreateWithoutInTeamInput {
-  name: String;
-  todoListsOwned?: TodoListCreateManyWithoutOwnedByInput;
-  todoListsAssigned?: TodoListCreateManyWithoutAssignedToInput;
+  events?: EventCreateManyWithoutTeamInput;
+  tags?: TagCreateManyWithoutTeamInput;
 }
 
 export interface MessageCreateManyWithoutInTeamInput {
@@ -736,38 +1116,141 @@ export interface MessageCreateWithoutInTeamInput {
   title: String;
   creator: UserCreateOneInput;
   content: String;
+  images?: MessageCreateimagesInput;
+  tag?: TagCreateOneInput;
+  comments?: MessageCommentCreateManyWithoutMessageInput;
+  subscribedUsers?: UserCreateManyInput;
 }
 
-export interface TeamCreateOneWithoutMessagesInput {
-  create?: TeamCreateWithoutMessagesInput;
-  connect?: TeamWhereUniqueInput;
-}
-
-export interface TeamCreateWithoutMessagesInput {
-  teamName: String;
-  members?: UserCreateManyWithoutInTeamInput;
-  todoLists?: TodoListCreateManyWithoutInTeamInput;
-}
-
-export interface MessageUpdateInput {
-  title?: String;
-  creator?: UserUpdateOneRequiredInput;
-  inTeam?: TeamUpdateOneRequiredWithoutMessagesInput;
-  content?: String;
-}
-
-export interface UserUpdateOneRequiredInput {
+export interface UserCreateOneInput {
   create?: UserCreateInput;
-  update?: UserUpdateDataInput;
-  upsert?: UserUpsertNestedInput;
   connect?: UserWhereUniqueInput;
 }
 
-export interface UserUpdateDataInput {
+export interface UserCreateInput {
+  authId?: String;
+  name: String;
+  todoListsOwned?: TodoListCreateManyWithoutOwnedByInput;
+  todoListsAssigned?: TodoListCreateManyWithoutAssignedToInput;
+  inTeam?: TeamCreateOneWithoutMembersInput;
+}
+
+export interface MessageCreateimagesInput {
+  set?: String[] | String;
+}
+
+export interface TagCreateOneInput {
+  create?: TagCreateInput;
+  connect?: TagWhereUniqueInput;
+}
+
+export interface TagCreateInput {
+  name: String;
+  team?: TeamCreateOneWithoutTagsInput;
+}
+
+export interface TeamCreateOneWithoutTagsInput {
+  create?: TeamCreateWithoutTagsInput;
+  connect?: TeamWhereUniqueInput;
+}
+
+export interface TeamCreateWithoutTagsInput {
+  teamName: String;
+  members?: UserCreateManyWithoutInTeamInput;
+  todoLists?: TodoListCreateManyWithoutInTeamInput;
+  messages?: MessageCreateManyWithoutInTeamInput;
+  events?: EventCreateManyWithoutTeamInput;
+}
+
+export interface EventCreateManyWithoutTeamInput {
+  create?: EventCreateWithoutTeamInput[] | EventCreateWithoutTeamInput;
+  connect?: EventWhereUniqueInput[] | EventWhereUniqueInput;
+}
+
+export interface EventCreateWithoutTeamInput {
+  user?: UserCreateOneInput;
+  action_string: String;
+  object_string: String;
+}
+
+export interface MessageCommentCreateManyWithoutMessageInput {
+  create?:
+    | MessageCommentCreateWithoutMessageInput[]
+    | MessageCommentCreateWithoutMessageInput;
+  connect?: MessageCommentWhereUniqueInput[] | MessageCommentWhereUniqueInput;
+}
+
+export interface MessageCommentCreateWithoutMessageInput {
+  content: String;
+  user: UserCreateOneInput;
+  image?: String;
+  likes?: UserCreateManyInput;
+}
+
+export interface UserCreateManyInput {
+  create?: UserCreateInput[] | UserCreateInput;
+  connect?: UserWhereUniqueInput[] | UserWhereUniqueInput;
+}
+
+export interface TagCreateManyWithoutTeamInput {
+  create?: TagCreateWithoutTeamInput[] | TagCreateWithoutTeamInput;
+  connect?: TagWhereUniqueInput[] | TagWhereUniqueInput;
+}
+
+export interface TagCreateWithoutTeamInput {
+  name: String;
+}
+
+export interface EventUpdateInput {
+  team?: TeamUpdateOneRequiredWithoutEventsInput;
+  user?: UserUpdateOneInput;
+  action_string?: String;
+  object_string?: String;
+}
+
+export interface TeamUpdateOneRequiredWithoutEventsInput {
+  create?: TeamCreateWithoutEventsInput;
+  update?: TeamUpdateWithoutEventsDataInput;
+  upsert?: TeamUpsertWithoutEventsInput;
+  connect?: TeamWhereUniqueInput;
+}
+
+export interface TeamUpdateWithoutEventsDataInput {
+  teamName?: String;
+  members?: UserUpdateManyWithoutInTeamInput;
+  todoLists?: TodoListUpdateManyWithoutInTeamInput;
+  messages?: MessageUpdateManyWithoutInTeamInput;
+  tags?: TagUpdateManyWithoutTeamInput;
+}
+
+export interface UserUpdateManyWithoutInTeamInput {
+  create?: UserCreateWithoutInTeamInput[] | UserCreateWithoutInTeamInput;
+  delete?: UserWhereUniqueInput[] | UserWhereUniqueInput;
+  connect?: UserWhereUniqueInput[] | UserWhereUniqueInput;
+  set?: UserWhereUniqueInput[] | UserWhereUniqueInput;
+  disconnect?: UserWhereUniqueInput[] | UserWhereUniqueInput;
+  update?:
+    | UserUpdateWithWhereUniqueWithoutInTeamInput[]
+    | UserUpdateWithWhereUniqueWithoutInTeamInput;
+  upsert?:
+    | UserUpsertWithWhereUniqueWithoutInTeamInput[]
+    | UserUpsertWithWhereUniqueWithoutInTeamInput;
+  deleteMany?: UserScalarWhereInput[] | UserScalarWhereInput;
+  updateMany?:
+    | UserUpdateManyWithWhereNestedInput[]
+    | UserUpdateManyWithWhereNestedInput;
+}
+
+export interface UserUpdateWithWhereUniqueWithoutInTeamInput {
+  where: UserWhereUniqueInput;
+  data: UserUpdateWithoutInTeamDataInput;
+}
+
+export interface UserUpdateWithoutInTeamDataInput {
+  authId?: String;
   name?: String;
   todoListsOwned?: TodoListUpdateManyWithoutOwnedByInput;
   todoListsAssigned?: TodoListUpdateManyWithoutAssignedToInput;
-  inTeam?: TeamUpdateOneWithoutMembersInput;
 }
 
 export interface TodoListUpdateManyWithoutOwnedByInput {
@@ -829,6 +1312,7 @@ export interface UserUpdateWithWhereUniqueWithoutTodoListsAssignedInput {
 }
 
 export interface UserUpdateWithoutTodoListsAssignedDataInput {
+  authId?: String;
   name?: String;
   todoListsOwned?: TodoListUpdateManyWithoutOwnedByInput;
   inTeam?: TeamUpdateOneWithoutMembersInput;
@@ -847,6 +1331,8 @@ export interface TeamUpdateWithoutMembersDataInput {
   teamName?: String;
   todoLists?: TodoListUpdateManyWithoutInTeamInput;
   messages?: MessageUpdateManyWithoutInTeamInput;
+  events?: EventUpdateManyWithoutTeamInput;
+  tags?: TagUpdateManyWithoutTeamInput;
 }
 
 export interface TodoListUpdateManyWithoutInTeamInput {
@@ -908,6 +1394,7 @@ export interface UserUpdateWithWhereUniqueWithoutTodoListsOwnedInput {
 }
 
 export interface UserUpdateWithoutTodoListsOwnedDataInput {
+  authId?: String;
   name?: String;
   todoListsAssigned?: TodoListUpdateManyWithoutAssignedToInput;
   inTeam?: TeamUpdateOneWithoutMembersInput;
@@ -1039,41 +1526,281 @@ export interface TeamUpdateWithoutTodoListsDataInput {
   teamName?: String;
   members?: UserUpdateManyWithoutInTeamInput;
   messages?: MessageUpdateManyWithoutInTeamInput;
+  events?: EventUpdateManyWithoutTeamInput;
+  tags?: TagUpdateManyWithoutTeamInput;
 }
 
-export interface UserUpdateManyWithoutInTeamInput {
-  create?: UserCreateWithoutInTeamInput[] | UserCreateWithoutInTeamInput;
+export interface MessageUpdateManyWithoutInTeamInput {
+  create?: MessageCreateWithoutInTeamInput[] | MessageCreateWithoutInTeamInput;
+  delete?: MessageWhereUniqueInput[] | MessageWhereUniqueInput;
+  connect?: MessageWhereUniqueInput[] | MessageWhereUniqueInput;
+  set?: MessageWhereUniqueInput[] | MessageWhereUniqueInput;
+  disconnect?: MessageWhereUniqueInput[] | MessageWhereUniqueInput;
+  update?:
+    | MessageUpdateWithWhereUniqueWithoutInTeamInput[]
+    | MessageUpdateWithWhereUniqueWithoutInTeamInput;
+  upsert?:
+    | MessageUpsertWithWhereUniqueWithoutInTeamInput[]
+    | MessageUpsertWithWhereUniqueWithoutInTeamInput;
+  deleteMany?: MessageScalarWhereInput[] | MessageScalarWhereInput;
+  updateMany?:
+    | MessageUpdateManyWithWhereNestedInput[]
+    | MessageUpdateManyWithWhereNestedInput;
+}
+
+export interface MessageUpdateWithWhereUniqueWithoutInTeamInput {
+  where: MessageWhereUniqueInput;
+  data: MessageUpdateWithoutInTeamDataInput;
+}
+
+export interface MessageUpdateWithoutInTeamDataInput {
+  title?: String;
+  creator?: UserUpdateOneRequiredInput;
+  content?: String;
+  images?: MessageUpdateimagesInput;
+  tag?: TagUpdateOneInput;
+  comments?: MessageCommentUpdateManyWithoutMessageInput;
+  subscribedUsers?: UserUpdateManyInput;
+}
+
+export interface UserUpdateOneRequiredInput {
+  create?: UserCreateInput;
+  update?: UserUpdateDataInput;
+  upsert?: UserUpsertNestedInput;
+  connect?: UserWhereUniqueInput;
+}
+
+export interface UserUpdateDataInput {
+  authId?: String;
+  name?: String;
+  todoListsOwned?: TodoListUpdateManyWithoutOwnedByInput;
+  todoListsAssigned?: TodoListUpdateManyWithoutAssignedToInput;
+  inTeam?: TeamUpdateOneWithoutMembersInput;
+}
+
+export interface UserUpsertNestedInput {
+  update: UserUpdateDataInput;
+  create: UserCreateInput;
+}
+
+export interface MessageUpdateimagesInput {
+  set?: String[] | String;
+}
+
+export interface TagUpdateOneInput {
+  create?: TagCreateInput;
+  update?: TagUpdateDataInput;
+  upsert?: TagUpsertNestedInput;
+  delete?: Boolean;
+  disconnect?: Boolean;
+  connect?: TagWhereUniqueInput;
+}
+
+export interface TagUpdateDataInput {
+  name?: String;
+  team?: TeamUpdateOneWithoutTagsInput;
+}
+
+export interface TeamUpdateOneWithoutTagsInput {
+  create?: TeamCreateWithoutTagsInput;
+  update?: TeamUpdateWithoutTagsDataInput;
+  upsert?: TeamUpsertWithoutTagsInput;
+  delete?: Boolean;
+  disconnect?: Boolean;
+  connect?: TeamWhereUniqueInput;
+}
+
+export interface TeamUpdateWithoutTagsDataInput {
+  teamName?: String;
+  members?: UserUpdateManyWithoutInTeamInput;
+  todoLists?: TodoListUpdateManyWithoutInTeamInput;
+  messages?: MessageUpdateManyWithoutInTeamInput;
+  events?: EventUpdateManyWithoutTeamInput;
+}
+
+export interface EventUpdateManyWithoutTeamInput {
+  create?: EventCreateWithoutTeamInput[] | EventCreateWithoutTeamInput;
+  delete?: EventWhereUniqueInput[] | EventWhereUniqueInput;
+  connect?: EventWhereUniqueInput[] | EventWhereUniqueInput;
+  set?: EventWhereUniqueInput[] | EventWhereUniqueInput;
+  disconnect?: EventWhereUniqueInput[] | EventWhereUniqueInput;
+  update?:
+    | EventUpdateWithWhereUniqueWithoutTeamInput[]
+    | EventUpdateWithWhereUniqueWithoutTeamInput;
+  upsert?:
+    | EventUpsertWithWhereUniqueWithoutTeamInput[]
+    | EventUpsertWithWhereUniqueWithoutTeamInput;
+  deleteMany?: EventScalarWhereInput[] | EventScalarWhereInput;
+  updateMany?:
+    | EventUpdateManyWithWhereNestedInput[]
+    | EventUpdateManyWithWhereNestedInput;
+}
+
+export interface EventUpdateWithWhereUniqueWithoutTeamInput {
+  where: EventWhereUniqueInput;
+  data: EventUpdateWithoutTeamDataInput;
+}
+
+export interface EventUpdateWithoutTeamDataInput {
+  user?: UserUpdateOneInput;
+  action_string?: String;
+  object_string?: String;
+}
+
+export interface UserUpdateOneInput {
+  create?: UserCreateInput;
+  update?: UserUpdateDataInput;
+  upsert?: UserUpsertNestedInput;
+  delete?: Boolean;
+  disconnect?: Boolean;
+  connect?: UserWhereUniqueInput;
+}
+
+export interface EventUpsertWithWhereUniqueWithoutTeamInput {
+  where: EventWhereUniqueInput;
+  update: EventUpdateWithoutTeamDataInput;
+  create: EventCreateWithoutTeamInput;
+}
+
+export interface EventScalarWhereInput {
+  id?: ID_Input;
+  id_not?: ID_Input;
+  id_in?: ID_Input[] | ID_Input;
+  id_not_in?: ID_Input[] | ID_Input;
+  id_lt?: ID_Input;
+  id_lte?: ID_Input;
+  id_gt?: ID_Input;
+  id_gte?: ID_Input;
+  id_contains?: ID_Input;
+  id_not_contains?: ID_Input;
+  id_starts_with?: ID_Input;
+  id_not_starts_with?: ID_Input;
+  id_ends_with?: ID_Input;
+  id_not_ends_with?: ID_Input;
+  action_string?: String;
+  action_string_not?: String;
+  action_string_in?: String[] | String;
+  action_string_not_in?: String[] | String;
+  action_string_lt?: String;
+  action_string_lte?: String;
+  action_string_gt?: String;
+  action_string_gte?: String;
+  action_string_contains?: String;
+  action_string_not_contains?: String;
+  action_string_starts_with?: String;
+  action_string_not_starts_with?: String;
+  action_string_ends_with?: String;
+  action_string_not_ends_with?: String;
+  object_string?: String;
+  object_string_not?: String;
+  object_string_in?: String[] | String;
+  object_string_not_in?: String[] | String;
+  object_string_lt?: String;
+  object_string_lte?: String;
+  object_string_gt?: String;
+  object_string_gte?: String;
+  object_string_contains?: String;
+  object_string_not_contains?: String;
+  object_string_starts_with?: String;
+  object_string_not_starts_with?: String;
+  object_string_ends_with?: String;
+  object_string_not_ends_with?: String;
+  createdAt?: DateTimeInput;
+  createdAt_not?: DateTimeInput;
+  createdAt_in?: DateTimeInput[] | DateTimeInput;
+  createdAt_not_in?: DateTimeInput[] | DateTimeInput;
+  createdAt_lt?: DateTimeInput;
+  createdAt_lte?: DateTimeInput;
+  createdAt_gt?: DateTimeInput;
+  createdAt_gte?: DateTimeInput;
+  AND?: EventScalarWhereInput[] | EventScalarWhereInput;
+  OR?: EventScalarWhereInput[] | EventScalarWhereInput;
+  NOT?: EventScalarWhereInput[] | EventScalarWhereInput;
+}
+
+export interface EventUpdateManyWithWhereNestedInput {
+  where: EventScalarWhereInput;
+  data: EventUpdateManyDataInput;
+}
+
+export interface EventUpdateManyDataInput {
+  action_string?: String;
+  object_string?: String;
+}
+
+export interface TeamUpsertWithoutTagsInput {
+  update: TeamUpdateWithoutTagsDataInput;
+  create: TeamCreateWithoutTagsInput;
+}
+
+export interface TagUpsertNestedInput {
+  update: TagUpdateDataInput;
+  create: TagCreateInput;
+}
+
+export interface MessageCommentUpdateManyWithoutMessageInput {
+  create?:
+    | MessageCommentCreateWithoutMessageInput[]
+    | MessageCommentCreateWithoutMessageInput;
+  delete?: MessageCommentWhereUniqueInput[] | MessageCommentWhereUniqueInput;
+  connect?: MessageCommentWhereUniqueInput[] | MessageCommentWhereUniqueInput;
+  set?: MessageCommentWhereUniqueInput[] | MessageCommentWhereUniqueInput;
+  disconnect?:
+    | MessageCommentWhereUniqueInput[]
+    | MessageCommentWhereUniqueInput;
+  update?:
+    | MessageCommentUpdateWithWhereUniqueWithoutMessageInput[]
+    | MessageCommentUpdateWithWhereUniqueWithoutMessageInput;
+  upsert?:
+    | MessageCommentUpsertWithWhereUniqueWithoutMessageInput[]
+    | MessageCommentUpsertWithWhereUniqueWithoutMessageInput;
+  deleteMany?:
+    | MessageCommentScalarWhereInput[]
+    | MessageCommentScalarWhereInput;
+  updateMany?:
+    | MessageCommentUpdateManyWithWhereNestedInput[]
+    | MessageCommentUpdateManyWithWhereNestedInput;
+}
+
+export interface MessageCommentUpdateWithWhereUniqueWithoutMessageInput {
+  where: MessageCommentWhereUniqueInput;
+  data: MessageCommentUpdateWithoutMessageDataInput;
+}
+
+export interface MessageCommentUpdateWithoutMessageDataInput {
+  content?: String;
+  user?: UserUpdateOneRequiredInput;
+  image?: String;
+  likes?: UserUpdateManyInput;
+}
+
+export interface UserUpdateManyInput {
+  create?: UserCreateInput[] | UserCreateInput;
+  update?:
+    | UserUpdateWithWhereUniqueNestedInput[]
+    | UserUpdateWithWhereUniqueNestedInput;
+  upsert?:
+    | UserUpsertWithWhereUniqueNestedInput[]
+    | UserUpsertWithWhereUniqueNestedInput;
   delete?: UserWhereUniqueInput[] | UserWhereUniqueInput;
   connect?: UserWhereUniqueInput[] | UserWhereUniqueInput;
   set?: UserWhereUniqueInput[] | UserWhereUniqueInput;
   disconnect?: UserWhereUniqueInput[] | UserWhereUniqueInput;
-  update?:
-    | UserUpdateWithWhereUniqueWithoutInTeamInput[]
-    | UserUpdateWithWhereUniqueWithoutInTeamInput;
-  upsert?:
-    | UserUpsertWithWhereUniqueWithoutInTeamInput[]
-    | UserUpsertWithWhereUniqueWithoutInTeamInput;
   deleteMany?: UserScalarWhereInput[] | UserScalarWhereInput;
   updateMany?:
     | UserUpdateManyWithWhereNestedInput[]
     | UserUpdateManyWithWhereNestedInput;
 }
 
-export interface UserUpdateWithWhereUniqueWithoutInTeamInput {
+export interface UserUpdateWithWhereUniqueNestedInput {
   where: UserWhereUniqueInput;
-  data: UserUpdateWithoutInTeamDataInput;
+  data: UserUpdateDataInput;
 }
 
-export interface UserUpdateWithoutInTeamDataInput {
-  name?: String;
-  todoListsOwned?: TodoListUpdateManyWithoutOwnedByInput;
-  todoListsAssigned?: TodoListUpdateManyWithoutAssignedToInput;
-}
-
-export interface UserUpsertWithWhereUniqueWithoutInTeamInput {
+export interface UserUpsertWithWhereUniqueNestedInput {
   where: UserWhereUniqueInput;
-  update: UserUpdateWithoutInTeamDataInput;
-  create: UserCreateWithoutInTeamInput;
+  update: UserUpdateDataInput;
+  create: UserCreateInput;
 }
 
 export interface UserScalarWhereInput {
@@ -1091,6 +1818,20 @@ export interface UserScalarWhereInput {
   id_not_starts_with?: ID_Input;
   id_ends_with?: ID_Input;
   id_not_ends_with?: ID_Input;
+  authId?: String;
+  authId_not?: String;
+  authId_in?: String[] | String;
+  authId_not_in?: String[] | String;
+  authId_lt?: String;
+  authId_lte?: String;
+  authId_gt?: String;
+  authId_gte?: String;
+  authId_contains?: String;
+  authId_not_contains?: String;
+  authId_starts_with?: String;
+  authId_not_starts_with?: String;
+  authId_ends_with?: String;
+  authId_not_ends_with?: String;
   createdAt?: DateTimeInput;
   createdAt_not?: DateTimeInput;
   createdAt_in?: DateTimeInput[] | DateTimeInput;
@@ -1124,36 +1865,80 @@ export interface UserUpdateManyWithWhereNestedInput {
 }
 
 export interface UserUpdateManyDataInput {
+  authId?: String;
   name?: String;
 }
 
-export interface MessageUpdateManyWithoutInTeamInput {
-  create?: MessageCreateWithoutInTeamInput[] | MessageCreateWithoutInTeamInput;
-  delete?: MessageWhereUniqueInput[] | MessageWhereUniqueInput;
-  connect?: MessageWhereUniqueInput[] | MessageWhereUniqueInput;
-  set?: MessageWhereUniqueInput[] | MessageWhereUniqueInput;
-  disconnect?: MessageWhereUniqueInput[] | MessageWhereUniqueInput;
-  update?:
-    | MessageUpdateWithWhereUniqueWithoutInTeamInput[]
-    | MessageUpdateWithWhereUniqueWithoutInTeamInput;
-  upsert?:
-    | MessageUpsertWithWhereUniqueWithoutInTeamInput[]
-    | MessageUpsertWithWhereUniqueWithoutInTeamInput;
-  deleteMany?: MessageScalarWhereInput[] | MessageScalarWhereInput;
-  updateMany?:
-    | MessageUpdateManyWithWhereNestedInput[]
-    | MessageUpdateManyWithWhereNestedInput;
+export interface MessageCommentUpsertWithWhereUniqueWithoutMessageInput {
+  where: MessageCommentWhereUniqueInput;
+  update: MessageCommentUpdateWithoutMessageDataInput;
+  create: MessageCommentCreateWithoutMessageInput;
 }
 
-export interface MessageUpdateWithWhereUniqueWithoutInTeamInput {
-  where: MessageWhereUniqueInput;
-  data: MessageUpdateWithoutInTeamDataInput;
-}
-
-export interface MessageUpdateWithoutInTeamDataInput {
-  title?: String;
-  creator?: UserUpdateOneRequiredInput;
+export interface MessageCommentScalarWhereInput {
+  id?: ID_Input;
+  id_not?: ID_Input;
+  id_in?: ID_Input[] | ID_Input;
+  id_not_in?: ID_Input[] | ID_Input;
+  id_lt?: ID_Input;
+  id_lte?: ID_Input;
+  id_gt?: ID_Input;
+  id_gte?: ID_Input;
+  id_contains?: ID_Input;
+  id_not_contains?: ID_Input;
+  id_starts_with?: ID_Input;
+  id_not_starts_with?: ID_Input;
+  id_ends_with?: ID_Input;
+  id_not_ends_with?: ID_Input;
   content?: String;
+  content_not?: String;
+  content_in?: String[] | String;
+  content_not_in?: String[] | String;
+  content_lt?: String;
+  content_lte?: String;
+  content_gt?: String;
+  content_gte?: String;
+  content_contains?: String;
+  content_not_contains?: String;
+  content_starts_with?: String;
+  content_not_starts_with?: String;
+  content_ends_with?: String;
+  content_not_ends_with?: String;
+  image?: String;
+  image_not?: String;
+  image_in?: String[] | String;
+  image_not_in?: String[] | String;
+  image_lt?: String;
+  image_lte?: String;
+  image_gt?: String;
+  image_gte?: String;
+  image_contains?: String;
+  image_not_contains?: String;
+  image_starts_with?: String;
+  image_not_starts_with?: String;
+  image_ends_with?: String;
+  image_not_ends_with?: String;
+  createdAt?: DateTimeInput;
+  createdAt_not?: DateTimeInput;
+  createdAt_in?: DateTimeInput[] | DateTimeInput;
+  createdAt_not_in?: DateTimeInput[] | DateTimeInput;
+  createdAt_lt?: DateTimeInput;
+  createdAt_lte?: DateTimeInput;
+  createdAt_gt?: DateTimeInput;
+  createdAt_gte?: DateTimeInput;
+  AND?: MessageCommentScalarWhereInput[] | MessageCommentScalarWhereInput;
+  OR?: MessageCommentScalarWhereInput[] | MessageCommentScalarWhereInput;
+  NOT?: MessageCommentScalarWhereInput[] | MessageCommentScalarWhereInput;
+}
+
+export interface MessageCommentUpdateManyWithWhereNestedInput {
+  where: MessageCommentScalarWhereInput;
+  data: MessageCommentUpdateManyDataInput;
+}
+
+export interface MessageCommentUpdateManyDataInput {
+  content?: String;
+  image?: String;
 }
 
 export interface MessageUpsertWithWhereUniqueWithoutInTeamInput {
@@ -1226,6 +2011,83 @@ export interface MessageUpdateManyWithWhereNestedInput {
 export interface MessageUpdateManyDataInput {
   title?: String;
   content?: String;
+  images?: MessageUpdateimagesInput;
+}
+
+export interface TagUpdateManyWithoutTeamInput {
+  create?: TagCreateWithoutTeamInput[] | TagCreateWithoutTeamInput;
+  delete?: TagWhereUniqueInput[] | TagWhereUniqueInput;
+  connect?: TagWhereUniqueInput[] | TagWhereUniqueInput;
+  set?: TagWhereUniqueInput[] | TagWhereUniqueInput;
+  disconnect?: TagWhereUniqueInput[] | TagWhereUniqueInput;
+  update?:
+    | TagUpdateWithWhereUniqueWithoutTeamInput[]
+    | TagUpdateWithWhereUniqueWithoutTeamInput;
+  upsert?:
+    | TagUpsertWithWhereUniqueWithoutTeamInput[]
+    | TagUpsertWithWhereUniqueWithoutTeamInput;
+  deleteMany?: TagScalarWhereInput[] | TagScalarWhereInput;
+  updateMany?:
+    | TagUpdateManyWithWhereNestedInput[]
+    | TagUpdateManyWithWhereNestedInput;
+}
+
+export interface TagUpdateWithWhereUniqueWithoutTeamInput {
+  where: TagWhereUniqueInput;
+  data: TagUpdateWithoutTeamDataInput;
+}
+
+export interface TagUpdateWithoutTeamDataInput {
+  name?: String;
+}
+
+export interface TagUpsertWithWhereUniqueWithoutTeamInput {
+  where: TagWhereUniqueInput;
+  update: TagUpdateWithoutTeamDataInput;
+  create: TagCreateWithoutTeamInput;
+}
+
+export interface TagScalarWhereInput {
+  id?: ID_Input;
+  id_not?: ID_Input;
+  id_in?: ID_Input[] | ID_Input;
+  id_not_in?: ID_Input[] | ID_Input;
+  id_lt?: ID_Input;
+  id_lte?: ID_Input;
+  id_gt?: ID_Input;
+  id_gte?: ID_Input;
+  id_contains?: ID_Input;
+  id_not_contains?: ID_Input;
+  id_starts_with?: ID_Input;
+  id_not_starts_with?: ID_Input;
+  id_ends_with?: ID_Input;
+  id_not_ends_with?: ID_Input;
+  name?: String;
+  name_not?: String;
+  name_in?: String[] | String;
+  name_not_in?: String[] | String;
+  name_lt?: String;
+  name_lte?: String;
+  name_gt?: String;
+  name_gte?: String;
+  name_contains?: String;
+  name_not_contains?: String;
+  name_starts_with?: String;
+  name_not_starts_with?: String;
+  name_ends_with?: String;
+  name_not_ends_with?: String;
+  AND?: TagScalarWhereInput[] | TagScalarWhereInput;
+  OR?: TagScalarWhereInput[] | TagScalarWhereInput;
+  NOT?: TagScalarWhereInput[] | TagScalarWhereInput;
+}
+
+export interface TagUpdateManyWithWhereNestedInput {
+  where: TagScalarWhereInput;
+  data: TagUpdateManyDataInput;
+}
+
+export interface TagUpdateManyDataInput {
+  name?: String;
 }
 
 export interface TeamUpsertWithoutTodoListsInput {
@@ -1322,9 +2184,55 @@ export interface TodoListUpsertWithWhereUniqueWithoutOwnedByInput {
   create: TodoListCreateWithoutOwnedByInput;
 }
 
-export interface UserUpsertNestedInput {
-  update: UserUpdateDataInput;
-  create: UserCreateInput;
+export interface UserUpsertWithWhereUniqueWithoutInTeamInput {
+  where: UserWhereUniqueInput;
+  update: UserUpdateWithoutInTeamDataInput;
+  create: UserCreateWithoutInTeamInput;
+}
+
+export interface TeamUpsertWithoutEventsInput {
+  update: TeamUpdateWithoutEventsDataInput;
+  create: TeamCreateWithoutEventsInput;
+}
+
+export interface EventUpdateManyMutationInput {
+  action_string?: String;
+  object_string?: String;
+}
+
+export interface MessageCreateInput {
+  title: String;
+  creator: UserCreateOneInput;
+  inTeam: TeamCreateOneWithoutMessagesInput;
+  content: String;
+  images?: MessageCreateimagesInput;
+  tag?: TagCreateOneInput;
+  comments?: MessageCommentCreateManyWithoutMessageInput;
+  subscribedUsers?: UserCreateManyInput;
+}
+
+export interface TeamCreateOneWithoutMessagesInput {
+  create?: TeamCreateWithoutMessagesInput;
+  connect?: TeamWhereUniqueInput;
+}
+
+export interface TeamCreateWithoutMessagesInput {
+  teamName: String;
+  members?: UserCreateManyWithoutInTeamInput;
+  todoLists?: TodoListCreateManyWithoutInTeamInput;
+  events?: EventCreateManyWithoutTeamInput;
+  tags?: TagCreateManyWithoutTeamInput;
+}
+
+export interface MessageUpdateInput {
+  title?: String;
+  creator?: UserUpdateOneRequiredInput;
+  inTeam?: TeamUpdateOneRequiredWithoutMessagesInput;
+  content?: String;
+  images?: MessageUpdateimagesInput;
+  tag?: TagUpdateOneInput;
+  comments?: MessageCommentUpdateManyWithoutMessageInput;
+  subscribedUsers?: UserUpdateManyInput;
 }
 
 export interface TeamUpdateOneRequiredWithoutMessagesInput {
@@ -1338,6 +2246,8 @@ export interface TeamUpdateWithoutMessagesDataInput {
   teamName?: String;
   members?: UserUpdateManyWithoutInTeamInput;
   todoLists?: TodoListUpdateManyWithoutInTeamInput;
+  events?: EventUpdateManyWithoutTeamInput;
+  tags?: TagUpdateManyWithoutTeamInput;
 }
 
 export interface TeamUpsertWithoutMessagesInput {
@@ -1348,6 +2258,74 @@ export interface TeamUpsertWithoutMessagesInput {
 export interface MessageUpdateManyMutationInput {
   title?: String;
   content?: String;
+  images?: MessageUpdateimagesInput;
+}
+
+export interface MessageCommentCreateInput {
+  content: String;
+  user: UserCreateOneInput;
+  message: MessageCreateOneWithoutCommentsInput;
+  image?: String;
+  likes?: UserCreateManyInput;
+}
+
+export interface MessageCreateOneWithoutCommentsInput {
+  create?: MessageCreateWithoutCommentsInput;
+  connect?: MessageWhereUniqueInput;
+}
+
+export interface MessageCreateWithoutCommentsInput {
+  title: String;
+  creator: UserCreateOneInput;
+  inTeam: TeamCreateOneWithoutMessagesInput;
+  content: String;
+  images?: MessageCreateimagesInput;
+  tag?: TagCreateOneInput;
+  subscribedUsers?: UserCreateManyInput;
+}
+
+export interface MessageCommentUpdateInput {
+  content?: String;
+  user?: UserUpdateOneRequiredInput;
+  message?: MessageUpdateOneRequiredWithoutCommentsInput;
+  image?: String;
+  likes?: UserUpdateManyInput;
+}
+
+export interface MessageUpdateOneRequiredWithoutCommentsInput {
+  create?: MessageCreateWithoutCommentsInput;
+  update?: MessageUpdateWithoutCommentsDataInput;
+  upsert?: MessageUpsertWithoutCommentsInput;
+  connect?: MessageWhereUniqueInput;
+}
+
+export interface MessageUpdateWithoutCommentsDataInput {
+  title?: String;
+  creator?: UserUpdateOneRequiredInput;
+  inTeam?: TeamUpdateOneRequiredWithoutMessagesInput;
+  content?: String;
+  images?: MessageUpdateimagesInput;
+  tag?: TagUpdateOneInput;
+  subscribedUsers?: UserUpdateManyInput;
+}
+
+export interface MessageUpsertWithoutCommentsInput {
+  update: MessageUpdateWithoutCommentsDataInput;
+  create: MessageCreateWithoutCommentsInput;
+}
+
+export interface MessageCommentUpdateManyMutationInput {
+  content?: String;
+  image?: String;
+}
+
+export interface TagUpdateInput {
+  name?: String;
+  team?: TeamUpdateOneWithoutTagsInput;
+}
+
+export interface TagUpdateManyMutationInput {
+  name?: String;
 }
 
 export interface TeamCreateInput {
@@ -1355,6 +2333,8 @@ export interface TeamCreateInput {
   members?: UserCreateManyWithoutInTeamInput;
   todoLists?: TodoListCreateManyWithoutInTeamInput;
   messages?: MessageCreateManyWithoutInTeamInput;
+  events?: EventCreateManyWithoutTeamInput;
+  tags?: TagCreateManyWithoutTeamInput;
 }
 
 export interface TeamUpdateInput {
@@ -1362,6 +2342,8 @@ export interface TeamUpdateInput {
   members?: UserUpdateManyWithoutInTeamInput;
   todoLists?: TodoListUpdateManyWithoutInTeamInput;
   messages?: MessageUpdateManyWithoutInTeamInput;
+  events?: EventUpdateManyWithoutTeamInput;
+  tags?: TagUpdateManyWithoutTeamInput;
 }
 
 export interface TeamUpdateManyMutationInput {
@@ -1444,6 +2426,7 @@ export interface TodoListUpdateManyMutationInput {
 }
 
 export interface UserUpdateInput {
+  authId?: String;
   name?: String;
   todoListsOwned?: TodoListUpdateManyWithoutOwnedByInput;
   todoListsAssigned?: TodoListUpdateManyWithoutAssignedToInput;
@@ -1451,7 +2434,19 @@ export interface UserUpdateInput {
 }
 
 export interface UserUpdateManyMutationInput {
+  authId?: String;
   name?: String;
+}
+
+export interface EventSubscriptionWhereInput {
+  mutation_in?: MutationType[] | MutationType;
+  updatedFields_contains?: String;
+  updatedFields_contains_every?: String[] | String;
+  updatedFields_contains_some?: String[] | String;
+  node?: EventWhereInput;
+  AND?: EventSubscriptionWhereInput[] | EventSubscriptionWhereInput;
+  OR?: EventSubscriptionWhereInput[] | EventSubscriptionWhereInput;
+  NOT?: EventSubscriptionWhereInput[] | EventSubscriptionWhereInput;
 }
 
 export interface MessageSubscriptionWhereInput {
@@ -1463,6 +2458,34 @@ export interface MessageSubscriptionWhereInput {
   AND?: MessageSubscriptionWhereInput[] | MessageSubscriptionWhereInput;
   OR?: MessageSubscriptionWhereInput[] | MessageSubscriptionWhereInput;
   NOT?: MessageSubscriptionWhereInput[] | MessageSubscriptionWhereInput;
+}
+
+export interface MessageCommentSubscriptionWhereInput {
+  mutation_in?: MutationType[] | MutationType;
+  updatedFields_contains?: String;
+  updatedFields_contains_every?: String[] | String;
+  updatedFields_contains_some?: String[] | String;
+  node?: MessageCommentWhereInput;
+  AND?:
+    | MessageCommentSubscriptionWhereInput[]
+    | MessageCommentSubscriptionWhereInput;
+  OR?:
+    | MessageCommentSubscriptionWhereInput[]
+    | MessageCommentSubscriptionWhereInput;
+  NOT?:
+    | MessageCommentSubscriptionWhereInput[]
+    | MessageCommentSubscriptionWhereInput;
+}
+
+export interface TagSubscriptionWhereInput {
+  mutation_in?: MutationType[] | MutationType;
+  updatedFields_contains?: String;
+  updatedFields_contains_every?: String[] | String;
+  updatedFields_contains_some?: String[] | String;
+  node?: TagWhereInput;
+  AND?: TagSubscriptionWhereInput[] | TagSubscriptionWhereInput;
+  OR?: TagSubscriptionWhereInput[] | TagSubscriptionWhereInput;
+  NOT?: TagSubscriptionWhereInput[] | TagSubscriptionWhereInput;
 }
 
 export interface TeamSubscriptionWhereInput {
@@ -1513,41 +2536,170 @@ export interface NodeNode {
   id: ID_Output;
 }
 
-export interface Message {
+export interface Event {
   id: ID_Output;
-  title: String;
-  content: String;
+  action_string: String;
+  object_string: String;
   createdAt: DateTimeOutput;
 }
 
-export interface MessagePromise extends Promise<Message>, Fragmentable {
+export interface EventPromise extends Promise<Event>, Fragmentable {
   id: () => Promise<ID_Output>;
-  title: () => Promise<String>;
-  creator: <T = UserPromise>() => T;
-  inTeam: <T = TeamPromise>() => T;
-  content: () => Promise<String>;
+  team: <T = TeamPromise>() => T;
+  user: <T = UserPromise>() => T;
+  action_string: () => Promise<String>;
+  object_string: () => Promise<String>;
   createdAt: () => Promise<DateTimeOutput>;
 }
 
-export interface MessageSubscription
-  extends Promise<AsyncIterator<Message>>,
+export interface EventSubscription
+  extends Promise<AsyncIterator<Event>>,
     Fragmentable {
   id: () => Promise<AsyncIterator<ID_Output>>;
-  title: () => Promise<AsyncIterator<String>>;
-  creator: <T = UserSubscription>() => T;
-  inTeam: <T = TeamSubscription>() => T;
-  content: () => Promise<AsyncIterator<String>>;
+  team: <T = TeamSubscription>() => T;
+  user: <T = UserSubscription>() => T;
+  action_string: () => Promise<AsyncIterator<String>>;
+  object_string: () => Promise<AsyncIterator<String>>;
   createdAt: () => Promise<AsyncIterator<DateTimeOutput>>;
+}
+
+export interface Team {
+  id: ID_Output;
+  teamName: String;
+}
+
+export interface TeamPromise extends Promise<Team>, Fragmentable {
+  id: () => Promise<ID_Output>;
+  teamName: () => Promise<String>;
+  members: <T = FragmentableArray<User>>(
+    args?: {
+      where?: UserWhereInput;
+      orderBy?: UserOrderByInput;
+      skip?: Int;
+      after?: String;
+      before?: String;
+      first?: Int;
+      last?: Int;
+    }
+  ) => T;
+  todoLists: <T = FragmentableArray<TodoList>>(
+    args?: {
+      where?: TodoListWhereInput;
+      orderBy?: TodoListOrderByInput;
+      skip?: Int;
+      after?: String;
+      before?: String;
+      first?: Int;
+      last?: Int;
+    }
+  ) => T;
+  messages: <T = FragmentableArray<Message>>(
+    args?: {
+      where?: MessageWhereInput;
+      orderBy?: MessageOrderByInput;
+      skip?: Int;
+      after?: String;
+      before?: String;
+      first?: Int;
+      last?: Int;
+    }
+  ) => T;
+  events: <T = FragmentableArray<Event>>(
+    args?: {
+      where?: EventWhereInput;
+      orderBy?: EventOrderByInput;
+      skip?: Int;
+      after?: String;
+      before?: String;
+      first?: Int;
+      last?: Int;
+    }
+  ) => T;
+  tags: <T = FragmentableArray<Tag>>(
+    args?: {
+      where?: TagWhereInput;
+      orderBy?: TagOrderByInput;
+      skip?: Int;
+      after?: String;
+      before?: String;
+      first?: Int;
+      last?: Int;
+    }
+  ) => T;
+}
+
+export interface TeamSubscription
+  extends Promise<AsyncIterator<Team>>,
+    Fragmentable {
+  id: () => Promise<AsyncIterator<ID_Output>>;
+  teamName: () => Promise<AsyncIterator<String>>;
+  members: <T = Promise<AsyncIterator<UserSubscription>>>(
+    args?: {
+      where?: UserWhereInput;
+      orderBy?: UserOrderByInput;
+      skip?: Int;
+      after?: String;
+      before?: String;
+      first?: Int;
+      last?: Int;
+    }
+  ) => T;
+  todoLists: <T = Promise<AsyncIterator<TodoListSubscription>>>(
+    args?: {
+      where?: TodoListWhereInput;
+      orderBy?: TodoListOrderByInput;
+      skip?: Int;
+      after?: String;
+      before?: String;
+      first?: Int;
+      last?: Int;
+    }
+  ) => T;
+  messages: <T = Promise<AsyncIterator<MessageSubscription>>>(
+    args?: {
+      where?: MessageWhereInput;
+      orderBy?: MessageOrderByInput;
+      skip?: Int;
+      after?: String;
+      before?: String;
+      first?: Int;
+      last?: Int;
+    }
+  ) => T;
+  events: <T = Promise<AsyncIterator<EventSubscription>>>(
+    args?: {
+      where?: EventWhereInput;
+      orderBy?: EventOrderByInput;
+      skip?: Int;
+      after?: String;
+      before?: String;
+      first?: Int;
+      last?: Int;
+    }
+  ) => T;
+  tags: <T = Promise<AsyncIterator<TagSubscription>>>(
+    args?: {
+      where?: TagWhereInput;
+      orderBy?: TagOrderByInput;
+      skip?: Int;
+      after?: String;
+      before?: String;
+      first?: Int;
+      last?: Int;
+    }
+  ) => T;
 }
 
 export interface User {
   id: ID_Output;
+  authId?: String;
   createdAt: DateTimeOutput;
   name: String;
 }
 
 export interface UserPromise extends Promise<User>, Fragmentable {
   id: () => Promise<ID_Output>;
+  authId: () => Promise<String>;
   createdAt: () => Promise<DateTimeOutput>;
   name: () => Promise<String>;
   todoListsOwned: <T = FragmentableArray<TodoList>>(
@@ -1579,6 +2731,7 @@ export interface UserSubscription
   extends Promise<AsyncIterator<User>>,
     Fragmentable {
   id: () => Promise<AsyncIterator<ID_Output>>;
+  authId: () => Promise<AsyncIterator<String>>;
   createdAt: () => Promise<AsyncIterator<DateTimeOutput>>;
   name: () => Promise<AsyncIterator<String>>;
   todoListsOwned: <T = Promise<AsyncIterator<TodoListSubscription>>>(
@@ -1719,15 +2872,34 @@ export interface TodoSubscription
   completed: () => Promise<AsyncIterator<Boolean>>;
 }
 
-export interface Team {
+export interface Message {
   id: ID_Output;
-  teamName: String;
+  title: String;
+  content: String;
+  images: String[];
+  createdAt: DateTimeOutput;
 }
 
-export interface TeamPromise extends Promise<Team>, Fragmentable {
+export interface MessagePromise extends Promise<Message>, Fragmentable {
   id: () => Promise<ID_Output>;
-  teamName: () => Promise<String>;
-  members: <T = FragmentableArray<User>>(
+  title: () => Promise<String>;
+  creator: <T = UserPromise>() => T;
+  inTeam: <T = TeamPromise>() => T;
+  content: () => Promise<String>;
+  images: () => Promise<String[]>;
+  tag: <T = TagPromise>() => T;
+  comments: <T = FragmentableArray<MessageComment>>(
+    args?: {
+      where?: MessageCommentWhereInput;
+      orderBy?: MessageCommentOrderByInput;
+      skip?: Int;
+      after?: String;
+      before?: String;
+      first?: Int;
+      last?: Int;
+    }
+  ) => T;
+  subscribedUsers: <T = FragmentableArray<User>>(
     args?: {
       where?: UserWhereInput;
       orderBy?: UserOrderByInput;
@@ -1738,36 +2910,31 @@ export interface TeamPromise extends Promise<Team>, Fragmentable {
       last?: Int;
     }
   ) => T;
-  todoLists: <T = FragmentableArray<TodoList>>(
-    args?: {
-      where?: TodoListWhereInput;
-      orderBy?: TodoListOrderByInput;
-      skip?: Int;
-      after?: String;
-      before?: String;
-      first?: Int;
-      last?: Int;
-    }
-  ) => T;
-  messages: <T = FragmentableArray<Message>>(
-    args?: {
-      where?: MessageWhereInput;
-      orderBy?: MessageOrderByInput;
-      skip?: Int;
-      after?: String;
-      before?: String;
-      first?: Int;
-      last?: Int;
-    }
-  ) => T;
+  createdAt: () => Promise<DateTimeOutput>;
 }
 
-export interface TeamSubscription
-  extends Promise<AsyncIterator<Team>>,
+export interface MessageSubscription
+  extends Promise<AsyncIterator<Message>>,
     Fragmentable {
   id: () => Promise<AsyncIterator<ID_Output>>;
-  teamName: () => Promise<AsyncIterator<String>>;
-  members: <T = Promise<AsyncIterator<UserSubscription>>>(
+  title: () => Promise<AsyncIterator<String>>;
+  creator: <T = UserSubscription>() => T;
+  inTeam: <T = TeamSubscription>() => T;
+  content: () => Promise<AsyncIterator<String>>;
+  images: () => Promise<AsyncIterator<String[]>>;
+  tag: <T = TagSubscription>() => T;
+  comments: <T = Promise<AsyncIterator<MessageCommentSubscription>>>(
+    args?: {
+      where?: MessageCommentWhereInput;
+      orderBy?: MessageCommentOrderByInput;
+      skip?: Int;
+      after?: String;
+      before?: String;
+      first?: Int;
+      last?: Int;
+    }
+  ) => T;
+  subscribedUsers: <T = Promise<AsyncIterator<UserSubscription>>>(
     args?: {
       where?: UserWhereInput;
       orderBy?: UserOrderByInput;
@@ -1778,49 +2945,98 @@ export interface TeamSubscription
       last?: Int;
     }
   ) => T;
-  todoLists: <T = Promise<AsyncIterator<TodoListSubscription>>>(
-    args?: {
-      where?: TodoListWhereInput;
-      orderBy?: TodoListOrderByInput;
-      skip?: Int;
-      after?: String;
-      before?: String;
-      first?: Int;
-      last?: Int;
-    }
-  ) => T;
-  messages: <T = Promise<AsyncIterator<MessageSubscription>>>(
-    args?: {
-      where?: MessageWhereInput;
-      orderBy?: MessageOrderByInput;
-      skip?: Int;
-      after?: String;
-      before?: String;
-      first?: Int;
-      last?: Int;
-    }
-  ) => T;
+  createdAt: () => Promise<AsyncIterator<DateTimeOutput>>;
 }
 
-export interface MessageConnection {
+export interface Tag {
+  id: ID_Output;
+  name: String;
+}
+
+export interface TagPromise extends Promise<Tag>, Fragmentable {
+  id: () => Promise<ID_Output>;
+  name: () => Promise<String>;
+  team: <T = TeamPromise>() => T;
+}
+
+export interface TagSubscription
+  extends Promise<AsyncIterator<Tag>>,
+    Fragmentable {
+  id: () => Promise<AsyncIterator<ID_Output>>;
+  name: () => Promise<AsyncIterator<String>>;
+  team: <T = TeamSubscription>() => T;
+}
+
+export interface MessageComment {
+  id: ID_Output;
+  content: String;
+  image?: String;
+  createdAt: DateTimeOutput;
+}
+
+export interface MessageCommentPromise
+  extends Promise<MessageComment>,
+    Fragmentable {
+  id: () => Promise<ID_Output>;
+  content: () => Promise<String>;
+  user: <T = UserPromise>() => T;
+  message: <T = MessagePromise>() => T;
+  image: () => Promise<String>;
+  likes: <T = FragmentableArray<User>>(
+    args?: {
+      where?: UserWhereInput;
+      orderBy?: UserOrderByInput;
+      skip?: Int;
+      after?: String;
+      before?: String;
+      first?: Int;
+      last?: Int;
+    }
+  ) => T;
+  createdAt: () => Promise<DateTimeOutput>;
+}
+
+export interface MessageCommentSubscription
+  extends Promise<AsyncIterator<MessageComment>>,
+    Fragmentable {
+  id: () => Promise<AsyncIterator<ID_Output>>;
+  content: () => Promise<AsyncIterator<String>>;
+  user: <T = UserSubscription>() => T;
+  message: <T = MessageSubscription>() => T;
+  image: () => Promise<AsyncIterator<String>>;
+  likes: <T = Promise<AsyncIterator<UserSubscription>>>(
+    args?: {
+      where?: UserWhereInput;
+      orderBy?: UserOrderByInput;
+      skip?: Int;
+      after?: String;
+      before?: String;
+      first?: Int;
+      last?: Int;
+    }
+  ) => T;
+  createdAt: () => Promise<AsyncIterator<DateTimeOutput>>;
+}
+
+export interface EventConnection {
   pageInfo: PageInfo;
-  edges: MessageEdge[];
+  edges: EventEdge[];
 }
 
-export interface MessageConnectionPromise
-  extends Promise<MessageConnection>,
+export interface EventConnectionPromise
+  extends Promise<EventConnection>,
     Fragmentable {
   pageInfo: <T = PageInfoPromise>() => T;
-  edges: <T = FragmentableArray<MessageEdge>>() => T;
-  aggregate: <T = AggregateMessagePromise>() => T;
+  edges: <T = FragmentableArray<EventEdge>>() => T;
+  aggregate: <T = AggregateEventPromise>() => T;
 }
 
-export interface MessageConnectionSubscription
-  extends Promise<AsyncIterator<MessageConnection>>,
+export interface EventConnectionSubscription
+  extends Promise<AsyncIterator<EventConnection>>,
     Fragmentable {
   pageInfo: <T = PageInfoSubscription>() => T;
-  edges: <T = Promise<AsyncIterator<MessageEdgeSubscription>>>() => T;
-  aggregate: <T = AggregateMessageSubscription>() => T;
+  edges: <T = Promise<AsyncIterator<EventEdgeSubscription>>>() => T;
+  aggregate: <T = AggregateEventSubscription>() => T;
 }
 
 export interface PageInfo {
@@ -1844,6 +3060,60 @@ export interface PageInfoSubscription
   hasPreviousPage: () => Promise<AsyncIterator<Boolean>>;
   startCursor: () => Promise<AsyncIterator<String>>;
   endCursor: () => Promise<AsyncIterator<String>>;
+}
+
+export interface EventEdge {
+  node: Event;
+  cursor: String;
+}
+
+export interface EventEdgePromise extends Promise<EventEdge>, Fragmentable {
+  node: <T = EventPromise>() => T;
+  cursor: () => Promise<String>;
+}
+
+export interface EventEdgeSubscription
+  extends Promise<AsyncIterator<EventEdge>>,
+    Fragmentable {
+  node: <T = EventSubscription>() => T;
+  cursor: () => Promise<AsyncIterator<String>>;
+}
+
+export interface AggregateEvent {
+  count: Int;
+}
+
+export interface AggregateEventPromise
+  extends Promise<AggregateEvent>,
+    Fragmentable {
+  count: () => Promise<Int>;
+}
+
+export interface AggregateEventSubscription
+  extends Promise<AsyncIterator<AggregateEvent>>,
+    Fragmentable {
+  count: () => Promise<AsyncIterator<Int>>;
+}
+
+export interface MessageConnection {
+  pageInfo: PageInfo;
+  edges: MessageEdge[];
+}
+
+export interface MessageConnectionPromise
+  extends Promise<MessageConnection>,
+    Fragmentable {
+  pageInfo: <T = PageInfoPromise>() => T;
+  edges: <T = FragmentableArray<MessageEdge>>() => T;
+  aggregate: <T = AggregateMessagePromise>() => T;
+}
+
+export interface MessageConnectionSubscription
+  extends Promise<AsyncIterator<MessageConnection>>,
+    Fragmentable {
+  pageInfo: <T = PageInfoSubscription>() => T;
+  edges: <T = Promise<AsyncIterator<MessageEdgeSubscription>>>() => T;
+  aggregate: <T = AggregateMessageSubscription>() => T;
 }
 
 export interface MessageEdge {
@@ -1875,6 +3145,116 @@ export interface AggregateMessagePromise
 
 export interface AggregateMessageSubscription
   extends Promise<AsyncIterator<AggregateMessage>>,
+    Fragmentable {
+  count: () => Promise<AsyncIterator<Int>>;
+}
+
+export interface MessageCommentConnection {
+  pageInfo: PageInfo;
+  edges: MessageCommentEdge[];
+}
+
+export interface MessageCommentConnectionPromise
+  extends Promise<MessageCommentConnection>,
+    Fragmentable {
+  pageInfo: <T = PageInfoPromise>() => T;
+  edges: <T = FragmentableArray<MessageCommentEdge>>() => T;
+  aggregate: <T = AggregateMessageCommentPromise>() => T;
+}
+
+export interface MessageCommentConnectionSubscription
+  extends Promise<AsyncIterator<MessageCommentConnection>>,
+    Fragmentable {
+  pageInfo: <T = PageInfoSubscription>() => T;
+  edges: <T = Promise<AsyncIterator<MessageCommentEdgeSubscription>>>() => T;
+  aggregate: <T = AggregateMessageCommentSubscription>() => T;
+}
+
+export interface MessageCommentEdge {
+  node: MessageComment;
+  cursor: String;
+}
+
+export interface MessageCommentEdgePromise
+  extends Promise<MessageCommentEdge>,
+    Fragmentable {
+  node: <T = MessageCommentPromise>() => T;
+  cursor: () => Promise<String>;
+}
+
+export interface MessageCommentEdgeSubscription
+  extends Promise<AsyncIterator<MessageCommentEdge>>,
+    Fragmentable {
+  node: <T = MessageCommentSubscription>() => T;
+  cursor: () => Promise<AsyncIterator<String>>;
+}
+
+export interface AggregateMessageComment {
+  count: Int;
+}
+
+export interface AggregateMessageCommentPromise
+  extends Promise<AggregateMessageComment>,
+    Fragmentable {
+  count: () => Promise<Int>;
+}
+
+export interface AggregateMessageCommentSubscription
+  extends Promise<AsyncIterator<AggregateMessageComment>>,
+    Fragmentable {
+  count: () => Promise<AsyncIterator<Int>>;
+}
+
+export interface TagConnection {
+  pageInfo: PageInfo;
+  edges: TagEdge[];
+}
+
+export interface TagConnectionPromise
+  extends Promise<TagConnection>,
+    Fragmentable {
+  pageInfo: <T = PageInfoPromise>() => T;
+  edges: <T = FragmentableArray<TagEdge>>() => T;
+  aggregate: <T = AggregateTagPromise>() => T;
+}
+
+export interface TagConnectionSubscription
+  extends Promise<AsyncIterator<TagConnection>>,
+    Fragmentable {
+  pageInfo: <T = PageInfoSubscription>() => T;
+  edges: <T = Promise<AsyncIterator<TagEdgeSubscription>>>() => T;
+  aggregate: <T = AggregateTagSubscription>() => T;
+}
+
+export interface TagEdge {
+  node: Tag;
+  cursor: String;
+}
+
+export interface TagEdgePromise extends Promise<TagEdge>, Fragmentable {
+  node: <T = TagPromise>() => T;
+  cursor: () => Promise<String>;
+}
+
+export interface TagEdgeSubscription
+  extends Promise<AsyncIterator<TagEdge>>,
+    Fragmentable {
+  node: <T = TagSubscription>() => T;
+  cursor: () => Promise<AsyncIterator<String>>;
+}
+
+export interface AggregateTag {
+  count: Int;
+}
+
+export interface AggregateTagPromise
+  extends Promise<AggregateTag>,
+    Fragmentable {
+  count: () => Promise<Int>;
+}
+
+export interface AggregateTagSubscription
+  extends Promise<AsyncIterator<AggregateTag>>,
     Fragmentable {
   count: () => Promise<AsyncIterator<Int>>;
 }
@@ -2113,6 +3493,56 @@ export interface BatchPayloadSubscription
   count: () => Promise<AsyncIterator<Long>>;
 }
 
+export interface EventSubscriptionPayload {
+  mutation: MutationType;
+  node: Event;
+  updatedFields: String[];
+  previousValues: EventPreviousValues;
+}
+
+export interface EventSubscriptionPayloadPromise
+  extends Promise<EventSubscriptionPayload>,
+    Fragmentable {
+  mutation: () => Promise<MutationType>;
+  node: <T = EventPromise>() => T;
+  updatedFields: () => Promise<String[]>;
+  previousValues: <T = EventPreviousValuesPromise>() => T;
+}
+
+export interface EventSubscriptionPayloadSubscription
+  extends Promise<AsyncIterator<EventSubscriptionPayload>>,
+    Fragmentable {
+  mutation: () => Promise<AsyncIterator<MutationType>>;
+  node: <T = EventSubscription>() => T;
+  updatedFields: () => Promise<AsyncIterator<String[]>>;
+  previousValues: <T = EventPreviousValuesSubscription>() => T;
+}
+
+export interface EventPreviousValues {
+  id: ID_Output;
+  action_string: String;
+  object_string: String;
+  createdAt: DateTimeOutput;
+}
+
+export interface EventPreviousValuesPromise
+  extends Promise<EventPreviousValues>,
+    Fragmentable {
+  id: () => Promise<ID_Output>;
+  action_string: () => Promise<String>;
+  object_string: () => Promise<String>;
+  createdAt: () => Promise<DateTimeOutput>;
+}
+
+export interface EventPreviousValuesSubscription
+  extends Promise<AsyncIterator<EventPreviousValues>>,
+    Fragmentable {
+  id: () => Promise<AsyncIterator<ID_Output>>;
+  action_string: () => Promise<AsyncIterator<String>>;
+  object_string: () => Promise<AsyncIterator<String>>;
+  createdAt: () => Promise<AsyncIterator<DateTimeOutput>>;
+}
+
 export interface MessageSubscriptionPayload {
   mutation: MutationType;
   node: Message;
@@ -2142,6 +3572,7 @@ export interface MessagePreviousValues {
   id: ID_Output;
   title: String;
   content: String;
+  images: String[];
   createdAt: DateTimeOutput;
 }
 
@@ -2151,6 +3582,7 @@ export interface MessagePreviousValuesPromise
   id: () => Promise<ID_Output>;
   title: () => Promise<String>;
   content: () => Promise<String>;
+  images: () => Promise<String[]>;
   createdAt: () => Promise<DateTimeOutput>;
 }
 
@@ -2160,7 +3592,102 @@ export interface MessagePreviousValuesSubscription
   id: () => Promise<AsyncIterator<ID_Output>>;
   title: () => Promise<AsyncIterator<String>>;
   content: () => Promise<AsyncIterator<String>>;
+  images: () => Promise<AsyncIterator<String[]>>;
   createdAt: () => Promise<AsyncIterator<DateTimeOutput>>;
+}
+
+export interface MessageCommentSubscriptionPayload {
+  mutation: MutationType;
+  node: MessageComment;
+  updatedFields: String[];
+  previousValues: MessageCommentPreviousValues;
+}
+
+export interface MessageCommentSubscriptionPayloadPromise
+  extends Promise<MessageCommentSubscriptionPayload>,
+    Fragmentable {
+  mutation: () => Promise<MutationType>;
+  node: <T = MessageCommentPromise>() => T;
+  updatedFields: () => Promise<String[]>;
+  previousValues: <T = MessageCommentPreviousValuesPromise>() => T;
+}
+
+export interface MessageCommentSubscriptionPayloadSubscription
+  extends Promise<AsyncIterator<MessageCommentSubscriptionPayload>>,
+    Fragmentable {
+  mutation: () => Promise<AsyncIterator<MutationType>>;
+  node: <T = MessageCommentSubscription>() => T;
+  updatedFields: () => Promise<AsyncIterator<String[]>>;
+  previousValues: <T = MessageCommentPreviousValuesSubscription>() => T;
+}
+
+export interface MessageCommentPreviousValues {
+  id: ID_Output;
+  content: String;
+  image?: String;
+  createdAt: DateTimeOutput;
+}
+
+export interface MessageCommentPreviousValuesPromise
+  extends Promise<MessageCommentPreviousValues>,
+    Fragmentable {
+  id: () => Promise<ID_Output>;
+  content: () => Promise<String>;
+  image: () => Promise<String>;
+  createdAt: () => Promise<DateTimeOutput>;
+}
+
+export interface MessageCommentPreviousValuesSubscription
+  extends Promise<AsyncIterator<MessageCommentPreviousValues>>,
+    Fragmentable {
+  id: () => Promise<AsyncIterator<ID_Output>>;
+  content: () => Promise<AsyncIterator<String>>;
+  image: () => Promise<AsyncIterator<String>>;
+  createdAt: () => Promise<AsyncIterator<DateTimeOutput>>;
+}
+
+export interface TagSubscriptionPayload {
+  mutation: MutationType;
+  node: Tag;
+  updatedFields: String[];
+  previousValues: TagPreviousValues;
+}
+
+export interface TagSubscriptionPayloadPromise
+  extends Promise<TagSubscriptionPayload>,
+    Fragmentable {
+  mutation: () => Promise<MutationType>;
+  node: <T = TagPromise>() => T;
+  updatedFields: () => Promise<String[]>;
+  previousValues: <T = TagPreviousValuesPromise>() => T;
+}
+
+export interface TagSubscriptionPayloadSubscription
+  extends Promise<AsyncIterator<TagSubscriptionPayload>>,
+    Fragmentable {
+  mutation: () => Promise<AsyncIterator<MutationType>>;
+  node: <T = TagSubscription>() => T;
+  updatedFields: () => Promise<AsyncIterator<String[]>>;
+  previousValues: <T = TagPreviousValuesSubscription>() => T;
+}
+
+export interface TagPreviousValues {
+  id: ID_Output;
+  name: String;
+}
+
+export interface TagPreviousValuesPromise
+  extends Promise<TagPreviousValues>,
+    Fragmentable {
+  id: () => Promise<ID_Output>;
+  name: () => Promise<String>;
+}
+
+export interface TagPreviousValuesSubscription
+  extends Promise<AsyncIterator<TagPreviousValues>>,
+    Fragmentable {
+  id: () => Promise<AsyncIterator<ID_Output>>;
+  name: () => Promise<AsyncIterator<String>>;
 }
 
 export interface TeamSubscriptionPayload {
@@ -2331,6 +3858,7 @@ export interface UserSubscriptionPayloadSubscription
 
 export interface UserPreviousValues {
   id: ID_Output;
+  authId?: String;
   createdAt: DateTimeOutput;
   name: String;
 }
@@ -2339,6 +3867,7 @@ export interface UserPreviousValuesPromise
   extends Promise<UserPreviousValues>,
     Fragmentable {
   id: () => Promise<ID_Output>;
+  authId: () => Promise<String>;
   createdAt: () => Promise<DateTimeOutput>;
   name: () => Promise<String>;
 }
@@ -2347,6 +3876,7 @@ export interface UserPreviousValuesSubscription
   extends Promise<AsyncIterator<UserPreviousValues>>,
     Fragmentable {
   id: () => Promise<AsyncIterator<ID_Output>>;
+  authId: () => Promise<AsyncIterator<String>>;
   createdAt: () => Promise<AsyncIterator<DateTimeOutput>>;
   name: () => Promise<AsyncIterator<String>>;
 }
@@ -2407,6 +3937,18 @@ export const models: Model[] = [
   },
   {
     name: "Message",
+    embedded: false
+  },
+  {
+    name: "MessageComment",
+    embedded: false
+  },
+  {
+    name: "Tag",
+    embedded: false
+  },
+  {
+    name: "Event",
     embedded: false
   }
 ];

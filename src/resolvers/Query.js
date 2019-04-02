@@ -46,6 +46,46 @@ const message = async (parent, args, context, info) => {
   return context.prisma.message({ id: args.id });
 };
 
+const events = (parent, args, context, info) => {
+  return context.prisma.events();
+}
+
+const findEventById = (parent, args, context, info) => {
+  return context.prisma.event({ id: args.id })
+}
+
+const findEventsByTeam = (parent, args, context, info) => {
+  return context.prisma.event({ where: { team: { id: args.teamId } } });
+}
+
+const findEventsByUser = (parent, args, context, info) => {
+  return context.prisma.event({ where: { user: { id: args.userId } } });
+}
+
+const tags = (parent, args, context, info) => {
+  return context.prisma.tags();
+}
+
+const findTagsByTeam = (parent, args, context, info) => {
+  return context.prisma.tags({ where: { team : { id: args.teamId } } });
+}
+
+const findTag = (parent, args, context, info) => {
+  return context.prisma.tag({ id: args.tagId });
+}
+
+const messageComments = (parent, args, context, info) => {
+  return context.prisma.messageComments();
+}
+
+const findMessageCommentsByMessage = (parent, args, context, info) => {
+  return context.prisma.messageComments({ where: { message: { id: args.messageId } } });
+}
+
+const findMessageComment = (parent, args, context, info) => {
+  return context.prisma.messageComment({ id: args.commentId });
+}
+
 
 module.exports = {
   info,
@@ -58,5 +98,15 @@ module.exports = {
   teams,
   team,
   messages,
-  message
+  message,
+  events,
+  findEventById,
+  findEventsByTeam,
+  findEventsByUser,
+  tags,
+  findTagsByTeam,
+  findTag,
+  messageComments,
+  findMessageCommentsByMessage,
+  findMessageComment,
 };
