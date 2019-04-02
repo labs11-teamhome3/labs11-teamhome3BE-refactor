@@ -1,111 +1,111 @@
 type TodoList {
-    id: ID! @unique
-    createdAt: DateTime!
-    description: String!
-    ownedBy: [User!]! @relation(name: "OwnedBy")
-    assignedTo: [User!]! @relation(name: "AssignedTo")
-    todos: [Todo!]! @relation(name: "TodosInList", onDelete: CASCADE)
-    completed: Boolean @default(value: "false")
-    inTeam: Team 
+  id: ID! @unique
+  createdAt: DateTime!
+  description: String!
+  ownedBy: [User!]! @relation(name: "OwnedBy")
+  assignedTo: [User!]! @relation(name: "AssignedTo")
+  todos: [Todo!]! @relation(name: "TodosInList", onDelete: CASCADE)
+  completed: Boolean @default(value: "false")
+  inTeam: Team
 }
 
 type Todo {
-    id: ID! @unique
-    description: String!
-    partOf: TodoList @relation(name: "TodosInList", onDelete: SET_NULL)
-    completed: Boolean @default(value: "false")
+  id: ID! @unique
+  description: String!
+  partOf: TodoList @relation(name: "TodosInList", onDelete: SET_NULL)
+  completed: Boolean @default(value: "false")
 }
 
 type User {
-    id: ID! @unique
-    authId: String @unique
-    createdAt: DateTime!
-    name: String!
-    todoListsOwned: [TodoList] @relation(name: "OwnedBy")
-    todoListsAssigned: [TodoList] @relation(name: "AssignedTo")
-    inTeam: [Team] 
+  id: ID! @unique
+  authId: String @unique
+  createdAt: DateTime!
+  name: String
+  todoListsOwned: [TodoList] @relation(name: "OwnedBy")
+  todoListsAssigned: [TodoList] @relation(name: "AssignedTo")
+  inTeam: [Team]
 }
 
 type Team {
-    id: ID! @unique
-    teamName: String!
-    members: [User!] 
-    todoLists: [TodoList!]
-    messages: [Message!]
-    events: [Event]
-    tags: [Tag]
-    documents: [Document]
-    folders: [Folder]
+  id: ID! @unique
+  teamName: String!
+  members: [User!]
+  todoLists: [TodoList!]
+  messages: [Message!]
+  events: [Event]
+  tags: [Tag]
+  documents: [Document]
+  folders: [Folder]
 }
 
 type Message {
-    id: ID! @unique
-    title: String!
-    creator: User! @relation(name: "MessageCreator")
-    inTeam: Team!
-    content: String!
-    images: [String]
-    tag: Tag
-    comments: [MessageComment]
-    subscribedUsers: [User] @relation(name: "MessageSubscribers")
-    createdAt: DateTime!
+  id: ID! @unique
+  title: String!
+  creator: User! @relation(name: "MessageCreator")
+  inTeam: Team!
+  content: String!
+  images: [String]
+  tag: Tag
+  comments: [MessageComment]
+  subscribedUsers: [User] @relation(name: "MessageSubscribers")
+  createdAt: DateTime!
 }
 
 type MessageComment {
-    id: ID! @unique
-    content: String!
-    user: User! @relation(name: "MessageCommentor")
-    message: Message!
-    image: String
-    likes: [User] @relation(name: "MessageCommentLikers")
-    createdAt: DateTime!
+  id: ID! @unique
+  content: String!
+  user: User! @relation(name: "MessageCommentor")
+  message: Message!
+  image: String
+  likes: [User] @relation(name: "MessageCommentLikers")
+  createdAt: DateTime!
 }
 
 type Tag {
-    id: ID! @unique
-    name: String!
-    team: Team
+  id: ID! @unique
+  name: String!
+  team: Team
 }
 
 type Event {
-    id: ID! @unique
-    team: Team!
-    user: User
-    action_string: String!
-    object_string: String!
-    createdAt: DateTime!
+  id: ID! @unique
+  team: Team!
+  user: User
+  action_string: String!
+  object_string: String!
+  createdAt: DateTime!
 }
 
 type Document {
-    id: ID! @unique
-    doc_url: String!
-    user: User! @relation(name: "DocumentCreator")
-    folder: Folder
-    team: Team!
-    title: String!
-    textContent: String!
-    tag: Tag
-    images: [String]
-    comments: [DocumentComment]
-    subscribedUsers: [User] @relation(name: "DocumentSubscribers")
-    createdAt: DateTime!
+  id: ID! @unique
+  doc_url: String!
+  user: User! @relation(name: "DocumentCreator")
+  folder: Folder
+  team: Team!
+  title: String!
+  textContent: String!
+  tag: Tag
+  images: [String]
+  comments: [DocumentComment]
+  subscribedUsers: [User] @relation(name: "DocumentSubscribers")
+  createdAt: DateTime!
 }
 
 type DocumentComment {
-    id: ID! @unique
-    user: User! @relation(name: "DocumentCommentor")
-    document: Document!
-    content: String!
-    image: String
-    likes: [User] @relation(name: "DocumentCommentLikers")
-    createdAt: DateTime!
+  id: ID! @unique
+  user: User! @relation(name: "DocumentCommentor")
+  document: Document!
+  content: String!
+  image: String
+  likes: [User] @relation(name: "DocumentCommentLikers")
+  createdAt: DateTime!
 }
 
 type Folder {
-    id: ID! @unique
-    title: String!
-    user: User!
-    team: Team!
-    createdAt: DateTime!
-    documents: [Document]
+  id: ID! @unique
+  title: String!
+  user: User!
+  team: Team!
+  createdAt: DateTime!
+  documents: [Document]
 }
