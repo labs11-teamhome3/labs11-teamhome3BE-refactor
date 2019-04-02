@@ -1,12 +1,33 @@
+const validateAndParseToken = require('../helpers/validateAndParseToken');
+
 async function createUser(parent, args, ctx, info) {
   return ctx.prisma.createUser({
     name: args.name,
+    //identity: args.sub.split('|')[0],
+    authId: args.sub.split('|')[1],
     inTeam: {
       connect: {
         id: args.inTeam,
       },
     },
   });
+}
+
+async function authenticateUser(parent, {idToken}, ctx, info) {
+ let userToken = null;
+ try {
+   userToken = await validateAndParseToken(idToken);
+   console.log(userToken);
+ } catch(err) {
+   throw new Error(err.message)
+ }
+
+ const id = userToken.sub.split("|")[1];
+ //let user = await ctx.prisma.user({ where: {authId: id}}, info);
+ //if(!user) {
+   let user = createUser(ctx, userToken)
+ //}
+ return user; 
 }
 
 /*
@@ -378,6 +399,7 @@ function unlikeMessageComment(parent, args, context, info) {
 
 module.exports = {
   createUser,
+  authenticateUser,
   // updateUser,
 
   createTodo,
