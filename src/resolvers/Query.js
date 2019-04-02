@@ -20,6 +20,9 @@ const todoList = async (parent, args, context, info) => {
 };
 
 const todoes = (parent, args, context, info) => {
+  if (args.todoListId) {
+    return context.prisma.todoes({ where: { partOf: { id: args.todoListId } } });
+  }
   return context.prisma.todoes();
 };
 
@@ -28,7 +31,10 @@ const todo = (parent, args, context, info) => {
 };
 
 const teamsByUser = (parent, args, context, info) => {
-  return context.prisma.teams({ where: { members_some: { id: args.userId } } });
+  if (args.userId) {
+    return context.prisma.teams({ where: { members_some: { id: args.userId } } });
+  }
+  return context.prisma.teams();
 };
 
 const team = (parent, args, context, info) => {
@@ -39,47 +45,45 @@ const messages = (parent, args, context, info) => {
   if (args.teamId) {
     return context.prisma.messages({ where: { inTeam: { id: args.teamId } } });
   }
-  return context.prisma.todoLists();
+  return context.prisma.messages();
 };
 
 const message = async (parent, args, context, info) => {
   return context.prisma.message({ id: args.id });
 };
 
-const events = (parent, args, context, info) => {
-  return context.prisma.events();
-}
 
 const findEventById = (parent, args, context, info) => {
   return context.prisma.event({ id: args.id })
 }
 
 const findEventsByTeam = (parent, args, context, info) => {
-  return context.prisma.event({ where: { team: { id: args.teamId } } });
+  if (args.teamId) {
+    return context.prisma.events({ where: { team: { id: args.teamId } } });
+  }
+  return context.prisma.events();
 }
 
 const findEventsByUser = (parent, args, context, info) => {
   return context.prisma.event({ where: { user: { id: args.userId } } });
 }
 
-const tags = (parent, args, context, info) => {
-  return context.prisma.tags();
-}
-
 const findTagsByTeam = (parent, args, context, info) => {
-  return context.prisma.tags({ where: { team : { id: args.teamId } } });
+  if (args.teamId) {
+    return context.prisma.tags({ where: { team : { id: args.teamId } } });
+  }
+  return context.prisma.tags();
 }
 
 const findTag = (parent, args, context, info) => {
   return context.prisma.tag({ id: args.tagId });
 }
 
-const messageComments = (parent, args, context, info) => {
-  return context.prisma.messageComments();
-}
-
 const findMessageCommentsByMessage = (parent, args, context, info) => {
-  return context.prisma.messageComments({ where: { message: { id: args.messageId } } });
+  if (args.messageId) {
+    return context.prisma.messageComments({ where: { message: { id: args.messageId } } });
+  } 
+  return context.prisma.messageComments();
 }
 
 const findMessageComment = (parent, args, context, info) => {
@@ -99,14 +103,11 @@ module.exports = {
   team,
   messages,
   message,
-  events,
   findEventById,
   findEventsByTeam,
   findEventsByUser,
-  tags,
   findTagsByTeam,
   findTag,
-  messageComments,
   findMessageCommentsByMessage,
   findMessageComment,
 };

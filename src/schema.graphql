@@ -50,19 +50,18 @@ type Mutation {
 
 type Query {
   info: String!
-  todoes: [Todo]
+  todoes(todoListId: ID): [Todo]
   todo(id: ID!): Todo!
   users: [User]
   user(authId: String, id: ID): User!
   todoLists(teamId: ID): [TodoList]
   todoList(id: ID!): TodoList!
-  teamsByUser(userId: ID!): [Team]
+  teamsByUser(userId: ID): [Team]
   team(id: ID!): Team!
   messages(teamId: ID!): [Message]
   message(id: ID!): Message
-  events: [Event]
   findEventById(eventId: ID!): Event
-  findEventsByTeam(teamId: ID!): [Event]
+  findEventsByTeam(teamId: ID): [Event]
   findEventsByUser(userId: ID!): [Event]
   tags: [Tag]
   findTagsByTeam(teamId: ID!): [Tag]
