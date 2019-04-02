@@ -22,7 +22,7 @@ type Mutation {
   removeUserFromAssignees(userId: ID!, todoListId: ID!): TodoList
   createMessage(title: String!, teamId: ID!, userId: ID!, content: String!): Message
   deleteMessage(id: ID!): Message
-  updateMessage(id: ID!, title: String, content: String): Message
+  # addMessageTag(id: ID!, tagId: ID!): Message
 
   addEvent(userId: ID, teamId: ID!, action_string: String!, object_string: String!): Event
   deleteEvent(eventId: ID!): Event
@@ -43,7 +43,7 @@ type Mutation {
   deleteDocumentComment(documentCommentId: ID!): DocumentComment
   ## Need to add ability to like comments and add images
 
-  addFolder(title: String!, userId: ID!, teamId: ID!): Folder
+  createFolder(title: String!, userId: ID!, teamId: ID!): Folder
   deleteFolder(folderId: ID!): Folder
   updateFolderTitle(folderId: ID!, title: String!): Folder
 
@@ -72,7 +72,21 @@ type Query {
   findTag(tagId: ID!): Tag
   findMessageCommentsByMessage(messageId: ID!): [MessageComment]
   findMessageComment(commentId: ID!): MessageComment
-  ## Need to add queries for Documents, DocComments, Folders
+
+  documents: [Document]
+  findDocument(id: ID!): Document
+  findDocumentsByTeam(teamId: ID): [Document]
+  findDocumentsByUser(userId: ID): [Document]
+  findDocumentsByTag(tagId: ID): [Document]
+
+  documentComments: [DocumentComment]
+  findDocumentComment(id: ID!): DocumentComment
+  findDocumentCommentsByUser(userId: ID): [DocumentComment]
+  findDocumentCommentsByTeam(teamId: ID): [DocumentComment]
+
+  folders: [Folder]
+  findFolder(id: ID): Folder
+  findFoldersByTeam(teamId: ID): [Folder]
 }
 
 type TodoList {

@@ -90,6 +90,55 @@ const findMessageComment = (parent, args, context, info) => {
   return context.prisma.messageComment({ id: args.commentId });
 }
 
+const documents = (parent, args, context, info) => {
+  return context.prisma.documents();
+}
+
+const findDocument = (parent, args, context, info) => {
+  return context.prisma.documents({id: args.id});
+}
+
+const findDocumentsByTeam = (parent, args, context, info) => {
+  return context.prisma.documents({ where: { team: { id: args.teamId } } });
+}
+
+const findDocumentsByUser = (parent, args, context, info) => {
+  return context.prisma.documents({ where: { user: { id: args.userId } } });
+}
+
+const findDocumentsByTag = (parent, args, context, info) => {
+  return context.prisma.documents({ where: { tag: { id: args.tagId } } });
+}
+
+
+const documentComments = (parent, args, context, info) => {
+  return context.prisma.documentComments();
+}
+
+const findDocumentComment = (parent, args, context, info) => {
+  return context.prisma.documentComments({ id: args.id });
+}
+
+const findDocumentCommentsByTeam = (parent, args, context, info) => {
+  return context.prisma.documentComments({ where: { team: { id: args.teamId } } });
+}
+
+const findDocumentCommentsByUser = (parent, args, context, info) => {
+  return context.prisma.documentComments({ where: { user: { id: args.userId } } });
+}
+
+const folders = (parent, args, context, info) => {
+  return context.prisma.folders();
+}
+
+const findFolder = (parent, args, context, info) => {
+  return context.prisma.folders({ id: args.id });
+}
+
+const findFoldersByTeam = (parent, args, context, info) => {
+  return context.prisma.folders({ where: { team: { id: args.teamId } } });
+}
+
 
 module.exports = {
   info,
@@ -110,4 +159,17 @@ module.exports = {
   findTag,
   findMessageCommentsByMessage,
   findMessageComment,
+  documents,
+  findDocument,
+  findDocumentsByTag,
+  findDocumentsByTeam,
+  findDocumentsByUser,
+  documentComments,
+  findDocumentComment,
+  findDocumentCommentsByTeam,
+  findDocumentCommentsByUser,
+  findFolder,
+  findFoldersByTeam,
+  folders,
+
 };
