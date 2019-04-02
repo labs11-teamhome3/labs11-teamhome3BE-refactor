@@ -465,6 +465,92 @@ function deleteFolder(parent, args, context, info) {
     return context.prisma.deleteFolder({ id: args.folderId })
 }
 
+function addDocument(parent, args, context, info) {
+    return context.prisma.addDocument({
+        doc_url: args.doc_url,
+        title: args.title,
+        textContent: args.textContent,
+        image: args.image,
+        folder: {
+            connect: {
+                id: args.folderId
+            }
+        },
+        team: {
+            connect: {
+                id: args.teamId
+            }
+        },
+        tag: {
+            connect: {
+                id: args.tagId
+            }
+        }
+    })
+}
+
+function updateDocument(parent, args, context, info) {
+    return context.prisma.updateDocument({
+        where: { id: args.documentId },
+        data: {
+            doc_url: args.doc_url,
+            title: args.title,
+            textContent: args.textContent,
+            image: args.image,
+        }
+    })
+}
+
+function deleteDocument(parent, args, context, info) {
+    return context.prisma.deleteDocument({ id: args.documentId })
+}
+
+function addDocumentComment(parent, args, context, info) {
+    return context.prisma.createDocumentComment({
+        content: args.content,
+        document: {
+            connect: {
+                id: args.documentId
+            }
+        },
+        user: {
+            connect: {
+                id: args.userId
+            }
+        }
+    })
+}
+
+function deleteDocumentComment(parent, args, context, info) {
+    return context.prisma.deleteDocumentComment({ id: args.documentCommentId });
+}
+
+function likeDocumentComment(parent, args, context, info) {
+    return context.prisma.updateDocumentComment({
+        where: { id: args.commentId },
+        data: {
+            likes: {
+                connect: {
+                    id: args.userId
+                }
+            }
+        }
+    })
+}
+
+function unlikeDocumentComment(parent, args, context, info) {
+    return context.prisma.updateDocumentComment({
+        where: { id: args.commentId },
+        data: {
+            likes: {
+                disconnect: {
+                    id: args.userId
+                }
+            }
+        }
+    })
+}
+
 module.exports = {
   createUser,
   authenticateUser,
@@ -516,5 +602,14 @@ module.exports = {
 
   createFolder,
   updateFolderTitle,
-  deleteFolder
+  deleteFolder,
+
+  addDocument,
+  updateDocument,
+  deleteDocument,
+
+  addDocumentComment,
+  deleteDocumentComment,
+  likeDocumentComment,
+  unlikeDocumentComment
 }

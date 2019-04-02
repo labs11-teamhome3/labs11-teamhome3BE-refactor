@@ -1207,6 +1207,9 @@ export interface FolderWhereInput {
   createdAt_lte?: DateTimeInput;
   createdAt_gt?: DateTimeInput;
   createdAt_gte?: DateTimeInput;
+  documents_every?: DocumentWhereInput;
+  documents_some?: DocumentWhereInput;
+  documents_none?: DocumentWhereInput;
   AND?: FolderWhereInput[] | FolderWhereInput;
   OR?: FolderWhereInput[] | FolderWhereInput;
   NOT?: FolderWhereInput[] | FolderWhereInput;
@@ -1354,7 +1357,7 @@ export type UserWhereUniqueInput = AtLeastOne<{
 export interface DocumentCreateInput {
   doc_url: String;
   user: UserCreateOneInput;
-  folder?: FolderCreateOneInput;
+  folder?: FolderCreateOneWithoutDocumentsInput;
   team: TeamCreateOneWithoutDocumentsInput;
   title: String;
   textContent: String;
@@ -1565,7 +1568,7 @@ export interface DocumentCreateManyWithoutTeamInput {
 export interface DocumentCreateWithoutTeamInput {
   doc_url: String;
   user: UserCreateOneInput;
-  folder?: FolderCreateOneInput;
+  folder?: FolderCreateOneWithoutDocumentsInput;
   title: String;
   textContent: String;
   tag?: TagCreateOneInput;
@@ -1574,12 +1577,12 @@ export interface DocumentCreateWithoutTeamInput {
   subscribedUsers?: UserCreateManyInput;
 }
 
-export interface FolderCreateOneInput {
-  create?: FolderCreateInput;
+export interface FolderCreateOneWithoutDocumentsInput {
+  create?: FolderCreateWithoutDocumentsInput;
   connect?: FolderWhereUniqueInput;
 }
 
-export interface FolderCreateInput {
+export interface FolderCreateWithoutDocumentsInput {
   title: String;
   user: UserCreateOneInput;
   team: TeamCreateOneWithoutFoldersInput;
@@ -1640,20 +1643,26 @@ export interface FolderCreateManyWithoutTeamInput {
 export interface FolderCreateWithoutTeamInput {
   title: String;
   user: UserCreateOneInput;
+  documents?: DocumentCreateManyWithoutFolderInput;
 }
 
-export interface MessageCommentCreateManyWithoutMessageInput {
+export interface DocumentCreateManyWithoutFolderInput {
   create?:
-    | MessageCommentCreateWithoutMessageInput[]
-    | MessageCommentCreateWithoutMessageInput;
-  connect?: MessageCommentWhereUniqueInput[] | MessageCommentWhereUniqueInput;
+    | DocumentCreateWithoutFolderInput[]
+    | DocumentCreateWithoutFolderInput;
+  connect?: DocumentWhereUniqueInput[] | DocumentWhereUniqueInput;
 }
 
-export interface MessageCommentCreateWithoutMessageInput {
-  content: String;
+export interface DocumentCreateWithoutFolderInput {
+  doc_url: String;
   user: UserCreateOneInput;
-  image?: String;
-  likes?: UserCreateManyInput;
+  team: TeamCreateOneWithoutDocumentsInput;
+  title: String;
+  textContent: String;
+  tag?: TagCreateOneInput;
+  images?: DocumentCreateimagesInput;
+  comments?: DocumentCommentCreateManyWithoutDocumentInput;
+  subscribedUsers?: UserCreateManyInput;
 }
 
 export interface TeamCreateOneWithoutDocumentsInput {
@@ -1671,10 +1680,24 @@ export interface TeamCreateWithoutDocumentsInput {
   folders?: FolderCreateManyWithoutTeamInput;
 }
 
+export interface MessageCommentCreateManyWithoutMessageInput {
+  create?:
+    | MessageCommentCreateWithoutMessageInput[]
+    | MessageCommentCreateWithoutMessageInput;
+  connect?: MessageCommentWhereUniqueInput[] | MessageCommentWhereUniqueInput;
+}
+
+export interface MessageCommentCreateWithoutMessageInput {
+  content: String;
+  user: UserCreateOneInput;
+  image?: String;
+  likes?: UserCreateManyInput;
+}
+
 export interface DocumentUpdateInput {
   doc_url?: String;
   user?: UserUpdateOneRequiredInput;
-  folder?: FolderUpdateOneInput;
+  folder?: FolderUpdateOneWithoutDocumentsInput;
   team?: TeamUpdateOneRequiredWithoutDocumentsInput;
   title?: String;
   textContent?: String;
@@ -2307,7 +2330,7 @@ export interface DocumentUpdateWithWhereUniqueWithoutTeamInput {
 export interface DocumentUpdateWithoutTeamDataInput {
   doc_url?: String;
   user?: UserUpdateOneRequiredInput;
-  folder?: FolderUpdateOneInput;
+  folder?: FolderUpdateOneWithoutDocumentsInput;
   title?: String;
   textContent?: String;
   tag?: TagUpdateOneInput;
@@ -2316,16 +2339,16 @@ export interface DocumentUpdateWithoutTeamDataInput {
   subscribedUsers?: UserUpdateManyInput;
 }
 
-export interface FolderUpdateOneInput {
-  create?: FolderCreateInput;
-  update?: FolderUpdateDataInput;
-  upsert?: FolderUpsertNestedInput;
+export interface FolderUpdateOneWithoutDocumentsInput {
+  create?: FolderCreateWithoutDocumentsInput;
+  update?: FolderUpdateWithoutDocumentsDataInput;
+  upsert?: FolderUpsertWithoutDocumentsInput;
   delete?: Boolean;
   disconnect?: Boolean;
   connect?: FolderWhereUniqueInput;
 }
 
-export interface FolderUpdateDataInput {
+export interface FolderUpdateWithoutDocumentsDataInput {
   title?: String;
   user?: UserUpdateOneRequiredInput;
   team?: TeamUpdateOneRequiredWithoutFoldersInput;
@@ -2429,9 +2452,9 @@ export interface TeamUpsertWithoutFoldersInput {
   create: TeamCreateWithoutFoldersInput;
 }
 
-export interface FolderUpsertNestedInput {
-  update: FolderUpdateDataInput;
-  create: FolderCreateInput;
+export interface FolderUpsertWithoutDocumentsInput {
+  update: FolderUpdateWithoutDocumentsDataInput;
+  create: FolderCreateWithoutDocumentsInput;
 }
 
 export interface DocumentUpdateimagesInput {
@@ -2689,6 +2712,72 @@ export interface FolderUpdateWithWhereUniqueWithoutTeamInput {
 export interface FolderUpdateWithoutTeamDataInput {
   title?: String;
   user?: UserUpdateOneRequiredInput;
+  documents?: DocumentUpdateManyWithoutFolderInput;
+}
+
+export interface DocumentUpdateManyWithoutFolderInput {
+  create?:
+    | DocumentCreateWithoutFolderInput[]
+    | DocumentCreateWithoutFolderInput;
+  delete?: DocumentWhereUniqueInput[] | DocumentWhereUniqueInput;
+  connect?: DocumentWhereUniqueInput[] | DocumentWhereUniqueInput;
+  set?: DocumentWhereUniqueInput[] | DocumentWhereUniqueInput;
+  disconnect?: DocumentWhereUniqueInput[] | DocumentWhereUniqueInput;
+  update?:
+    | DocumentUpdateWithWhereUniqueWithoutFolderInput[]
+    | DocumentUpdateWithWhereUniqueWithoutFolderInput;
+  upsert?:
+    | DocumentUpsertWithWhereUniqueWithoutFolderInput[]
+    | DocumentUpsertWithWhereUniqueWithoutFolderInput;
+  deleteMany?: DocumentScalarWhereInput[] | DocumentScalarWhereInput;
+  updateMany?:
+    | DocumentUpdateManyWithWhereNestedInput[]
+    | DocumentUpdateManyWithWhereNestedInput;
+}
+
+export interface DocumentUpdateWithWhereUniqueWithoutFolderInput {
+  where: DocumentWhereUniqueInput;
+  data: DocumentUpdateWithoutFolderDataInput;
+}
+
+export interface DocumentUpdateWithoutFolderDataInput {
+  doc_url?: String;
+  user?: UserUpdateOneRequiredInput;
+  team?: TeamUpdateOneRequiredWithoutDocumentsInput;
+  title?: String;
+  textContent?: String;
+  tag?: TagUpdateOneInput;
+  images?: DocumentUpdateimagesInput;
+  comments?: DocumentCommentUpdateManyWithoutDocumentInput;
+  subscribedUsers?: UserUpdateManyInput;
+}
+
+export interface TeamUpdateOneRequiredWithoutDocumentsInput {
+  create?: TeamCreateWithoutDocumentsInput;
+  update?: TeamUpdateWithoutDocumentsDataInput;
+  upsert?: TeamUpsertWithoutDocumentsInput;
+  connect?: TeamWhereUniqueInput;
+}
+
+export interface TeamUpdateWithoutDocumentsDataInput {
+  teamName?: String;
+  members?: UserUpdateManyWithoutInTeamInput;
+  todoLists?: TodoListUpdateManyWithoutInTeamInput;
+  messages?: MessageUpdateManyWithoutInTeamInput;
+  events?: EventUpdateManyWithoutTeamInput;
+  tags?: TagUpdateManyWithoutTeamInput;
+  folders?: FolderUpdateManyWithoutTeamInput;
+}
+
+export interface TeamUpsertWithoutDocumentsInput {
+  update: TeamUpdateWithoutDocumentsDataInput;
+  create: TeamCreateWithoutDocumentsInput;
+}
+
+export interface DocumentUpsertWithWhereUniqueWithoutFolderInput {
+  where: DocumentWhereUniqueInput;
+  update: DocumentUpdateWithoutFolderDataInput;
+  create: DocumentCreateWithoutFolderInput;
 }
 
 export interface FolderUpsertWithWhereUniqueWithoutTeamInput {
@@ -3077,28 +3166,6 @@ export interface TodoListUpsertWithWhereUniqueWithoutOwnedByInput {
   create: TodoListCreateWithoutOwnedByInput;
 }
 
-export interface TeamUpdateOneRequiredWithoutDocumentsInput {
-  create?: TeamCreateWithoutDocumentsInput;
-  update?: TeamUpdateWithoutDocumentsDataInput;
-  upsert?: TeamUpsertWithoutDocumentsInput;
-  connect?: TeamWhereUniqueInput;
-}
-
-export interface TeamUpdateWithoutDocumentsDataInput {
-  teamName?: String;
-  members?: UserUpdateManyWithoutInTeamInput;
-  todoLists?: TodoListUpdateManyWithoutInTeamInput;
-  messages?: MessageUpdateManyWithoutInTeamInput;
-  events?: EventUpdateManyWithoutTeamInput;
-  tags?: TagUpdateManyWithoutTeamInput;
-  folders?: FolderUpdateManyWithoutTeamInput;
-}
-
-export interface TeamUpsertWithoutDocumentsInput {
-  update: TeamUpdateWithoutDocumentsDataInput;
-  create: TeamCreateWithoutDocumentsInput;
-}
-
 export interface DocumentUpdateManyMutationInput {
   doc_url?: String;
   title?: String;
@@ -3122,7 +3189,7 @@ export interface DocumentCreateOneWithoutCommentsInput {
 export interface DocumentCreateWithoutCommentsInput {
   doc_url: String;
   user: UserCreateOneInput;
-  folder?: FolderCreateOneInput;
+  folder?: FolderCreateOneWithoutDocumentsInput;
   team: TeamCreateOneWithoutDocumentsInput;
   title: String;
   textContent: String;
@@ -3149,7 +3216,7 @@ export interface DocumentUpdateOneRequiredWithoutCommentsInput {
 export interface DocumentUpdateWithoutCommentsDataInput {
   doc_url?: String;
   user?: UserUpdateOneRequiredInput;
-  folder?: FolderUpdateOneInput;
+  folder?: FolderUpdateOneWithoutDocumentsInput;
   team?: TeamUpdateOneRequiredWithoutDocumentsInput;
   title?: String;
   textContent?: String;
@@ -3224,10 +3291,18 @@ export interface EventUpdateManyMutationInput {
   object_string?: String;
 }
 
+export interface FolderCreateInput {
+  title: String;
+  user: UserCreateOneInput;
+  team: TeamCreateOneWithoutFoldersInput;
+  documents?: DocumentCreateManyWithoutFolderInput;
+}
+
 export interface FolderUpdateInput {
   title?: String;
   user?: UserUpdateOneRequiredInput;
   team?: TeamUpdateOneRequiredWithoutFoldersInput;
+  documents?: DocumentUpdateManyWithoutFolderInput;
 }
 
 export interface FolderUpdateManyMutationInput {
@@ -4256,6 +4331,17 @@ export interface FolderPromise extends Promise<Folder>, Fragmentable {
   user: <T = UserPromise>() => T;
   team: <T = TeamPromise>() => T;
   createdAt: () => Promise<DateTimeOutput>;
+  documents: <T = FragmentableArray<Document>>(
+    args?: {
+      where?: DocumentWhereInput;
+      orderBy?: DocumentOrderByInput;
+      skip?: Int;
+      after?: String;
+      before?: String;
+      first?: Int;
+      last?: Int;
+    }
+  ) => T;
 }
 
 export interface FolderSubscription
@@ -4266,6 +4352,17 @@ export interface FolderSubscription
   user: <T = UserSubscription>() => T;
   team: <T = TeamSubscription>() => T;
   createdAt: () => Promise<AsyncIterator<DateTimeOutput>>;
+  documents: <T = Promise<AsyncIterator<DocumentSubscription>>>(
+    args?: {
+      where?: DocumentWhereInput;
+      orderBy?: DocumentOrderByInput;
+      skip?: Int;
+      after?: String;
+      before?: String;
+      first?: Int;
+      last?: Int;
+    }
+  ) => T;
 }
 
 export interface DocumentComment {
