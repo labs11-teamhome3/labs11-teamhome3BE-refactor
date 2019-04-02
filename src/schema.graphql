@@ -22,8 +22,6 @@ type Mutation {
   removeUserFromAssignees(userId: ID!, todoListId: ID!): TodoList
   createMessage(title: String!, teamId: ID!, userId: ID!, content: String!): Message
   deleteMessage(id: ID!): Message
-  # addMessageTag(id: ID!, tagId: ID!): Message
-
   addEvent(userId: ID, teamId: ID!, action_string: String!, object_string: String!): Event
   deleteEvent(eventId: ID!): Event
   addTag(name: String!, teamId: ID!): Tag
@@ -58,7 +56,6 @@ type Query {
   todoList(id: ID!): TodoList!
   teamsByUser(userId: ID): [Team]
   team(id: ID!): Team!
-  teams: [Team]
   messages(teamId: ID!): [Message]
   message(id: ID!): Message
   findEventById(eventId: ID!): Event

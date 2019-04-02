@@ -402,6 +402,20 @@ function createFolder(parent, args, context, info) {
   })
 }
 
+
+function updateFolderTitle(parent, args, context, info) {
+  return context.prisma.updateFolder({
+      where: { id: args.folderId },
+      data: {
+        title: args.title
+      }
+  })
+}
+
+function deleteFolder(parent, args, context, info) {
+  return context.prisma.deleteFolder({id: args.folderId})
+}
+
 module.exports = {
   createUser,
   authenticateUser,
@@ -447,6 +461,9 @@ module.exports = {
   likeMessageComment,
   unlikeMessageComment,
 
-  createFolder
+  createFolder,
+  updateFolderTitle, 
+  deleteFolder,
 
 };
+
