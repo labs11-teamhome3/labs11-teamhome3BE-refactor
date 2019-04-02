@@ -396,6 +396,54 @@ function unlikeMessageComment(parent, args, context, info) {
     })
 }
 
+function addTagToMessage(parent, args, context, info) {
+    return context.prisma.updateMessage({
+        where: { id: args.messageId },
+        data: {
+            tag: {
+                connect: {
+                    id: args.tagId
+                }
+            }
+        }
+    })
+}
+
+function removeTagFromMessage(parent, args, context, info) {
+    return context.prisma.updateMessage({
+        where: { id: args.messageId },
+        data: {
+            tag: {
+                disconnect: true
+            }
+        }
+    })
+}
+
+function addTagToDocument(parent, args, context, info) {
+    return context.prisma.updateDocument({
+        where: { id: args.documentId },
+        data: {
+            tag: {
+                connect: {
+                    id: args.tagId
+                }
+            }
+        }
+    })
+}
+
+function removeTagFromDocument(parent, args, context, info) {
+    return context.prisma.updateDocument({
+        where: { id: args.documentId },
+        data: {
+            tag: {
+                disconnect: true
+            }
+        }
+    })
+}
+
 module.exports = {
   createUser,
   authenticateUser,
@@ -440,7 +488,12 @@ module.exports = {
    updateMessageComment,
    deleteMessageComment,
    likeMessageComment,
-   unlikeMessageComment
+   unlikeMessageComment,
+
+   addTagToMessage,
+   removeTagFromMessage,
+   addTagToDocument,
+   removeTagFromDocument
 
 
 

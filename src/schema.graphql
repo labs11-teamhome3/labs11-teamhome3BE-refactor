@@ -46,6 +46,11 @@ type Mutation {
   addFolder(title: String!, userId: ID!, teamId: ID!): Folder
   deleteFolder(folderId: ID!): Folder
   updateFolderTitle(folderId: ID!, title: String!): Folder
+
+  addTagToMessage(messageId: ID!, tagId: ID!): Message
+  removeTagFromMessage(messageId: ID!): Message
+  addTagToDocument(documentId: ID!, tagId: ID!): Document
+  removeTagFromDocument(documentId: ID!): Document
 }
 
 type Query {
@@ -58,7 +63,7 @@ type Query {
   todoList(id: ID!): TodoList!
   teamsByUser(userId: ID): [Team]
   team(id: ID!): Team!
-  messages(teamId: ID!): [Message]
+  messages(teamId: ID): [Message]
   message(id: ID!): Message
   findEventById(eventId: ID!): Event
   findEventsByTeam(teamId: ID): [Event]

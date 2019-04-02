@@ -10,8 +10,18 @@ function comments(parent, args, context) {
     return context.prisma.message({ id: parent.id }).comments();
 }
 
+function tag(parent, args, context) {
+    return context.prisma.message({ id: parent.id }).tag();
+}
+
+function subscribedUsers(parent, args, context) {
+    return context.prisma.message({ id: parent.id }).subscribedUsers();
+}
+
 module.exports = {
     creator,
     inTeam,
-    comments
+    comments,
+    tag,
+    subscribedUsers
 }
