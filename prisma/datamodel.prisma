@@ -34,6 +34,8 @@ type Team {
     messages: [Message!]
     events: [Event]
     tags: [Tag]
+    documents: [Document]
+    folders: [Folder]
 }
 
 type Message {
