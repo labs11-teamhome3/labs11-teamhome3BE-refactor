@@ -1308,6 +1308,7 @@ export type DocumentCommentWhereUniqueInput = AtLeastOne<{
 
 export type EventWhereUniqueInput = AtLeastOne<{
   id: ID_Input;
+  authId?: String;
 }>;
 
 export type FolderWhereUniqueInput = AtLeastOne<{
