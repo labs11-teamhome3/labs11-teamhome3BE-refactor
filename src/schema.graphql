@@ -24,8 +24,6 @@ type Mutation {
   removeUserFromAssignees(userId: ID!, todoListId: ID!): TodoList
   createMessage(title: String!, teamId: ID!, userId: ID!, content: String!): Message
   deleteMessage(id: ID!): Message
-  # addMessageTag(id: ID!, tagId: ID!): Message
-
   addEvent(userId: ID, teamId: ID!, action_string: String!, object_string: String!): Event
   deleteEvent(eventId: ID!): Event
   addTag(name: String!, teamId: ID!): Tag
