@@ -28,7 +28,7 @@ const todo = (parent, args, context, info) => {
 };
 
 const teams = (parent, args, context, info) => {
-  return context.prisma.teams();
+  return context.prisma.teams({ where: { members_some: { id: args.id } } });
 };
 
 const team = (parent, args, context, info) => {
