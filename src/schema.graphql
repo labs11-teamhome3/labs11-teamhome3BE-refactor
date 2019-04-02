@@ -63,10 +63,8 @@ type Query {
   findEventById(eventId: ID!): Event
   findEventsByTeam(teamId: ID): [Event]
   findEventsByUser(userId: ID!): [Event]
-  tags: [Tag]
   findTagsByTeam(teamId: ID!): [Tag]
   findTag(tagId: ID!): Tag
-  messageComments: [MessageComment]
   findMessageCommentsByMessage(messageId: ID!): [MessageComment]
   findMessageComment(commentId: ID!): MessageComment
   ## Need to add queries for Documents, DocComments, Folders
