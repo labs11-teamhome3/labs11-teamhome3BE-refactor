@@ -643,28 +643,6 @@ export type TagOrderByInput =
   | "updatedAt_ASC"
   | "updatedAt_DESC";
 
-export type TeamOrderByInput =
-  | "id_ASC"
-  | "id_DESC"
-  | "teamName_ASC"
-  | "teamName_DESC"
-  | "createdAt_ASC"
-  | "createdAt_DESC"
-  | "updatedAt_ASC"
-  | "updatedAt_DESC";
-
-export type DocumentCommentOrderByInput =
-  | "id_ASC"
-  | "id_DESC"
-  | "content_ASC"
-  | "content_DESC"
-  | "image_ASC"
-  | "image_DESC"
-  | "createdAt_ASC"
-  | "createdAt_DESC"
-  | "updatedAt_ASC"
-  | "updatedAt_DESC";
-
 export type DocumentOrderByInput =
   | "id_ASC"
   | "id_DESC"
@@ -684,6 +662,28 @@ export type FolderOrderByInput =
   | "id_DESC"
   | "title_ASC"
   | "title_DESC"
+  | "createdAt_ASC"
+  | "createdAt_DESC"
+  | "updatedAt_ASC"
+  | "updatedAt_DESC";
+
+export type TeamOrderByInput =
+  | "id_ASC"
+  | "id_DESC"
+  | "teamName_ASC"
+  | "teamName_DESC"
+  | "createdAt_ASC"
+  | "createdAt_DESC"
+  | "updatedAt_ASC"
+  | "updatedAt_DESC";
+
+export type DocumentCommentOrderByInput =
+  | "id_ASC"
+  | "id_DESC"
+  | "content_ASC"
+  | "content_DESC"
+  | "image_ASC"
+  | "image_DESC"
   | "createdAt_ASC"
   | "createdAt_DESC"
   | "updatedAt_ASC"
@@ -858,6 +858,12 @@ export interface TeamWhereInput {
   tags_every?: TagWhereInput;
   tags_some?: TagWhereInput;
   tags_none?: TagWhereInput;
+  documents_every?: DocumentWhereInput;
+  documents_some?: DocumentWhereInput;
+  documents_none?: DocumentWhereInput;
+  folders_every?: FolderWhereInput;
+  folders_some?: FolderWhereInput;
+  folders_none?: FolderWhereInput;
   AND?: TeamWhereInput[] | TeamWhereInput;
   OR?: TeamWhereInput[] | TeamWhereInput;
   NOT?: TeamWhereInput[] | TeamWhereInput;
@@ -1082,104 +1088,6 @@ export interface EventWhereInput {
   NOT?: EventWhereInput[] | EventWhereInput;
 }
 
-export interface TodoWhereInput {
-  id?: ID_Input;
-  id_not?: ID_Input;
-  id_in?: ID_Input[] | ID_Input;
-  id_not_in?: ID_Input[] | ID_Input;
-  id_lt?: ID_Input;
-  id_lte?: ID_Input;
-  id_gt?: ID_Input;
-  id_gte?: ID_Input;
-  id_contains?: ID_Input;
-  id_not_contains?: ID_Input;
-  id_starts_with?: ID_Input;
-  id_not_starts_with?: ID_Input;
-  id_ends_with?: ID_Input;
-  id_not_ends_with?: ID_Input;
-  description?: String;
-  description_not?: String;
-  description_in?: String[] | String;
-  description_not_in?: String[] | String;
-  description_lt?: String;
-  description_lte?: String;
-  description_gt?: String;
-  description_gte?: String;
-  description_contains?: String;
-  description_not_contains?: String;
-  description_starts_with?: String;
-  description_not_starts_with?: String;
-  description_ends_with?: String;
-  description_not_ends_with?: String;
-  partOf?: TodoListWhereInput;
-  completed?: Boolean;
-  completed_not?: Boolean;
-  AND?: TodoWhereInput[] | TodoWhereInput;
-  OR?: TodoWhereInput[] | TodoWhereInput;
-  NOT?: TodoWhereInput[] | TodoWhereInput;
-}
-
-export interface DocumentCommentWhereInput {
-  id?: ID_Input;
-  id_not?: ID_Input;
-  id_in?: ID_Input[] | ID_Input;
-  id_not_in?: ID_Input[] | ID_Input;
-  id_lt?: ID_Input;
-  id_lte?: ID_Input;
-  id_gt?: ID_Input;
-  id_gte?: ID_Input;
-  id_contains?: ID_Input;
-  id_not_contains?: ID_Input;
-  id_starts_with?: ID_Input;
-  id_not_starts_with?: ID_Input;
-  id_ends_with?: ID_Input;
-  id_not_ends_with?: ID_Input;
-  user?: UserWhereInput;
-  document?: DocumentWhereInput;
-  content?: String;
-  content_not?: String;
-  content_in?: String[] | String;
-  content_not_in?: String[] | String;
-  content_lt?: String;
-  content_lte?: String;
-  content_gt?: String;
-  content_gte?: String;
-  content_contains?: String;
-  content_not_contains?: String;
-  content_starts_with?: String;
-  content_not_starts_with?: String;
-  content_ends_with?: String;
-  content_not_ends_with?: String;
-  image?: String;
-  image_not?: String;
-  image_in?: String[] | String;
-  image_not_in?: String[] | String;
-  image_lt?: String;
-  image_lte?: String;
-  image_gt?: String;
-  image_gte?: String;
-  image_contains?: String;
-  image_not_contains?: String;
-  image_starts_with?: String;
-  image_not_starts_with?: String;
-  image_ends_with?: String;
-  image_not_ends_with?: String;
-  likes_every?: UserWhereInput;
-  likes_some?: UserWhereInput;
-  likes_none?: UserWhereInput;
-  createdAt?: DateTimeInput;
-  createdAt_not?: DateTimeInput;
-  createdAt_in?: DateTimeInput[] | DateTimeInput;
-  createdAt_not_in?: DateTimeInput[] | DateTimeInput;
-  createdAt_lt?: DateTimeInput;
-  createdAt_lte?: DateTimeInput;
-  createdAt_gt?: DateTimeInput;
-  createdAt_gte?: DateTimeInput;
-  AND?: DocumentCommentWhereInput[] | DocumentCommentWhereInput;
-  OR?: DocumentCommentWhereInput[] | DocumentCommentWhereInput;
-  NOT?: DocumentCommentWhereInput[] | DocumentCommentWhereInput;
-}
-
 export interface DocumentWhereInput {
   id?: ID_Input;
   id_not?: ID_Input;
@@ -1304,6 +1212,104 @@ export interface FolderWhereInput {
   NOT?: FolderWhereInput[] | FolderWhereInput;
 }
 
+export interface DocumentCommentWhereInput {
+  id?: ID_Input;
+  id_not?: ID_Input;
+  id_in?: ID_Input[] | ID_Input;
+  id_not_in?: ID_Input[] | ID_Input;
+  id_lt?: ID_Input;
+  id_lte?: ID_Input;
+  id_gt?: ID_Input;
+  id_gte?: ID_Input;
+  id_contains?: ID_Input;
+  id_not_contains?: ID_Input;
+  id_starts_with?: ID_Input;
+  id_not_starts_with?: ID_Input;
+  id_ends_with?: ID_Input;
+  id_not_ends_with?: ID_Input;
+  user?: UserWhereInput;
+  document?: DocumentWhereInput;
+  content?: String;
+  content_not?: String;
+  content_in?: String[] | String;
+  content_not_in?: String[] | String;
+  content_lt?: String;
+  content_lte?: String;
+  content_gt?: String;
+  content_gte?: String;
+  content_contains?: String;
+  content_not_contains?: String;
+  content_starts_with?: String;
+  content_not_starts_with?: String;
+  content_ends_with?: String;
+  content_not_ends_with?: String;
+  image?: String;
+  image_not?: String;
+  image_in?: String[] | String;
+  image_not_in?: String[] | String;
+  image_lt?: String;
+  image_lte?: String;
+  image_gt?: String;
+  image_gte?: String;
+  image_contains?: String;
+  image_not_contains?: String;
+  image_starts_with?: String;
+  image_not_starts_with?: String;
+  image_ends_with?: String;
+  image_not_ends_with?: String;
+  likes_every?: UserWhereInput;
+  likes_some?: UserWhereInput;
+  likes_none?: UserWhereInput;
+  createdAt?: DateTimeInput;
+  createdAt_not?: DateTimeInput;
+  createdAt_in?: DateTimeInput[] | DateTimeInput;
+  createdAt_not_in?: DateTimeInput[] | DateTimeInput;
+  createdAt_lt?: DateTimeInput;
+  createdAt_lte?: DateTimeInput;
+  createdAt_gt?: DateTimeInput;
+  createdAt_gte?: DateTimeInput;
+  AND?: DocumentCommentWhereInput[] | DocumentCommentWhereInput;
+  OR?: DocumentCommentWhereInput[] | DocumentCommentWhereInput;
+  NOT?: DocumentCommentWhereInput[] | DocumentCommentWhereInput;
+}
+
+export interface TodoWhereInput {
+  id?: ID_Input;
+  id_not?: ID_Input;
+  id_in?: ID_Input[] | ID_Input;
+  id_not_in?: ID_Input[] | ID_Input;
+  id_lt?: ID_Input;
+  id_lte?: ID_Input;
+  id_gt?: ID_Input;
+  id_gte?: ID_Input;
+  id_contains?: ID_Input;
+  id_not_contains?: ID_Input;
+  id_starts_with?: ID_Input;
+  id_not_starts_with?: ID_Input;
+  id_ends_with?: ID_Input;
+  id_not_ends_with?: ID_Input;
+  description?: String;
+  description_not?: String;
+  description_in?: String[] | String;
+  description_not_in?: String[] | String;
+  description_lt?: String;
+  description_lte?: String;
+  description_gt?: String;
+  description_gte?: String;
+  description_contains?: String;
+  description_not_contains?: String;
+  description_starts_with?: String;
+  description_not_starts_with?: String;
+  description_ends_with?: String;
+  description_not_ends_with?: String;
+  partOf?: TodoListWhereInput;
+  completed?: Boolean;
+  completed_not?: Boolean;
+  AND?: TodoWhereInput[] | TodoWhereInput;
+  OR?: TodoWhereInput[] | TodoWhereInput;
+  NOT?: TodoWhereInput[] | TodoWhereInput;
+}
+
 export type DocumentCommentWhereUniqueInput = AtLeastOne<{
   id: ID_Input;
 }>;
@@ -1349,7 +1355,7 @@ export interface DocumentCreateInput {
   doc_url: String;
   user: UserCreateOneInput;
   folder?: FolderCreateOneInput;
-  team: TeamCreateOneInput;
+  team: TeamCreateOneWithoutDocumentsInput;
   title: String;
   textContent: String;
   tag?: TagCreateOneInput;
@@ -1411,6 +1417,8 @@ export interface TeamCreateWithoutMembersInput {
   messages?: MessageCreateManyWithoutInTeamInput;
   events?: EventCreateManyWithoutTeamInput;
   tags?: TagCreateManyWithoutTeamInput;
+  documents?: DocumentCreateManyWithoutTeamInput;
+  folders?: FolderCreateManyWithoutTeamInput;
 }
 
 export interface TodoListCreateManyWithoutInTeamInput {
@@ -1478,6 +1486,8 @@ export interface TeamCreateWithoutTodoListsInput {
   messages?: MessageCreateManyWithoutInTeamInput;
   events?: EventCreateManyWithoutTeamInput;
   tags?: TagCreateManyWithoutTeamInput;
+  documents?: DocumentCreateManyWithoutTeamInput;
+  folders?: FolderCreateManyWithoutTeamInput;
 }
 
 export interface UserCreateManyWithoutInTeamInput {
@@ -1532,6 +1542,8 @@ export interface TeamCreateWithoutTagsInput {
   todoLists?: TodoListCreateManyWithoutInTeamInput;
   messages?: MessageCreateManyWithoutInTeamInput;
   events?: EventCreateManyWithoutTeamInput;
+  documents?: DocumentCreateManyWithoutTeamInput;
+  folders?: FolderCreateManyWithoutTeamInput;
 }
 
 export interface EventCreateManyWithoutTeamInput {
@@ -1545,32 +1557,21 @@ export interface EventCreateWithoutTeamInput {
   object_string: String;
 }
 
-export interface MessageCommentCreateManyWithoutMessageInput {
-  create?:
-    | MessageCommentCreateWithoutMessageInput[]
-    | MessageCommentCreateWithoutMessageInput;
-  connect?: MessageCommentWhereUniqueInput[] | MessageCommentWhereUniqueInput;
+export interface DocumentCreateManyWithoutTeamInput {
+  create?: DocumentCreateWithoutTeamInput[] | DocumentCreateWithoutTeamInput;
+  connect?: DocumentWhereUniqueInput[] | DocumentWhereUniqueInput;
 }
 
-export interface MessageCommentCreateWithoutMessageInput {
-  content: String;
+export interface DocumentCreateWithoutTeamInput {
+  doc_url: String;
   user: UserCreateOneInput;
-  image?: String;
-  likes?: UserCreateManyInput;
-}
-
-export interface UserCreateManyInput {
-  create?: UserCreateInput[] | UserCreateInput;
-  connect?: UserWhereUniqueInput[] | UserWhereUniqueInput;
-}
-
-export interface TagCreateManyWithoutTeamInput {
-  create?: TagCreateWithoutTeamInput[] | TagCreateWithoutTeamInput;
-  connect?: TagWhereUniqueInput[] | TagWhereUniqueInput;
-}
-
-export interface TagCreateWithoutTeamInput {
-  name: String;
+  folder?: FolderCreateOneInput;
+  title: String;
+  textContent: String;
+  tag?: TagCreateOneInput;
+  images?: DocumentCreateimagesInput;
+  comments?: DocumentCommentCreateManyWithoutDocumentInput;
+  subscribedUsers?: UserCreateManyInput;
 }
 
 export interface FolderCreateOneInput {
@@ -1581,21 +1582,31 @@ export interface FolderCreateOneInput {
 export interface FolderCreateInput {
   title: String;
   user: UserCreateOneInput;
-  team: TeamCreateOneInput;
+  team: TeamCreateOneWithoutFoldersInput;
 }
 
-export interface TeamCreateOneInput {
-  create?: TeamCreateInput;
+export interface TeamCreateOneWithoutFoldersInput {
+  create?: TeamCreateWithoutFoldersInput;
   connect?: TeamWhereUniqueInput;
 }
 
-export interface TeamCreateInput {
+export interface TeamCreateWithoutFoldersInput {
   teamName: String;
   members?: UserCreateManyWithoutInTeamInput;
   todoLists?: TodoListCreateManyWithoutInTeamInput;
   messages?: MessageCreateManyWithoutInTeamInput;
   events?: EventCreateManyWithoutTeamInput;
   tags?: TagCreateManyWithoutTeamInput;
+  documents?: DocumentCreateManyWithoutTeamInput;
+}
+
+export interface TagCreateManyWithoutTeamInput {
+  create?: TagCreateWithoutTeamInput[] | TagCreateWithoutTeamInput;
+  connect?: TagWhereUniqueInput[] | TagWhereUniqueInput;
+}
+
+export interface TagCreateWithoutTeamInput {
+  name: String;
 }
 
 export interface DocumentCreateimagesInput {
@@ -1616,11 +1627,55 @@ export interface DocumentCommentCreateWithoutDocumentInput {
   likes?: UserCreateManyInput;
 }
 
+export interface UserCreateManyInput {
+  create?: UserCreateInput[] | UserCreateInput;
+  connect?: UserWhereUniqueInput[] | UserWhereUniqueInput;
+}
+
+export interface FolderCreateManyWithoutTeamInput {
+  create?: FolderCreateWithoutTeamInput[] | FolderCreateWithoutTeamInput;
+  connect?: FolderWhereUniqueInput[] | FolderWhereUniqueInput;
+}
+
+export interface FolderCreateWithoutTeamInput {
+  title: String;
+  user: UserCreateOneInput;
+}
+
+export interface MessageCommentCreateManyWithoutMessageInput {
+  create?:
+    | MessageCommentCreateWithoutMessageInput[]
+    | MessageCommentCreateWithoutMessageInput;
+  connect?: MessageCommentWhereUniqueInput[] | MessageCommentWhereUniqueInput;
+}
+
+export interface MessageCommentCreateWithoutMessageInput {
+  content: String;
+  user: UserCreateOneInput;
+  image?: String;
+  likes?: UserCreateManyInput;
+}
+
+export interface TeamCreateOneWithoutDocumentsInput {
+  create?: TeamCreateWithoutDocumentsInput;
+  connect?: TeamWhereUniqueInput;
+}
+
+export interface TeamCreateWithoutDocumentsInput {
+  teamName: String;
+  members?: UserCreateManyWithoutInTeamInput;
+  todoLists?: TodoListCreateManyWithoutInTeamInput;
+  messages?: MessageCreateManyWithoutInTeamInput;
+  events?: EventCreateManyWithoutTeamInput;
+  tags?: TagCreateManyWithoutTeamInput;
+  folders?: FolderCreateManyWithoutTeamInput;
+}
+
 export interface DocumentUpdateInput {
   doc_url?: String;
   user?: UserUpdateOneRequiredInput;
   folder?: FolderUpdateOneInput;
-  team?: TeamUpdateOneRequiredInput;
+  team?: TeamUpdateOneRequiredWithoutDocumentsInput;
   title?: String;
   textContent?: String;
   tag?: TagUpdateOneInput;
@@ -1738,6 +1793,8 @@ export interface TeamUpdateWithoutMembersDataInput {
   messages?: MessageUpdateManyWithoutInTeamInput;
   events?: EventUpdateManyWithoutTeamInput;
   tags?: TagUpdateManyWithoutTeamInput;
+  documents?: DocumentUpdateManyWithoutTeamInput;
+  folders?: FolderUpdateManyWithoutTeamInput;
 }
 
 export interface TodoListUpdateManyWithoutInTeamInput {
@@ -1933,6 +1990,8 @@ export interface TeamUpdateWithoutTodoListsDataInput {
   messages?: MessageUpdateManyWithoutInTeamInput;
   events?: EventUpdateManyWithoutTeamInput;
   tags?: TagUpdateManyWithoutTeamInput;
+  documents?: DocumentUpdateManyWithoutTeamInput;
+  folders?: FolderUpdateManyWithoutTeamInput;
 }
 
 export interface UserUpdateManyWithoutInTeamInput {
@@ -2103,6 +2162,8 @@ export interface TeamUpdateWithoutTagsDataInput {
   todoLists?: TodoListUpdateManyWithoutInTeamInput;
   messages?: MessageUpdateManyWithoutInTeamInput;
   events?: EventUpdateManyWithoutTeamInput;
+  documents?: DocumentUpdateManyWithoutTeamInput;
+  folders?: FolderUpdateManyWithoutTeamInput;
 }
 
 export interface EventUpdateManyWithoutTeamInput {
@@ -2220,6 +2281,473 @@ export interface EventUpdateManyDataInput {
   object_string?: String;
 }
 
+export interface DocumentUpdateManyWithoutTeamInput {
+  create?: DocumentCreateWithoutTeamInput[] | DocumentCreateWithoutTeamInput;
+  delete?: DocumentWhereUniqueInput[] | DocumentWhereUniqueInput;
+  connect?: DocumentWhereUniqueInput[] | DocumentWhereUniqueInput;
+  set?: DocumentWhereUniqueInput[] | DocumentWhereUniqueInput;
+  disconnect?: DocumentWhereUniqueInput[] | DocumentWhereUniqueInput;
+  update?:
+    | DocumentUpdateWithWhereUniqueWithoutTeamInput[]
+    | DocumentUpdateWithWhereUniqueWithoutTeamInput;
+  upsert?:
+    | DocumentUpsertWithWhereUniqueWithoutTeamInput[]
+    | DocumentUpsertWithWhereUniqueWithoutTeamInput;
+  deleteMany?: DocumentScalarWhereInput[] | DocumentScalarWhereInput;
+  updateMany?:
+    | DocumentUpdateManyWithWhereNestedInput[]
+    | DocumentUpdateManyWithWhereNestedInput;
+}
+
+export interface DocumentUpdateWithWhereUniqueWithoutTeamInput {
+  where: DocumentWhereUniqueInput;
+  data: DocumentUpdateWithoutTeamDataInput;
+}
+
+export interface DocumentUpdateWithoutTeamDataInput {
+  doc_url?: String;
+  user?: UserUpdateOneRequiredInput;
+  folder?: FolderUpdateOneInput;
+  title?: String;
+  textContent?: String;
+  tag?: TagUpdateOneInput;
+  images?: DocumentUpdateimagesInput;
+  comments?: DocumentCommentUpdateManyWithoutDocumentInput;
+  subscribedUsers?: UserUpdateManyInput;
+}
+
+export interface FolderUpdateOneInput {
+  create?: FolderCreateInput;
+  update?: FolderUpdateDataInput;
+  upsert?: FolderUpsertNestedInput;
+  delete?: Boolean;
+  disconnect?: Boolean;
+  connect?: FolderWhereUniqueInput;
+}
+
+export interface FolderUpdateDataInput {
+  title?: String;
+  user?: UserUpdateOneRequiredInput;
+  team?: TeamUpdateOneRequiredWithoutFoldersInput;
+}
+
+export interface TeamUpdateOneRequiredWithoutFoldersInput {
+  create?: TeamCreateWithoutFoldersInput;
+  update?: TeamUpdateWithoutFoldersDataInput;
+  upsert?: TeamUpsertWithoutFoldersInput;
+  connect?: TeamWhereUniqueInput;
+}
+
+export interface TeamUpdateWithoutFoldersDataInput {
+  teamName?: String;
+  members?: UserUpdateManyWithoutInTeamInput;
+  todoLists?: TodoListUpdateManyWithoutInTeamInput;
+  messages?: MessageUpdateManyWithoutInTeamInput;
+  events?: EventUpdateManyWithoutTeamInput;
+  tags?: TagUpdateManyWithoutTeamInput;
+  documents?: DocumentUpdateManyWithoutTeamInput;
+}
+
+export interface TagUpdateManyWithoutTeamInput {
+  create?: TagCreateWithoutTeamInput[] | TagCreateWithoutTeamInput;
+  delete?: TagWhereUniqueInput[] | TagWhereUniqueInput;
+  connect?: TagWhereUniqueInput[] | TagWhereUniqueInput;
+  set?: TagWhereUniqueInput[] | TagWhereUniqueInput;
+  disconnect?: TagWhereUniqueInput[] | TagWhereUniqueInput;
+  update?:
+    | TagUpdateWithWhereUniqueWithoutTeamInput[]
+    | TagUpdateWithWhereUniqueWithoutTeamInput;
+  upsert?:
+    | TagUpsertWithWhereUniqueWithoutTeamInput[]
+    | TagUpsertWithWhereUniqueWithoutTeamInput;
+  deleteMany?: TagScalarWhereInput[] | TagScalarWhereInput;
+  updateMany?:
+    | TagUpdateManyWithWhereNestedInput[]
+    | TagUpdateManyWithWhereNestedInput;
+}
+
+export interface TagUpdateWithWhereUniqueWithoutTeamInput {
+  where: TagWhereUniqueInput;
+  data: TagUpdateWithoutTeamDataInput;
+}
+
+export interface TagUpdateWithoutTeamDataInput {
+  name?: String;
+}
+
+export interface TagUpsertWithWhereUniqueWithoutTeamInput {
+  where: TagWhereUniqueInput;
+  update: TagUpdateWithoutTeamDataInput;
+  create: TagCreateWithoutTeamInput;
+}
+
+export interface TagScalarWhereInput {
+  id?: ID_Input;
+  id_not?: ID_Input;
+  id_in?: ID_Input[] | ID_Input;
+  id_not_in?: ID_Input[] | ID_Input;
+  id_lt?: ID_Input;
+  id_lte?: ID_Input;
+  id_gt?: ID_Input;
+  id_gte?: ID_Input;
+  id_contains?: ID_Input;
+  id_not_contains?: ID_Input;
+  id_starts_with?: ID_Input;
+  id_not_starts_with?: ID_Input;
+  id_ends_with?: ID_Input;
+  id_not_ends_with?: ID_Input;
+  name?: String;
+  name_not?: String;
+  name_in?: String[] | String;
+  name_not_in?: String[] | String;
+  name_lt?: String;
+  name_lte?: String;
+  name_gt?: String;
+  name_gte?: String;
+  name_contains?: String;
+  name_not_contains?: String;
+  name_starts_with?: String;
+  name_not_starts_with?: String;
+  name_ends_with?: String;
+  name_not_ends_with?: String;
+  AND?: TagScalarWhereInput[] | TagScalarWhereInput;
+  OR?: TagScalarWhereInput[] | TagScalarWhereInput;
+  NOT?: TagScalarWhereInput[] | TagScalarWhereInput;
+}
+
+export interface TagUpdateManyWithWhereNestedInput {
+  where: TagScalarWhereInput;
+  data: TagUpdateManyDataInput;
+}
+
+export interface TagUpdateManyDataInput {
+  name?: String;
+}
+
+export interface TeamUpsertWithoutFoldersInput {
+  update: TeamUpdateWithoutFoldersDataInput;
+  create: TeamCreateWithoutFoldersInput;
+}
+
+export interface FolderUpsertNestedInput {
+  update: FolderUpdateDataInput;
+  create: FolderCreateInput;
+}
+
+export interface DocumentUpdateimagesInput {
+  set?: String[] | String;
+}
+
+export interface DocumentCommentUpdateManyWithoutDocumentInput {
+  create?:
+    | DocumentCommentCreateWithoutDocumentInput[]
+    | DocumentCommentCreateWithoutDocumentInput;
+  delete?: DocumentCommentWhereUniqueInput[] | DocumentCommentWhereUniqueInput;
+  connect?: DocumentCommentWhereUniqueInput[] | DocumentCommentWhereUniqueInput;
+  set?: DocumentCommentWhereUniqueInput[] | DocumentCommentWhereUniqueInput;
+  disconnect?:
+    | DocumentCommentWhereUniqueInput[]
+    | DocumentCommentWhereUniqueInput;
+  update?:
+    | DocumentCommentUpdateWithWhereUniqueWithoutDocumentInput[]
+    | DocumentCommentUpdateWithWhereUniqueWithoutDocumentInput;
+  upsert?:
+    | DocumentCommentUpsertWithWhereUniqueWithoutDocumentInput[]
+    | DocumentCommentUpsertWithWhereUniqueWithoutDocumentInput;
+  deleteMany?:
+    | DocumentCommentScalarWhereInput[]
+    | DocumentCommentScalarWhereInput;
+  updateMany?:
+    | DocumentCommentUpdateManyWithWhereNestedInput[]
+    | DocumentCommentUpdateManyWithWhereNestedInput;
+}
+
+export interface DocumentCommentUpdateWithWhereUniqueWithoutDocumentInput {
+  where: DocumentCommentWhereUniqueInput;
+  data: DocumentCommentUpdateWithoutDocumentDataInput;
+}
+
+export interface DocumentCommentUpdateWithoutDocumentDataInput {
+  user?: UserUpdateOneRequiredInput;
+  content?: String;
+  image?: String;
+  likes?: UserUpdateManyInput;
+}
+
+export interface UserUpdateManyInput {
+  create?: UserCreateInput[] | UserCreateInput;
+  update?:
+    | UserUpdateWithWhereUniqueNestedInput[]
+    | UserUpdateWithWhereUniqueNestedInput;
+  upsert?:
+    | UserUpsertWithWhereUniqueNestedInput[]
+    | UserUpsertWithWhereUniqueNestedInput;
+  delete?: UserWhereUniqueInput[] | UserWhereUniqueInput;
+  connect?: UserWhereUniqueInput[] | UserWhereUniqueInput;
+  set?: UserWhereUniqueInput[] | UserWhereUniqueInput;
+  disconnect?: UserWhereUniqueInput[] | UserWhereUniqueInput;
+  deleteMany?: UserScalarWhereInput[] | UserScalarWhereInput;
+  updateMany?:
+    | UserUpdateManyWithWhereNestedInput[]
+    | UserUpdateManyWithWhereNestedInput;
+}
+
+export interface UserUpdateWithWhereUniqueNestedInput {
+  where: UserWhereUniqueInput;
+  data: UserUpdateDataInput;
+}
+
+export interface UserUpsertWithWhereUniqueNestedInput {
+  where: UserWhereUniqueInput;
+  update: UserUpdateDataInput;
+  create: UserCreateInput;
+}
+
+export interface DocumentCommentUpsertWithWhereUniqueWithoutDocumentInput {
+  where: DocumentCommentWhereUniqueInput;
+  update: DocumentCommentUpdateWithoutDocumentDataInput;
+  create: DocumentCommentCreateWithoutDocumentInput;
+}
+
+export interface DocumentCommentScalarWhereInput {
+  id?: ID_Input;
+  id_not?: ID_Input;
+  id_in?: ID_Input[] | ID_Input;
+  id_not_in?: ID_Input[] | ID_Input;
+  id_lt?: ID_Input;
+  id_lte?: ID_Input;
+  id_gt?: ID_Input;
+  id_gte?: ID_Input;
+  id_contains?: ID_Input;
+  id_not_contains?: ID_Input;
+  id_starts_with?: ID_Input;
+  id_not_starts_with?: ID_Input;
+  id_ends_with?: ID_Input;
+  id_not_ends_with?: ID_Input;
+  content?: String;
+  content_not?: String;
+  content_in?: String[] | String;
+  content_not_in?: String[] | String;
+  content_lt?: String;
+  content_lte?: String;
+  content_gt?: String;
+  content_gte?: String;
+  content_contains?: String;
+  content_not_contains?: String;
+  content_starts_with?: String;
+  content_not_starts_with?: String;
+  content_ends_with?: String;
+  content_not_ends_with?: String;
+  image?: String;
+  image_not?: String;
+  image_in?: String[] | String;
+  image_not_in?: String[] | String;
+  image_lt?: String;
+  image_lte?: String;
+  image_gt?: String;
+  image_gte?: String;
+  image_contains?: String;
+  image_not_contains?: String;
+  image_starts_with?: String;
+  image_not_starts_with?: String;
+  image_ends_with?: String;
+  image_not_ends_with?: String;
+  createdAt?: DateTimeInput;
+  createdAt_not?: DateTimeInput;
+  createdAt_in?: DateTimeInput[] | DateTimeInput;
+  createdAt_not_in?: DateTimeInput[] | DateTimeInput;
+  createdAt_lt?: DateTimeInput;
+  createdAt_lte?: DateTimeInput;
+  createdAt_gt?: DateTimeInput;
+  createdAt_gte?: DateTimeInput;
+  AND?: DocumentCommentScalarWhereInput[] | DocumentCommentScalarWhereInput;
+  OR?: DocumentCommentScalarWhereInput[] | DocumentCommentScalarWhereInput;
+  NOT?: DocumentCommentScalarWhereInput[] | DocumentCommentScalarWhereInput;
+}
+
+export interface DocumentCommentUpdateManyWithWhereNestedInput {
+  where: DocumentCommentScalarWhereInput;
+  data: DocumentCommentUpdateManyDataInput;
+}
+
+export interface DocumentCommentUpdateManyDataInput {
+  content?: String;
+  image?: String;
+}
+
+export interface DocumentUpsertWithWhereUniqueWithoutTeamInput {
+  where: DocumentWhereUniqueInput;
+  update: DocumentUpdateWithoutTeamDataInput;
+  create: DocumentCreateWithoutTeamInput;
+}
+
+export interface DocumentScalarWhereInput {
+  id?: ID_Input;
+  id_not?: ID_Input;
+  id_in?: ID_Input[] | ID_Input;
+  id_not_in?: ID_Input[] | ID_Input;
+  id_lt?: ID_Input;
+  id_lte?: ID_Input;
+  id_gt?: ID_Input;
+  id_gte?: ID_Input;
+  id_contains?: ID_Input;
+  id_not_contains?: ID_Input;
+  id_starts_with?: ID_Input;
+  id_not_starts_with?: ID_Input;
+  id_ends_with?: ID_Input;
+  id_not_ends_with?: ID_Input;
+  doc_url?: String;
+  doc_url_not?: String;
+  doc_url_in?: String[] | String;
+  doc_url_not_in?: String[] | String;
+  doc_url_lt?: String;
+  doc_url_lte?: String;
+  doc_url_gt?: String;
+  doc_url_gte?: String;
+  doc_url_contains?: String;
+  doc_url_not_contains?: String;
+  doc_url_starts_with?: String;
+  doc_url_not_starts_with?: String;
+  doc_url_ends_with?: String;
+  doc_url_not_ends_with?: String;
+  title?: String;
+  title_not?: String;
+  title_in?: String[] | String;
+  title_not_in?: String[] | String;
+  title_lt?: String;
+  title_lte?: String;
+  title_gt?: String;
+  title_gte?: String;
+  title_contains?: String;
+  title_not_contains?: String;
+  title_starts_with?: String;
+  title_not_starts_with?: String;
+  title_ends_with?: String;
+  title_not_ends_with?: String;
+  textContent?: String;
+  textContent_not?: String;
+  textContent_in?: String[] | String;
+  textContent_not_in?: String[] | String;
+  textContent_lt?: String;
+  textContent_lte?: String;
+  textContent_gt?: String;
+  textContent_gte?: String;
+  textContent_contains?: String;
+  textContent_not_contains?: String;
+  textContent_starts_with?: String;
+  textContent_not_starts_with?: String;
+  textContent_ends_with?: String;
+  textContent_not_ends_with?: String;
+  createdAt?: DateTimeInput;
+  createdAt_not?: DateTimeInput;
+  createdAt_in?: DateTimeInput[] | DateTimeInput;
+  createdAt_not_in?: DateTimeInput[] | DateTimeInput;
+  createdAt_lt?: DateTimeInput;
+  createdAt_lte?: DateTimeInput;
+  createdAt_gt?: DateTimeInput;
+  createdAt_gte?: DateTimeInput;
+  AND?: DocumentScalarWhereInput[] | DocumentScalarWhereInput;
+  OR?: DocumentScalarWhereInput[] | DocumentScalarWhereInput;
+  NOT?: DocumentScalarWhereInput[] | DocumentScalarWhereInput;
+}
+
+export interface DocumentUpdateManyWithWhereNestedInput {
+  where: DocumentScalarWhereInput;
+  data: DocumentUpdateManyDataInput;
+}
+
+export interface DocumentUpdateManyDataInput {
+  doc_url?: String;
+  title?: String;
+  textContent?: String;
+  images?: DocumentUpdateimagesInput;
+}
+
+export interface FolderUpdateManyWithoutTeamInput {
+  create?: FolderCreateWithoutTeamInput[] | FolderCreateWithoutTeamInput;
+  delete?: FolderWhereUniqueInput[] | FolderWhereUniqueInput;
+  connect?: FolderWhereUniqueInput[] | FolderWhereUniqueInput;
+  set?: FolderWhereUniqueInput[] | FolderWhereUniqueInput;
+  disconnect?: FolderWhereUniqueInput[] | FolderWhereUniqueInput;
+  update?:
+    | FolderUpdateWithWhereUniqueWithoutTeamInput[]
+    | FolderUpdateWithWhereUniqueWithoutTeamInput;
+  upsert?:
+    | FolderUpsertWithWhereUniqueWithoutTeamInput[]
+    | FolderUpsertWithWhereUniqueWithoutTeamInput;
+  deleteMany?: FolderScalarWhereInput[] | FolderScalarWhereInput;
+  updateMany?:
+    | FolderUpdateManyWithWhereNestedInput[]
+    | FolderUpdateManyWithWhereNestedInput;
+}
+
+export interface FolderUpdateWithWhereUniqueWithoutTeamInput {
+  where: FolderWhereUniqueInput;
+  data: FolderUpdateWithoutTeamDataInput;
+}
+
+export interface FolderUpdateWithoutTeamDataInput {
+  title?: String;
+  user?: UserUpdateOneRequiredInput;
+}
+
+export interface FolderUpsertWithWhereUniqueWithoutTeamInput {
+  where: FolderWhereUniqueInput;
+  update: FolderUpdateWithoutTeamDataInput;
+  create: FolderCreateWithoutTeamInput;
+}
+
+export interface FolderScalarWhereInput {
+  id?: ID_Input;
+  id_not?: ID_Input;
+  id_in?: ID_Input[] | ID_Input;
+  id_not_in?: ID_Input[] | ID_Input;
+  id_lt?: ID_Input;
+  id_lte?: ID_Input;
+  id_gt?: ID_Input;
+  id_gte?: ID_Input;
+  id_contains?: ID_Input;
+  id_not_contains?: ID_Input;
+  id_starts_with?: ID_Input;
+  id_not_starts_with?: ID_Input;
+  id_ends_with?: ID_Input;
+  id_not_ends_with?: ID_Input;
+  title?: String;
+  title_not?: String;
+  title_in?: String[] | String;
+  title_not_in?: String[] | String;
+  title_lt?: String;
+  title_lte?: String;
+  title_gt?: String;
+  title_gte?: String;
+  title_contains?: String;
+  title_not_contains?: String;
+  title_starts_with?: String;
+  title_not_starts_with?: String;
+  title_ends_with?: String;
+  title_not_ends_with?: String;
+  createdAt?: DateTimeInput;
+  createdAt_not?: DateTimeInput;
+  createdAt_in?: DateTimeInput[] | DateTimeInput;
+  createdAt_not_in?: DateTimeInput[] | DateTimeInput;
+  createdAt_lt?: DateTimeInput;
+  createdAt_lte?: DateTimeInput;
+  createdAt_gt?: DateTimeInput;
+  createdAt_gte?: DateTimeInput;
+  AND?: FolderScalarWhereInput[] | FolderScalarWhereInput;
+  OR?: FolderScalarWhereInput[] | FolderScalarWhereInput;
+  NOT?: FolderScalarWhereInput[] | FolderScalarWhereInput;
+}
+
+export interface FolderUpdateManyWithWhereNestedInput {
+  where: FolderScalarWhereInput;
+  data: FolderUpdateManyDataInput;
+}
+
+export interface FolderUpdateManyDataInput {
+  title?: String;
+}
+
 export interface TeamUpsertWithoutTagsInput {
   update: TeamUpdateWithoutTagsDataInput;
   create: TeamCreateWithoutTagsInput;
@@ -2264,35 +2792,6 @@ export interface MessageCommentUpdateWithoutMessageDataInput {
   user?: UserUpdateOneRequiredInput;
   image?: String;
   likes?: UserUpdateManyInput;
-}
-
-export interface UserUpdateManyInput {
-  create?: UserCreateInput[] | UserCreateInput;
-  update?:
-    | UserUpdateWithWhereUniqueNestedInput[]
-    | UserUpdateWithWhereUniqueNestedInput;
-  upsert?:
-    | UserUpsertWithWhereUniqueNestedInput[]
-    | UserUpsertWithWhereUniqueNestedInput;
-  delete?: UserWhereUniqueInput[] | UserWhereUniqueInput;
-  connect?: UserWhereUniqueInput[] | UserWhereUniqueInput;
-  set?: UserWhereUniqueInput[] | UserWhereUniqueInput;
-  disconnect?: UserWhereUniqueInput[] | UserWhereUniqueInput;
-  deleteMany?: UserScalarWhereInput[] | UserScalarWhereInput;
-  updateMany?:
-    | UserUpdateManyWithWhereNestedInput[]
-    | UserUpdateManyWithWhereNestedInput;
-}
-
-export interface UserUpdateWithWhereUniqueNestedInput {
-  where: UserWhereUniqueInput;
-  data: UserUpdateDataInput;
-}
-
-export interface UserUpsertWithWhereUniqueNestedInput {
-  where: UserWhereUniqueInput;
-  update: UserUpdateDataInput;
-  create: UserCreateInput;
 }
 
 export interface MessageCommentUpsertWithWhereUniqueWithoutMessageInput {
@@ -2440,82 +2939,6 @@ export interface MessageUpdateManyDataInput {
   images?: MessageUpdateimagesInput;
 }
 
-export interface TagUpdateManyWithoutTeamInput {
-  create?: TagCreateWithoutTeamInput[] | TagCreateWithoutTeamInput;
-  delete?: TagWhereUniqueInput[] | TagWhereUniqueInput;
-  connect?: TagWhereUniqueInput[] | TagWhereUniqueInput;
-  set?: TagWhereUniqueInput[] | TagWhereUniqueInput;
-  disconnect?: TagWhereUniqueInput[] | TagWhereUniqueInput;
-  update?:
-    | TagUpdateWithWhereUniqueWithoutTeamInput[]
-    | TagUpdateWithWhereUniqueWithoutTeamInput;
-  upsert?:
-    | TagUpsertWithWhereUniqueWithoutTeamInput[]
-    | TagUpsertWithWhereUniqueWithoutTeamInput;
-  deleteMany?: TagScalarWhereInput[] | TagScalarWhereInput;
-  updateMany?:
-    | TagUpdateManyWithWhereNestedInput[]
-    | TagUpdateManyWithWhereNestedInput;
-}
-
-export interface TagUpdateWithWhereUniqueWithoutTeamInput {
-  where: TagWhereUniqueInput;
-  data: TagUpdateWithoutTeamDataInput;
-}
-
-export interface TagUpdateWithoutTeamDataInput {
-  name?: String;
-}
-
-export interface TagUpsertWithWhereUniqueWithoutTeamInput {
-  where: TagWhereUniqueInput;
-  update: TagUpdateWithoutTeamDataInput;
-  create: TagCreateWithoutTeamInput;
-}
-
-export interface TagScalarWhereInput {
-  id?: ID_Input;
-  id_not?: ID_Input;
-  id_in?: ID_Input[] | ID_Input;
-  id_not_in?: ID_Input[] | ID_Input;
-  id_lt?: ID_Input;
-  id_lte?: ID_Input;
-  id_gt?: ID_Input;
-  id_gte?: ID_Input;
-  id_contains?: ID_Input;
-  id_not_contains?: ID_Input;
-  id_starts_with?: ID_Input;
-  id_not_starts_with?: ID_Input;
-  id_ends_with?: ID_Input;
-  id_not_ends_with?: ID_Input;
-  name?: String;
-  name_not?: String;
-  name_in?: String[] | String;
-  name_not_in?: String[] | String;
-  name_lt?: String;
-  name_lte?: String;
-  name_gt?: String;
-  name_gte?: String;
-  name_contains?: String;
-  name_not_contains?: String;
-  name_starts_with?: String;
-  name_not_starts_with?: String;
-  name_ends_with?: String;
-  name_not_ends_with?: String;
-  AND?: TagScalarWhereInput[] | TagScalarWhereInput;
-  OR?: TagScalarWhereInput[] | TagScalarWhereInput;
-  NOT?: TagScalarWhereInput[] | TagScalarWhereInput;
-}
-
-export interface TagUpdateManyWithWhereNestedInput {
-  where: TagScalarWhereInput;
-  data: TagUpdateManyDataInput;
-}
-
-export interface TagUpdateManyDataInput {
-  name?: String;
-}
-
 export interface TeamUpsertWithoutTodoListsInput {
   update: TeamUpdateWithoutTodoListsDataInput;
   create: TeamCreateWithoutTodoListsInput;
@@ -2654,157 +3077,26 @@ export interface TodoListUpsertWithWhereUniqueWithoutOwnedByInput {
   create: TodoListCreateWithoutOwnedByInput;
 }
 
-export interface FolderUpdateOneInput {
-  create?: FolderCreateInput;
-  update?: FolderUpdateDataInput;
-  upsert?: FolderUpsertNestedInput;
-  delete?: Boolean;
-  disconnect?: Boolean;
-  connect?: FolderWhereUniqueInput;
-}
-
-export interface FolderUpdateDataInput {
-  title?: String;
-  user?: UserUpdateOneRequiredInput;
-  team?: TeamUpdateOneRequiredInput;
-}
-
-export interface TeamUpdateOneRequiredInput {
-  create?: TeamCreateInput;
-  update?: TeamUpdateDataInput;
-  upsert?: TeamUpsertNestedInput;
+export interface TeamUpdateOneRequiredWithoutDocumentsInput {
+  create?: TeamCreateWithoutDocumentsInput;
+  update?: TeamUpdateWithoutDocumentsDataInput;
+  upsert?: TeamUpsertWithoutDocumentsInput;
   connect?: TeamWhereUniqueInput;
 }
 
-export interface TeamUpdateDataInput {
+export interface TeamUpdateWithoutDocumentsDataInput {
   teamName?: String;
   members?: UserUpdateManyWithoutInTeamInput;
   todoLists?: TodoListUpdateManyWithoutInTeamInput;
   messages?: MessageUpdateManyWithoutInTeamInput;
   events?: EventUpdateManyWithoutTeamInput;
   tags?: TagUpdateManyWithoutTeamInput;
+  folders?: FolderUpdateManyWithoutTeamInput;
 }
 
-export interface TeamUpsertNestedInput {
-  update: TeamUpdateDataInput;
-  create: TeamCreateInput;
-}
-
-export interface FolderUpsertNestedInput {
-  update: FolderUpdateDataInput;
-  create: FolderCreateInput;
-}
-
-export interface DocumentUpdateimagesInput {
-  set?: String[] | String;
-}
-
-export interface DocumentCommentUpdateManyWithoutDocumentInput {
-  create?:
-    | DocumentCommentCreateWithoutDocumentInput[]
-    | DocumentCommentCreateWithoutDocumentInput;
-  delete?: DocumentCommentWhereUniqueInput[] | DocumentCommentWhereUniqueInput;
-  connect?: DocumentCommentWhereUniqueInput[] | DocumentCommentWhereUniqueInput;
-  set?: DocumentCommentWhereUniqueInput[] | DocumentCommentWhereUniqueInput;
-  disconnect?:
-    | DocumentCommentWhereUniqueInput[]
-    | DocumentCommentWhereUniqueInput;
-  update?:
-    | DocumentCommentUpdateWithWhereUniqueWithoutDocumentInput[]
-    | DocumentCommentUpdateWithWhereUniqueWithoutDocumentInput;
-  upsert?:
-    | DocumentCommentUpsertWithWhereUniqueWithoutDocumentInput[]
-    | DocumentCommentUpsertWithWhereUniqueWithoutDocumentInput;
-  deleteMany?:
-    | DocumentCommentScalarWhereInput[]
-    | DocumentCommentScalarWhereInput;
-  updateMany?:
-    | DocumentCommentUpdateManyWithWhereNestedInput[]
-    | DocumentCommentUpdateManyWithWhereNestedInput;
-}
-
-export interface DocumentCommentUpdateWithWhereUniqueWithoutDocumentInput {
-  where: DocumentCommentWhereUniqueInput;
-  data: DocumentCommentUpdateWithoutDocumentDataInput;
-}
-
-export interface DocumentCommentUpdateWithoutDocumentDataInput {
-  user?: UserUpdateOneRequiredInput;
-  content?: String;
-  image?: String;
-  likes?: UserUpdateManyInput;
-}
-
-export interface DocumentCommentUpsertWithWhereUniqueWithoutDocumentInput {
-  where: DocumentCommentWhereUniqueInput;
-  update: DocumentCommentUpdateWithoutDocumentDataInput;
-  create: DocumentCommentCreateWithoutDocumentInput;
-}
-
-export interface DocumentCommentScalarWhereInput {
-  id?: ID_Input;
-  id_not?: ID_Input;
-  id_in?: ID_Input[] | ID_Input;
-  id_not_in?: ID_Input[] | ID_Input;
-  id_lt?: ID_Input;
-  id_lte?: ID_Input;
-  id_gt?: ID_Input;
-  id_gte?: ID_Input;
-  id_contains?: ID_Input;
-  id_not_contains?: ID_Input;
-  id_starts_with?: ID_Input;
-  id_not_starts_with?: ID_Input;
-  id_ends_with?: ID_Input;
-  id_not_ends_with?: ID_Input;
-  content?: String;
-  content_not?: String;
-  content_in?: String[] | String;
-  content_not_in?: String[] | String;
-  content_lt?: String;
-  content_lte?: String;
-  content_gt?: String;
-  content_gte?: String;
-  content_contains?: String;
-  content_not_contains?: String;
-  content_starts_with?: String;
-  content_not_starts_with?: String;
-  content_ends_with?: String;
-  content_not_ends_with?: String;
-  image?: String;
-  image_not?: String;
-  image_in?: String[] | String;
-  image_not_in?: String[] | String;
-  image_lt?: String;
-  image_lte?: String;
-  image_gt?: String;
-  image_gte?: String;
-  image_contains?: String;
-  image_not_contains?: String;
-  image_starts_with?: String;
-  image_not_starts_with?: String;
-  image_ends_with?: String;
-  image_not_ends_with?: String;
-  createdAt?: DateTimeInput;
-  createdAt_not?: DateTimeInput;
-  createdAt_in?: DateTimeInput[] | DateTimeInput;
-  createdAt_not_in?: DateTimeInput[] | DateTimeInput;
-  createdAt_lt?: DateTimeInput;
-  createdAt_lte?: DateTimeInput;
-  createdAt_gt?: DateTimeInput;
-  createdAt_gte?: DateTimeInput;
-  AND?: DocumentCommentScalarWhereInput[] | DocumentCommentScalarWhereInput;
-  OR?: DocumentCommentScalarWhereInput[] | DocumentCommentScalarWhereInput;
-  NOT?: DocumentCommentScalarWhereInput[] | DocumentCommentScalarWhereInput;
-}
-
-export interface DocumentCommentUpdateManyWithWhereNestedInput {
-  where: DocumentCommentScalarWhereInput;
-  data: DocumentCommentUpdateManyDataInput;
-}
-
-export interface DocumentCommentUpdateManyDataInput {
-  content?: String;
-  image?: String;
+export interface TeamUpsertWithoutDocumentsInput {
+  update: TeamUpdateWithoutDocumentsDataInput;
+  create: TeamCreateWithoutDocumentsInput;
 }
 
 export interface DocumentUpdateManyMutationInput {
@@ -2831,7 +3123,7 @@ export interface DocumentCreateWithoutCommentsInput {
   doc_url: String;
   user: UserCreateOneInput;
   folder?: FolderCreateOneInput;
-  team: TeamCreateOneInput;
+  team: TeamCreateOneWithoutDocumentsInput;
   title: String;
   textContent: String;
   tag?: TagCreateOneInput;
@@ -2858,7 +3150,7 @@ export interface DocumentUpdateWithoutCommentsDataInput {
   doc_url?: String;
   user?: UserUpdateOneRequiredInput;
   folder?: FolderUpdateOneInput;
-  team?: TeamUpdateOneRequiredInput;
+  team?: TeamUpdateOneRequiredWithoutDocumentsInput;
   title?: String;
   textContent?: String;
   tag?: TagUpdateOneInput;
@@ -2894,6 +3186,8 @@ export interface TeamCreateWithoutEventsInput {
   todoLists?: TodoListCreateManyWithoutInTeamInput;
   messages?: MessageCreateManyWithoutInTeamInput;
   tags?: TagCreateManyWithoutTeamInput;
+  documents?: DocumentCreateManyWithoutTeamInput;
+  folders?: FolderCreateManyWithoutTeamInput;
 }
 
 export interface EventUpdateInput {
@@ -2916,6 +3210,8 @@ export interface TeamUpdateWithoutEventsDataInput {
   todoLists?: TodoListUpdateManyWithoutInTeamInput;
   messages?: MessageUpdateManyWithoutInTeamInput;
   tags?: TagUpdateManyWithoutTeamInput;
+  documents?: DocumentUpdateManyWithoutTeamInput;
+  folders?: FolderUpdateManyWithoutTeamInput;
 }
 
 export interface TeamUpsertWithoutEventsInput {
@@ -2931,7 +3227,7 @@ export interface EventUpdateManyMutationInput {
 export interface FolderUpdateInput {
   title?: String;
   user?: UserUpdateOneRequiredInput;
-  team?: TeamUpdateOneRequiredInput;
+  team?: TeamUpdateOneRequiredWithoutFoldersInput;
 }
 
 export interface FolderUpdateManyMutationInput {
@@ -2960,6 +3256,8 @@ export interface TeamCreateWithoutMessagesInput {
   todoLists?: TodoListCreateManyWithoutInTeamInput;
   events?: EventCreateManyWithoutTeamInput;
   tags?: TagCreateManyWithoutTeamInput;
+  documents?: DocumentCreateManyWithoutTeamInput;
+  folders?: FolderCreateManyWithoutTeamInput;
 }
 
 export interface MessageUpdateInput {
@@ -2986,6 +3284,8 @@ export interface TeamUpdateWithoutMessagesDataInput {
   todoLists?: TodoListUpdateManyWithoutInTeamInput;
   events?: EventUpdateManyWithoutTeamInput;
   tags?: TagUpdateManyWithoutTeamInput;
+  documents?: DocumentUpdateManyWithoutTeamInput;
+  folders?: FolderUpdateManyWithoutTeamInput;
 }
 
 export interface TeamUpsertWithoutMessagesInput {
@@ -3066,6 +3366,17 @@ export interface TagUpdateManyMutationInput {
   name?: String;
 }
 
+export interface TeamCreateInput {
+  teamName: String;
+  members?: UserCreateManyWithoutInTeamInput;
+  todoLists?: TodoListCreateManyWithoutInTeamInput;
+  messages?: MessageCreateManyWithoutInTeamInput;
+  events?: EventCreateManyWithoutTeamInput;
+  tags?: TagCreateManyWithoutTeamInput;
+  documents?: DocumentCreateManyWithoutTeamInput;
+  folders?: FolderCreateManyWithoutTeamInput;
+}
+
 export interface TeamUpdateInput {
   teamName?: String;
   members?: UserUpdateManyWithoutInTeamInput;
@@ -3073,6 +3384,8 @@ export interface TeamUpdateInput {
   messages?: MessageUpdateManyWithoutInTeamInput;
   events?: EventUpdateManyWithoutTeamInput;
   tags?: TagUpdateManyWithoutTeamInput;
+  documents?: DocumentUpdateManyWithoutTeamInput;
+  folders?: FolderUpdateManyWithoutTeamInput;
 }
 
 export interface TeamUpdateManyMutationInput {
@@ -3650,6 +3963,28 @@ export interface TeamPromise extends Promise<Team>, Fragmentable {
       last?: Int;
     }
   ) => T;
+  documents: <T = FragmentableArray<Document>>(
+    args?: {
+      where?: DocumentWhereInput;
+      orderBy?: DocumentOrderByInput;
+      skip?: Int;
+      after?: String;
+      before?: String;
+      first?: Int;
+      last?: Int;
+    }
+  ) => T;
+  folders: <T = FragmentableArray<Folder>>(
+    args?: {
+      where?: FolderWhereInput;
+      orderBy?: FolderOrderByInput;
+      skip?: Int;
+      after?: String;
+      before?: String;
+      first?: Int;
+      last?: Int;
+    }
+  ) => T;
 }
 
 export interface TeamSubscription
@@ -3705,6 +4040,28 @@ export interface TeamSubscription
     args?: {
       where?: TagWhereInput;
       orderBy?: TagOrderByInput;
+      skip?: Int;
+      after?: String;
+      before?: String;
+      first?: Int;
+      last?: Int;
+    }
+  ) => T;
+  documents: <T = Promise<AsyncIterator<DocumentSubscription>>>(
+    args?: {
+      where?: DocumentWhereInput;
+      orderBy?: DocumentOrderByInput;
+      skip?: Int;
+      after?: String;
+      before?: String;
+      first?: Int;
+      last?: Int;
+    }
+  ) => T;
+  folders: <T = Promise<AsyncIterator<FolderSubscription>>>(
+    args?: {
+      where?: FolderWhereInput;
+      orderBy?: FolderOrderByInput;
       skip?: Int;
       after?: String;
       before?: String;

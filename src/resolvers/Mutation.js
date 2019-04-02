@@ -284,16 +284,6 @@ function deleteMessage(parent, args, context , info) {
     })
 }
 
-async function updateMessage(parent, args, context, info) {
-    return context.prisma.updateMessage({
-        where: {id: args.id},
-        data: {
-            title: args.title,
-            content: args.content,
-        }
-    })
-}
-
 function addEvent(parent, args, context, info) {
     return context.prisma.createEvent({
         action_string: args.action_string,
@@ -396,6 +386,85 @@ function unlikeMessageComment(parent, args, context, info) {
     })
 }
 
+function addTagToMessage(parent, args, context, info) {
+    return context.prisma.updateMessage({
+        where: { id: args.messageId },
+        data: {
+            tag: {
+                connect: {
+                    id: args.tagId
+                }
+            }
+        }
+    })
+}
+
+function removeTagFromMessage(parent, args, context, info) {
+    return context.prisma.updateMessage({
+        where: { id: args.messageId },
+        data: {
+            tag: {
+                disconnect: true
+            }
+        }
+    })
+}
+
+function addTagToDocument(parent, args, context, info) {
+    return context.prisma.updateDocument({
+        where: { id: args.documentId },
+        data: {
+            tag: {
+                connect: {
+                    id: args.tagId
+                }
+            }
+        }
+    })
+}
+
+function removeTagFromDocument(parent, args, context, info) {
+    return context.prisma.updateDocument({
+        where: { id: args.documentId },
+        data: {
+            tag: {
+                disconnect: true
+            }
+        }
+    })
+}
+
+function createFolder(parent, args, context, info) {
+  return context.prisma.createFolder({
+    title: args.title,
+    user: {
+      connect: {
+        id: args.userId
+      }
+    },
+    team: {
+      connect: {
+        id: args.teamId
+      }
+    } 
+  })
+}
+
+function updateFolderTitle(parent, args, context, info) {
+    return context.prisma.updateFolder({
+        where: {
+            id: args.folderId
+        },
+        data: {
+            title: args.title
+        }
+    })
+}
+
+function deleteFolder(parent, args, context, info) {
+    return context.prisma.deleteFolder({ id: args.folderId })
+}
+
 module.exports = {
   createUser,
   authenticateUser,
@@ -418,36 +487,34 @@ module.exports = {
   removeTodoListFromTeam,
   removeUserFromTeam,
 
-   toggleTodoComplete,
-   toggleTodoListComplete,
-   addUserToOwners,
-   addUserToAssignees,
-   removeUserFromOwners,
-   removeUserFromAssignees,
+  toggleTodoComplete,
+  toggleTodoListComplete,
+  addUserToOwners,
+  addUserToAssignees,
+  removeUserFromOwners,
+  removeUserFromAssignees,
 
-   createMessage,
-   deleteMessage,
-   updateMessage,
+  createMessage,
+  deleteMessage,
 
-   addEvent,
-   deleteEvent,
+  addEvent,
+  deleteEvent,
 
-   addTag,
-   updateTag,
-   deleteTag,
+  addTag,
+  updateTag,
+  deleteTag,
+  addTagToMessage,
+  addTagToDocument,
+  removeTagFromMessage,
+  removeTagFromDocument,
 
-   addMessageComment,
-   updateMessageComment,
-   deleteMessageComment,
-   likeMessageComment,
-   unlikeMessageComment
+  addMessageComment,
+  updateMessageComment,
+  deleteMessageComment,
+  likeMessageComment,
+  unlikeMessageComment,
 
-
-
-
-
-
-
-};
-
-// Need to make users unique by adding email and phone numbers, finish CRUD on users/
+  createFolder,
+  updateFolderTitle,
+  deleteFolder
+}

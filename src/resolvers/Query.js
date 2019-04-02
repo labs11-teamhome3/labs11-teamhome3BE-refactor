@@ -90,6 +90,53 @@ const findMessageComment = (parent, args, context, info) => {
   return context.prisma.messageComment({ id: args.commentId });
 }
 
+const findDocument = (parent, args, context, info) => {
+  return context.prisma.documents({id: args.id});
+}
+
+const findDocumentsByTeam = (parent, args, context, info) => {
+  if (args.teamId) {
+    return context.prisma.documents({ where: { team: { id: args.teamId } } });
+  }
+  return context.prisma.documents();
+}
+
+const findDocumentsByUser = (parent, args, context, info) => {
+  return context.prisma.documents({ where: { user: { id: args.userId } } });
+}
+
+const findDocumentsByTag = (parent, args, context, info) => {
+  return context.prisma.documents({ where: { tag: { id: args.tagId } } });
+}
+
+
+const documentComments = (parent, args, context, info) => {
+  return context.prisma.documentComments();
+}
+
+const findDocumentComment = (parent, args, context, info) => {
+  return context.prisma.documentComments({ id: args.id });
+}
+
+const findDocumentCommentsByTeam = (parent, args, context, info) => {
+  return context.prisma.documentComments({ where: { team: { id: args.teamId } } });
+}
+
+const findDocumentCommentsByUser = (parent, args, context, info) => {
+  return context.prisma.documentComments({ where: { user: { id: args.userId } } });
+}
+
+const findFolder = (parent, args, context, info) => {
+  return context.prisma.folders({ id: args.id });
+}
+
+const findFoldersByTeam = (parent, args, context, info) => {
+  if (args.teamId) {
+    return context.prisma.folders({ where: { team: { id: args.teamId } } });
+  }
+  return context.prisma.folders();
+}
+
 
 module.exports = {
   info,
@@ -110,4 +157,15 @@ module.exports = {
   findTag,
   findMessageCommentsByMessage,
   findMessageComment,
+  findDocument,
+  findDocumentsByTag,
+  findDocumentsByTeam,
+  findDocumentsByUser,
+  documentComments,
+  findDocumentComment,
+  findDocumentCommentsByTeam,
+  findDocumentCommentsByUser,
+  findFolder,
+  findFoldersByTeam,
+
 };
