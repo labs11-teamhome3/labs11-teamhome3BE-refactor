@@ -164,7 +164,7 @@ type User {
   createdAt: Date
   identity: String
   authId: String
-  name: String!
+  name: String
   todoListsOwned: [TodoList]
   todoListsAssigned: [TodoList]
   inTeam: [Team]
