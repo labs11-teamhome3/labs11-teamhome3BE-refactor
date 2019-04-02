@@ -284,16 +284,6 @@ function deleteMessage(parent, args, context , info) {
     })
 }
 
-async function updateMessage(parent, args, context, info) {
-    return context.prisma.updateMessage({
-        where: {id: args.id},
-        data: {
-            title: args.title,
-            content: args.content,
-        }
-    })
-}
-
 function addEvent(parent, args, context, info) {
     return context.prisma.createEvent({
         action_string: args.action_string,
@@ -427,7 +417,6 @@ module.exports = {
 
    createMessage,
    deleteMessage,
-   // updateMessage,
 
    addEvent,
    deleteEvent,
