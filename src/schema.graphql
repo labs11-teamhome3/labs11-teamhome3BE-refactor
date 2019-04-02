@@ -43,7 +43,7 @@ type Mutation {
   deleteDocumentComment(documentCommentId: ID!): DocumentComment
   ## Need to add ability to like comments and add images
 
-  addFolder(title: String!, userId: ID!, teamId: ID!): Folder
+  createFolder(title: String!, userId: ID!, teamId: ID!): Folder
   deleteFolder(folderId: ID!): Folder
   updateFolderTitle(folderId: ID!, title: String!): Folder
 }
@@ -58,6 +58,7 @@ type Query {
   todoList(id: ID!): TodoList!
   teamsByUser(userId: ID): [Team]
   team(id: ID!): Team!
+  teams: [Team]
   messages(teamId: ID!): [Message]
   message(id: ID!): Message
   findEventById(eventId: ID!): Event

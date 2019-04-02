@@ -386,6 +386,22 @@ function unlikeMessageComment(parent, args, context, info) {
     })
 }
 
+function createFolder(parent, args, context, info) {
+  return context.prisma.createFolder({
+    title: args.title,
+    user: {
+      connect: {
+        id: args.userId
+      }
+    },
+    team: {
+      connect: {
+        id: args.teamId
+      }
+    } 
+  })
+}
+
 module.exports = {
   createUser,
   authenticateUser,
@@ -408,27 +424,29 @@ module.exports = {
   removeTodoListFromTeam,
   removeUserFromTeam,
 
-   toggleTodoComplete,
-   toggleTodoListComplete,
-   addUserToOwners,
-   addUserToAssignees,
-   removeUserFromOwners,
-   removeUserFromAssignees,
+  toggleTodoComplete,
+  toggleTodoListComplete,
+  addUserToOwners,
+  addUserToAssignees,
+  removeUserFromOwners,
+  removeUserFromAssignees,
 
-   createMessage,
-   deleteMessage,
+  createMessage,
+  deleteMessage,
 
-   addEvent,
-   deleteEvent,
+  addEvent,
+  deleteEvent,
 
-   addTag,
-   updateTag,
-   deleteTag,
+  addTag,
+  updateTag,
+  deleteTag,
 
-   addMessageComment,
-   updateMessageComment,
-   deleteMessageComment,
-   likeMessageComment,
-   unlikeMessageComment
+  addMessageComment,
+  updateMessageComment,
+  deleteMessageComment,
+  likeMessageComment,
+  unlikeMessageComment,
+
+  createFolder
 
 };
