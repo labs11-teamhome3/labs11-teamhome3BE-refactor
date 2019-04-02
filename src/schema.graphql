@@ -2,7 +2,7 @@ type Mutation {
   createUser(authId: String!): User!
   authenticateUser(idToken: String!): User
   createTodo(description: String!, partOf: ID!, completed: Boolean): Todo
-  deleteTodo(id: String!): String!
+  deleteTodo(id: String!): Todo
   updateTodo(id: String!, description: String!, completed: Boolean): Todo
   createTodoList(description: String!, ownedBy: String!, assignedTo: String!, completed: Boolean, inTeam: ID): TodoList
   deleteTodoList(id: String!): TodoList!
@@ -50,19 +50,18 @@ type Mutation {
 
 type Query {
   info: String!
-  todoes: [Todo]
+  todoes(todoListId: ID): [Todo]
   todo(id: ID!): Todo!
   users: [User]
   user(authId: String, id: ID): User!
   todoLists(teamId: ID): [TodoList]
   todoList(id: ID!): TodoList!
-  teams: [Team]
+  teamsByUser(userId: ID): [Team]
   team(id: ID!): Team!
   messages(teamId: ID!): [Message]
   message(id: ID!): Message
-  events: [Event]
   findEventById(eventId: ID!): Event
-  findEventsByTeam(teamId: ID!): [Event]
+  findEventsByTeam(teamId: ID): [Event]
   findEventsByUser(userId: ID!): [Event]
   tags: [Tag]
   findTagsByTeam(teamId: ID!): [Tag]
