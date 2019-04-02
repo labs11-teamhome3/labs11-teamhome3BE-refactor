@@ -427,7 +427,7 @@ module.exports = {
 
    createMessage,
    deleteMessage,
-   updateMessage,
+   // updateMessage,
 
    addEvent,
    deleteEvent,
@@ -442,12 +442,4 @@ module.exports = {
    likeMessageComment,
    unlikeMessageComment
 
-
-
-
-
-
-
 };
-
-// Need to make users unique by adding email and phone numbers, finish CRUD on users/
