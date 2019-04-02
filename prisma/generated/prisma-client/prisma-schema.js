@@ -334,7 +334,7 @@ input DocumentCreateimagesInput {
 input DocumentCreateInput {
   doc_url: String!
   user: UserCreateOneInput!
-  folder: FolderCreateOneInput
+  folder: FolderCreateOneWithoutDocumentsInput
   team: TeamCreateOneWithoutDocumentsInput!
   title: String!
   textContent: String!
@@ -342,6 +342,11 @@ input DocumentCreateInput {
   images: DocumentCreateimagesInput
   comments: DocumentCommentCreateManyWithoutDocumentInput
   subscribedUsers: UserCreateManyInput
+}
+
+input DocumentCreateManyWithoutFolderInput {
+  create: [DocumentCreateWithoutFolderInput!]
+  connect: [DocumentWhereUniqueInput!]
 }
 
 input DocumentCreateManyWithoutTeamInput {
@@ -357,7 +362,7 @@ input DocumentCreateOneWithoutCommentsInput {
 input DocumentCreateWithoutCommentsInput {
   doc_url: String!
   user: UserCreateOneInput!
-  folder: FolderCreateOneInput
+  folder: FolderCreateOneWithoutDocumentsInput
   team: TeamCreateOneWithoutDocumentsInput!
   title: String!
   textContent: String!
@@ -366,10 +371,22 @@ input DocumentCreateWithoutCommentsInput {
   subscribedUsers: UserCreateManyInput
 }
 
+input DocumentCreateWithoutFolderInput {
+  doc_url: String!
+  user: UserCreateOneInput!
+  team: TeamCreateOneWithoutDocumentsInput!
+  title: String!
+  textContent: String!
+  tag: TagCreateOneInput
+  images: DocumentCreateimagesInput
+  comments: DocumentCommentCreateManyWithoutDocumentInput
+  subscribedUsers: UserCreateManyInput
+}
+
 input DocumentCreateWithoutTeamInput {
   doc_url: String!
   user: UserCreateOneInput!
-  folder: FolderCreateOneInput
+  folder: FolderCreateOneWithoutDocumentsInput
   title: String!
   textContent: String!
   tag: TagCreateOneInput
@@ -502,7 +519,7 @@ input DocumentUpdateimagesInput {
 input DocumentUpdateInput {
   doc_url: String
   user: UserUpdateOneRequiredInput
-  folder: FolderUpdateOneInput
+  folder: FolderUpdateOneWithoutDocumentsInput
   team: TeamUpdateOneRequiredWithoutDocumentsInput
   title: String
   textContent: String
@@ -524,6 +541,18 @@ input DocumentUpdateManyMutationInput {
   title: String
   textContent: String
   images: DocumentUpdateimagesInput
+}
+
+input DocumentUpdateManyWithoutFolderInput {
+  create: [DocumentCreateWithoutFolderInput!]
+  delete: [DocumentWhereUniqueInput!]
+  connect: [DocumentWhereUniqueInput!]
+  set: [DocumentWhereUniqueInput!]
+  disconnect: [DocumentWhereUniqueInput!]
+  update: [DocumentUpdateWithWhereUniqueWithoutFolderInput!]
+  upsert: [DocumentUpsertWithWhereUniqueWithoutFolderInput!]
+  deleteMany: [DocumentScalarWhereInput!]
+  updateMany: [DocumentUpdateManyWithWhereNestedInput!]
 }
 
 input DocumentUpdateManyWithoutTeamInput {
@@ -553,7 +582,7 @@ input DocumentUpdateOneRequiredWithoutCommentsInput {
 input DocumentUpdateWithoutCommentsDataInput {
   doc_url: String
   user: UserUpdateOneRequiredInput
-  folder: FolderUpdateOneInput
+  folder: FolderUpdateOneWithoutDocumentsInput
   team: TeamUpdateOneRequiredWithoutDocumentsInput
   title: String
   textContent: String
@@ -562,16 +591,33 @@ input DocumentUpdateWithoutCommentsDataInput {
   subscribedUsers: UserUpdateManyInput
 }
 
-input DocumentUpdateWithoutTeamDataInput {
+input DocumentUpdateWithoutFolderDataInput {
   doc_url: String
   user: UserUpdateOneRequiredInput
-  folder: FolderUpdateOneInput
+  team: TeamUpdateOneRequiredWithoutDocumentsInput
   title: String
   textContent: String
   tag: TagUpdateOneInput
   images: DocumentUpdateimagesInput
   comments: DocumentCommentUpdateManyWithoutDocumentInput
   subscribedUsers: UserUpdateManyInput
+}
+
+input DocumentUpdateWithoutTeamDataInput {
+  doc_url: String
+  user: UserUpdateOneRequiredInput
+  folder: FolderUpdateOneWithoutDocumentsInput
+  title: String
+  textContent: String
+  tag: TagUpdateOneInput
+  images: DocumentUpdateimagesInput
+  comments: DocumentCommentUpdateManyWithoutDocumentInput
+  subscribedUsers: UserUpdateManyInput
+}
+
+input DocumentUpdateWithWhereUniqueWithoutFolderInput {
+  where: DocumentWhereUniqueInput!
+  data: DocumentUpdateWithoutFolderDataInput!
 }
 
 input DocumentUpdateWithWhereUniqueWithoutTeamInput {
@@ -582,6 +628,12 @@ input DocumentUpdateWithWhereUniqueWithoutTeamInput {
 input DocumentUpsertWithoutCommentsInput {
   update: DocumentUpdateWithoutCommentsDataInput!
   create: DocumentCreateWithoutCommentsInput!
+}
+
+input DocumentUpsertWithWhereUniqueWithoutFolderInput {
+  where: DocumentWhereUniqueInput!
+  update: DocumentUpdateWithoutFolderDataInput!
+  create: DocumentCreateWithoutFolderInput!
 }
 
 input DocumentUpsertWithWhereUniqueWithoutTeamInput {
@@ -925,6 +977,7 @@ type Folder {
   user: User!
   team: Team!
   createdAt: DateTime!
+  documents(where: DocumentWhereInput, orderBy: DocumentOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Document!]
 }
 
 type FolderConnection {
@@ -937,6 +990,7 @@ input FolderCreateInput {
   title: String!
   user: UserCreateOneInput!
   team: TeamCreateOneWithoutFoldersInput!
+  documents: DocumentCreateManyWithoutFolderInput
 }
 
 input FolderCreateManyWithoutTeamInput {
@@ -944,14 +998,21 @@ input FolderCreateManyWithoutTeamInput {
   connect: [FolderWhereUniqueInput!]
 }
 
-input FolderCreateOneInput {
-  create: FolderCreateInput
+input FolderCreateOneWithoutDocumentsInput {
+  create: FolderCreateWithoutDocumentsInput
   connect: FolderWhereUniqueInput
+}
+
+input FolderCreateWithoutDocumentsInput {
+  title: String!
+  user: UserCreateOneInput!
+  team: TeamCreateOneWithoutFoldersInput!
 }
 
 input FolderCreateWithoutTeamInput {
   title: String!
   user: UserCreateOneInput!
+  documents: DocumentCreateManyWithoutFolderInput
 }
 
 type FolderEdge {
@@ -1036,16 +1097,11 @@ input FolderSubscriptionWhereInput {
   NOT: [FolderSubscriptionWhereInput!]
 }
 
-input FolderUpdateDataInput {
-  title: String
-  user: UserUpdateOneRequiredInput
-  team: TeamUpdateOneRequiredWithoutFoldersInput
-}
-
 input FolderUpdateInput {
   title: String
   user: UserUpdateOneRequiredInput
   team: TeamUpdateOneRequiredWithoutFoldersInput
+  documents: DocumentUpdateManyWithoutFolderInput
 }
 
 input FolderUpdateManyDataInput {
@@ -1073,18 +1129,25 @@ input FolderUpdateManyWithWhereNestedInput {
   data: FolderUpdateManyDataInput!
 }
 
-input FolderUpdateOneInput {
-  create: FolderCreateInput
-  update: FolderUpdateDataInput
-  upsert: FolderUpsertNestedInput
+input FolderUpdateOneWithoutDocumentsInput {
+  create: FolderCreateWithoutDocumentsInput
+  update: FolderUpdateWithoutDocumentsDataInput
+  upsert: FolderUpsertWithoutDocumentsInput
   delete: Boolean
   disconnect: Boolean
   connect: FolderWhereUniqueInput
 }
 
+input FolderUpdateWithoutDocumentsDataInput {
+  title: String
+  user: UserUpdateOneRequiredInput
+  team: TeamUpdateOneRequiredWithoutFoldersInput
+}
+
 input FolderUpdateWithoutTeamDataInput {
   title: String
   user: UserUpdateOneRequiredInput
+  documents: DocumentUpdateManyWithoutFolderInput
 }
 
 input FolderUpdateWithWhereUniqueWithoutTeamInput {
@@ -1092,9 +1155,9 @@ input FolderUpdateWithWhereUniqueWithoutTeamInput {
   data: FolderUpdateWithoutTeamDataInput!
 }
 
-input FolderUpsertNestedInput {
-  update: FolderUpdateDataInput!
-  create: FolderCreateInput!
+input FolderUpsertWithoutDocumentsInput {
+  update: FolderUpdateWithoutDocumentsDataInput!
+  create: FolderCreateWithoutDocumentsInput!
 }
 
 input FolderUpsertWithWhereUniqueWithoutTeamInput {
@@ -1142,6 +1205,9 @@ input FolderWhereInput {
   createdAt_lte: DateTime
   createdAt_gt: DateTime
   createdAt_gte: DateTime
+  documents_every: DocumentWhereInput
+  documents_some: DocumentWhereInput
+  documents_none: DocumentWhereInput
   AND: [FolderWhereInput!]
   OR: [FolderWhereInput!]
   NOT: [FolderWhereInput!]

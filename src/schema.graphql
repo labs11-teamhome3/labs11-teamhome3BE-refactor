@@ -39,8 +39,6 @@ type Mutation {
     content: String!
   ): Message
   deleteMessage(id: ID!): Message
-  # addMessageTag(id: ID!, tagId: ID!): Message
-
   addEvent(
     userId: ID
     teamId: ID!
@@ -67,16 +65,25 @@ type Mutation {
   unlikeMessageComment(commentId: ID!, userId: ID!): MessageComment
 
   addDocument(
-    userId: ID!
     doc_url: String!
     folderId: ID
     teamId: ID!
     title: String!
     textContent: String!
     tagId: ID
+    image: String
+  ): Document
+  updateDocument(
+    documentId: ID!
+    doc_url: String
+    folderId: ID
+    title: String
+    textContent: String
+    tagId: ID
+    image: String
   ): Document
   deleteDocument(documentId: ID!): Document
-  ## Need to add ability to subscribe users and add images
+  ## Need to add ability to subscribe users
 
   addDocumentComment(
     userId: ID!
@@ -84,11 +91,14 @@ type Mutation {
     content: String!
   ): DocumentComment
   deleteDocumentComment(documentCommentId: ID!): DocumentComment
-  ## Need to add ability to like comments and add images
+  likeDocumentComment(commentId: ID!, userId: ID!): DocumentComment
+  unlikeDocumentComment(commentId: ID!, userId: ID!): DocumentComment
 
   createFolder(title: String!, userId: ID!, teamId: ID!): Folder
   deleteFolder(folderId: ID!): Folder
   updateFolderTitle(folderId: ID!, title: String): Folder
+  addDocumentToFolder(folderId: ID!, documentId: ID!): Document
+  removeDocumentFromFolder(folderId: ID!, documentId: ID!): Document
 
   addTagToMessage(messageId: ID!, tagId: ID!): Message
   removeTagFromMessage(messageId: ID!): Message
@@ -243,4 +253,5 @@ type Folder {
   title: String!
   user: User!
   team: Team!
+  documents: [Document]
 }
