@@ -18,12 +18,12 @@ type Todo {
 
 type User {
     id: ID! @unique
-    authId: String
+    authId: String @unique
     createdAt: DateTime!
     name: String!
     todoListsOwned: [TodoList] @relation(name: "OwnedBy")
     todoListsAssigned: [TodoList] @relation(name: "AssignedTo")
-    inTeam: Team 
+    inTeam: [Team] 
 }
 
 type Team {

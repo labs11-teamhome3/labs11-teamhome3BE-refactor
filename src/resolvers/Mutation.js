@@ -2,18 +2,13 @@ const validateAndParseToken = require('../helpers/validateAndParseToken');
 
 async function createUser(parent, args, ctx, info) {
   return ctx.prisma.createUser({
-    name: args.name,
+    //name: args.name,
     //identity: args.sub.split('|')[0],
-    authId: args.sub.split('|')[1],
-    inTeam: {
-      connect: {
-        id: args.inTeam,
-      },
-    },
+    authId: args.sub.split('|')[1]
   });
 }
 
-async function authenticateUser(parent, {idToken}, ctx, info) {
+async function authenticateUser(parent, {idToken, name}, ctx, info) {
  let userToken = null;
  try {
    userToken = await validateAndParseToken(idToken);
@@ -22,14 +17,16 @@ async function authenticateUser(parent, {idToken}, ctx, info) {
    throw new Error(err.message)
  }
 
+ userToken.name = name; 
  const id = userToken.sub.split("|")[1];
  //this function needs to be a query, how do I do that?
- //let user = await ctx.prisma.user({ where: {authId: id}}, info);
- //if(!user) {
+ let currentUser = await ctx.prisma.user({authId: id});
+ console.log(currentUser)
+ if(!currentUser) {
    //error says that prisma is not defined, is this a binding issue?
-   let user = createUser(ctx, userToken)
- //}
- return user; 
+   currentUser = await createUser(parent, userToken, ctx)
+ }
+ return currentUser; 
 }
 
 /*

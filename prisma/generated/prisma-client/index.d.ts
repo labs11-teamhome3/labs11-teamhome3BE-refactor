@@ -964,6 +964,7 @@ export type TodoListWhereUniqueInput = AtLeastOne<{
 
 export type UserWhereUniqueInput = AtLeastOne<{
   id: ID_Input;
+  authId?: String;
 }>;
 
 export interface EventCreateInput {
