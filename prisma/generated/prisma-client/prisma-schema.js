@@ -1479,7 +1479,7 @@ input TeamWhereUniqueInput {
 type Todo {
   id: ID!
   description: String!
-  partOf: TodoList
+  partOf: TodoList!
   completed: Boolean
 }
 
@@ -1491,7 +1491,7 @@ type TodoConnection {
 
 input TodoCreateInput {
   description: String!
-  partOf: TodoListCreateOneWithoutTodosInput
+  partOf: TodoListCreateOneWithoutTodosInput!
   completed: Boolean
 }
 
@@ -1735,12 +1735,10 @@ input TodoListUpdateManyWithWhereNestedInput {
   data: TodoListUpdateManyDataInput!
 }
 
-input TodoListUpdateOneWithoutTodosInput {
+input TodoListUpdateOneRequiredWithoutTodosInput {
   create: TodoListCreateWithoutTodosInput
   update: TodoListUpdateWithoutTodosDataInput
   upsert: TodoListUpsertWithoutTodosInput
-  delete: Boolean
-  disconnect: Boolean
   connect: TodoListWhereUniqueInput
 }
 
@@ -1947,7 +1945,7 @@ input TodoSubscriptionWhereInput {
 
 input TodoUpdateInput {
   description: String
-  partOf: TodoListUpdateOneWithoutTodosInput
+  partOf: TodoListUpdateOneRequiredWithoutTodosInput
   completed: Boolean
 }
 
