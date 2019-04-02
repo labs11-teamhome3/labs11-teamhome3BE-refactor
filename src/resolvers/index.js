@@ -8,6 +8,7 @@ const Message = require('./Message.js');
 const Event = require('./Event.js')
 const MessageComment = require('./MessageComment.js');
 const Tag = require('./Tag.js');
+const Document = require('./Document.js');
 
 const resolvers = {
     Query,
@@ -19,7 +20,8 @@ const resolvers = {
     Message,
     Event,
     MessageComment,
-    Tag
+    Tag,
+    Document
 };
 
 module.exports = resolvers;

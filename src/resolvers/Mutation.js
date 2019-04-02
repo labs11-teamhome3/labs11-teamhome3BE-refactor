@@ -386,6 +386,54 @@ function unlikeMessageComment(parent, args, context, info) {
     })
 }
 
+function addTagToMessage(parent, args, context, info) {
+    return context.prisma.updateMessage({
+        where: { id: args.messageId },
+        data: {
+            tag: {
+                connect: {
+                    id: args.tagId
+                }
+            }
+        }
+    })
+}
+
+function removeTagFromMessage(parent, args, context, info) {
+    return context.prisma.updateMessage({
+        where: { id: args.messageId },
+        data: {
+            tag: {
+                disconnect: true
+            }
+        }
+    })
+}
+
+function addTagToDocument(parent, args, context, info) {
+    return context.prisma.updateDocument({
+        where: { id: args.documentId },
+        data: {
+            tag: {
+                connect: {
+                    id: args.tagId
+                }
+            }
+        }
+    })
+}
+
+function removeTagFromDocument(parent, args, context, info) {
+    return context.prisma.updateDocument({
+        where: { id: args.documentId },
+        data: {
+            tag: {
+                disconnect: true
+            }
+        }
+    })
+}
+
 function createFolder(parent, args, context, info) {
   return context.prisma.createFolder({
     title: args.title,
@@ -400,6 +448,21 @@ function createFolder(parent, args, context, info) {
       }
     } 
   })
+}
+
+function updateFolderTitle(parent, args, context, info) {
+    return context.prisma.updateFolder({
+        where: {
+            id: args.folderId
+        },
+        data: {
+            title: args.title
+        }
+    })
+}
+
+function deleteFolder(parent, args, context, info) {
+    return context.prisma.deleteFolder({ id: args.folderId })
 }
 
 module.exports = {
@@ -440,6 +503,10 @@ module.exports = {
   addTag,
   updateTag,
   deleteTag,
+  addTagToMessage,
+  addTagToDocument,
+  removeTagFromMessage,
+  removeTagFromDocument,
 
   addMessageComment,
   updateMessageComment,
@@ -447,6 +514,7 @@ module.exports = {
   likeMessageComment,
   unlikeMessageComment,
 
-  createFolder
-
-};
+  createFolder,
+  updateFolderTitle,
+  deleteFolder
+}
