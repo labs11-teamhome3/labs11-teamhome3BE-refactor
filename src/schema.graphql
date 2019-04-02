@@ -22,7 +22,7 @@ type Mutation {
   createMessage(title: String!, teamId: ID!, userId: ID!, content: String!): Message
   deleteMessage(id: ID!): Message
   updateMessage(id: ID!, title: String, content: String): Message
-  ## Need to add ability to subscribe users to messages 
+
   addEvent(userId: ID, teamId: ID!, action_string: String!, object_string: String!): Event
   deleteEvent(eventId: ID!): Event
   addTag(name: String!, teamId: ID!): Tag

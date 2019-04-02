@@ -32,8 +32,8 @@ async function createTodo(parent, args, context, info) {
 }
 
 async function deleteTodo(parent, args, context, info) {
-  await context.prisma.deleteTodo({ id: args.id });
-  return `Todo ${args.id} deleted`;
+  return context.prisma.deleteTodo({ id: args.id });
+//   return `Todo ${args.id} deleted`;
 }
 
 async function updateTodo(parent, args, context, info) {
