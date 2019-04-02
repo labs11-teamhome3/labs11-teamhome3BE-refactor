@@ -6,10 +6,20 @@ type Mutation {
   createTodo(description: String!, partOf: ID!, completed: Boolean): Todo
   deleteTodo(id: String!): Todo
   updateTodo(id: String!, description: String!, completed: Boolean): Todo
-  createTodoList(description: String!, ownedBy: String!, assignedTo: String!, completed: Boolean, inTeam: ID): TodoList
+  createTodoList(
+    description: String!
+    ownedBy: String!
+    assignedTo: String!
+    completed: Boolean
+    inTeam: ID
+  ): TodoList
   deleteTodoList(id: String!): TodoList!
-  updateTodoList(id: String!, description: String!, completed: Boolean): TodoList
-  createTeam(teamName: String!): Team
+  updateTodoList(
+    id: String!
+    description: String!
+    completed: Boolean
+  ): TodoList
+  createTeam(teamName: String!, userId: ID!): Team
   deleteTeam(id: ID!): Team
   updateTeamName(id: ID!, teamName: ID!): Team
   addTodoListToTeam(teamId: ID!, todoListId: ID!): Team
@@ -22,32 +32,73 @@ type Mutation {
   addUserToAssignees(userId: ID!, todoListId: ID!): TodoList
   removeUserFromOwners(userId: ID!, todoListId: ID!): TodoList
   removeUserFromAssignees(userId: ID!, todoListId: ID!): TodoList
-  createMessage(title: String!, teamId: ID!, userId: ID!, content: String!): Message
+  createMessage(
+    title: String!
+    teamId: ID!
+    userId: ID!
+    content: String!
+  ): Message
   deleteMessage(id: ID!): Message
-  # addMessageTag(id: ID!, tagId: ID!): Message
-
-  addEvent(userId: ID, teamId: ID!, action_string: String!, object_string: String!): Event
+  addEvent(
+    userId: ID
+    teamId: ID!
+    action_string: String!
+    object_string: String!
+  ): Event
   deleteEvent(eventId: ID!): Event
   addTag(name: String!, teamId: ID!): Tag
   updateTag(tagId: ID!, name: String): Tag
   deleteTag(tagId: ID!): Tag
-  addMessageComment(messageId: ID!, userId: ID!, content: String!, image: String): MessageComment
-  updateMessageComment(commentId: ID!, content: String, image: String): MessageComment
+  addMessageComment(
+    messageId: ID!
+    userId: ID!
+    content: String!
+    image: String
+  ): MessageComment
+  updateMessageComment(
+    commentId: ID!
+    content: String
+    image: String
+  ): MessageComment
   deleteMessageComment(commentId: ID!): MessageComment
   likeMessageComment(commentId: ID!, userId: ID!): MessageComment
   unlikeMessageComment(commentId: ID!, userId: ID!): MessageComment
 
-  addDocument(userId: ID!, doc_url: String!, folderId: ID, teamId: ID!, title: String!, textContent: String!, tagId: ID): Document
+  addDocument(
+    doc_url: String!
+    folderId: ID
+    teamId: ID!
+    title: String!
+    textContent: String!
+    tagId: ID
+    image: String
+  ): Document
+  updateDocument(
+    documentId: ID!
+    doc_url: String
+    folderId: ID
+    title: String
+    textContent: String
+    tagId: ID
+    image: String
+  ): Document
   deleteDocument(documentId: ID!): Document
-  ## Need to add ability to subscribe users and add images 
+  ## Need to add ability to subscribe users
 
-  addDocumentComment(userId: ID!, documentId: ID!, content: String!): DocumentComment
+  addDocumentComment(
+    userId: ID!
+    documentId: ID!
+    content: String!
+  ): DocumentComment
   deleteDocumentComment(documentCommentId: ID!): DocumentComment
-  ## Need to add ability to like comments and add images
+  likeDocumentComment(commentId: ID!, userId: ID!): DocumentComment
+  unlikeDocumentComment(commentId: ID!, userId: ID!): DocumentComment
 
   createFolder(title: String!, userId: ID!, teamId: ID!): Folder
   deleteFolder(folderId: ID!): Folder
   updateFolderTitle(folderId: ID!, title: String): Folder
+  addDocumentToFolder(folderId: ID!, documentId: ID!): Document
+  removeDocumentFromFolder(folderId: ID!, documentId: ID!): Document
 
   addTagToMessage(messageId: ID!, tagId: ID!): Message
   removeTagFromMessage(messageId: ID!): Message
@@ -187,7 +238,7 @@ type Document {
 }
 
 type DocumentComment {
-  id: ID! 
+  id: ID!
   createdAt: Date
   user: User!
   document: Document!
@@ -202,4 +253,5 @@ type Folder {
   title: String!
   user: User!
   team: Team!
+  documents: [Document]
 }

@@ -107,4 +107,5 @@ type Folder {
     user: User!
     team: Team!
     createdAt: DateTime!
+    documents: [Document]
 }
