@@ -39,23 +39,23 @@ type Team {
 type Message {
     id: ID! @unique
     title: String!
-    creator: User! @relation(name: "Creator")
+    creator: User! @relation(name: "MessageCreator")
     inTeam: Team!
     content: String!
     images: [String]
     tag: Tag
     comments: [MessageComment]
-    subscribedUsers: [User] @relation(name: "Subscribed")
+    subscribedUsers: [User] @relation(name: "MessageSubscribers")
     createdAt: DateTime!
 }
 
 type MessageComment {
     id: ID! @unique
     content: String!
-    user: User! @relation(name: "Commentor")
+    user: User! @relation(name: "MessageCommentor")
     message: Message!
     image: String
-    likes: [User] @relation(name: "Likes")
+    likes: [User] @relation(name: "MessageCommentLikers")
     createdAt: DateTime!
 }
 
@@ -77,7 +77,7 @@ type Event {
 type Document {
     id: ID! @unique
     doc_url: String!
-    user: User!
+    user: User! @relation(name: "DocumentCreator")
     folder: Folder
     team: Team!
     title: String!
@@ -85,17 +85,17 @@ type Document {
     tag: Tag
     images: [String]
     comments: [DocumentComment]
-    subscribedUsers: [User]
+    subscribedUsers: [User] @relation(name: "DocumentSubscribers")
     createdAt: DateTime!
 }
 
 type DocumentComment {
     id: ID! @unique
-    user: User!
+    user: User! @relation(name: "DocumentCommentor")
     document: Document!
     content: String!
     image: String
-    likes: [User]
+    likes: [User] @relation(name: "DocumentCommentLikers")
     createdAt: DateTime!
 }
 
