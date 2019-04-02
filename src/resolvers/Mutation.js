@@ -450,19 +450,18 @@ function createFolder(parent, args, context, info) {
   })
 }
 
+
 function updateFolderTitle(parent, args, context, info) {
-    return context.prisma.updateFolder({
-        where: {
-            id: args.folderId
-        },
-        data: {
-            title: args.title
-        }
-    })
+  return context.prisma.updateFolder({
+      where: { id: args.folderId },
+      data: {
+        title: args.title
+      }
+  })
 }
 
 function deleteFolder(parent, args, context, info) {
-    return context.prisma.deleteFolder({ id: args.folderId })
+  return context.prisma.deleteFolder({id: args.folderId})
 }
 
 module.exports = {
