@@ -104,7 +104,12 @@ async function updateTodoList(parent, args, context, info) {
 
 async function createTeam(parent, args, ctx, info) {
   return ctx.prisma.createTeam({
-    teamName: args.teamName,
+      teamName: args.teamName,
+      members: {
+        connect: {
+          id: args.userId
+        }
+      }
   });
 }
 
