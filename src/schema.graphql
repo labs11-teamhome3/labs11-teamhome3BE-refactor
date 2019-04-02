@@ -1,7 +1,7 @@
 type Mutation {
   createUser(name: String! authId: String!): User!
   createTodo(description: String!, partOf: ID!, completed: Boolean): Todo
-  deleteTodo(id: String!): String!
+  deleteTodo(id: String!): Todo
   updateTodo(id: String!, description: String!, completed: Boolean): Todo
   createTodoList(description: String!, ownedBy: String!, assignedTo: String!, completed: Boolean, inTeam: ID): TodoList
   deleteTodoList(id: String!): TodoList!
