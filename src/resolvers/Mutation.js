@@ -284,16 +284,6 @@ function deleteMessage(parent, args, context , info) {
     })
 }
 
-async function updateMessage(parent, args, context, info) {
-    return context.prisma.updateMessage({
-        where: {id: args.id},
-        data: {
-            title: args.title,
-            content: args.content,
-        }
-    })
-}
-
 function addEvent(parent, args, context, info) {
     return context.prisma.createEvent({
         action_string: args.action_string,
@@ -396,6 +386,22 @@ function unlikeMessageComment(parent, args, context, info) {
     })
 }
 
+function createFolder(parent, args, context, info) {
+  return context.prisma.createFolder({
+    title: args.title,
+    user: {
+      connect: {
+        id: args.userId
+      }
+    },
+    team: {
+      connect: {
+        id: args.teamId
+      }
+    } 
+  })
+}
+
 module.exports = {
   createUser,
   authenticateUser,
@@ -418,36 +424,29 @@ module.exports = {
   removeTodoListFromTeam,
   removeUserFromTeam,
 
-   toggleTodoComplete,
-   toggleTodoListComplete,
-   addUserToOwners,
-   addUserToAssignees,
-   removeUserFromOwners,
-   removeUserFromAssignees,
+  toggleTodoComplete,
+  toggleTodoListComplete,
+  addUserToOwners,
+  addUserToAssignees,
+  removeUserFromOwners,
+  removeUserFromAssignees,
 
-   createMessage,
-   deleteMessage,
-   updateMessage,
+  createMessage,
+  deleteMessage,
 
-   addEvent,
-   deleteEvent,
+  addEvent,
+  deleteEvent,
 
-   addTag,
-   updateTag,
-   deleteTag,
+  addTag,
+  updateTag,
+  deleteTag,
 
-   addMessageComment,
-   updateMessageComment,
-   deleteMessageComment,
-   likeMessageComment,
-   unlikeMessageComment
+  addMessageComment,
+  updateMessageComment,
+  deleteMessageComment,
+  likeMessageComment,
+  unlikeMessageComment,
 
-
-
-
-
-
+  createFolder
 
 };
-
-// Need to make users unique by adding email and phone numbers, finish CRUD on users/
