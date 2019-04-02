@@ -550,6 +550,29 @@ function unlikeDocumentComment(parent, args, context, info) {
     })
 }
 
+function addDocumentToFolder(parent, args, context, info) {
+    return context.prisma.updateDocument({
+        where: { id: args.documentId },
+        data: {
+            folder: {
+                connect: {
+                    id: args.folderId
+                }
+            }
+        }
+    })
+}
+
+function removeDocumentFromFolder(parent, args, context, info) {
+    return context.prisma.updateDocument({
+        where: { id: args.documentId },
+        data: {
+            folder: {
+                disconnect: true
+            }
+        }
+    })
+}
 module.exports = {
   createUser,
   authenticateUser,
@@ -606,6 +629,8 @@ module.exports = {
   addDocument,
   updateDocument,
   deleteDocument,
+  addDocumentToFolder,
+  removeDocumentFromFolder,
 
   addDocumentComment,
   deleteDocumentComment,
