@@ -3158,7 +3158,7 @@ type User {
   id: ID!
   authId: String
   createdAt: DateTime!
-  name: String!
+  name: String
   todoListsOwned(where: TodoListWhereInput, orderBy: TodoListOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [TodoList!]
   todoListsAssigned(where: TodoListWhereInput, orderBy: TodoListOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [TodoList!]
   inTeam(where: TeamWhereInput, orderBy: TeamOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Team!]
@@ -3172,7 +3172,7 @@ type UserConnection {
 
 input UserCreateInput {
   authId: String
-  name: String!
+  name: String
   todoListsOwned: TodoListCreateManyWithoutOwnedByInput
   todoListsAssigned: TodoListCreateManyWithoutAssignedToInput
   inTeam: TeamCreateManyWithoutMembersInput
@@ -3205,21 +3205,21 @@ input UserCreateOneInput {
 
 input UserCreateWithoutInTeamInput {
   authId: String
-  name: String!
+  name: String
   todoListsOwned: TodoListCreateManyWithoutOwnedByInput
   todoListsAssigned: TodoListCreateManyWithoutAssignedToInput
 }
 
 input UserCreateWithoutTodoListsAssignedInput {
   authId: String
-  name: String!
+  name: String
   todoListsOwned: TodoListCreateManyWithoutOwnedByInput
   inTeam: TeamCreateManyWithoutMembersInput
 }
 
 input UserCreateWithoutTodoListsOwnedInput {
   authId: String
-  name: String!
+  name: String
   todoListsAssigned: TodoListCreateManyWithoutAssignedToInput
   inTeam: TeamCreateManyWithoutMembersInput
 }
@@ -3246,7 +3246,7 @@ type UserPreviousValues {
   id: ID!
   authId: String
   createdAt: DateTime!
-  name: String!
+  name: String
 }
 
 input UserScalarWhereInput {
