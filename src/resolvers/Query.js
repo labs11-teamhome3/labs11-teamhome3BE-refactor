@@ -27,8 +27,8 @@ const todo = (parent, args, context, info) => {
   return context.prisma.todo({ id: args.id });
 };
 
-const teams = (parent, args, context, info) => {
-  return context.prisma.teams();
+const teamsByUser = (parent, args, context, info) => {
+  return context.prisma.teams({ where: { members_some: { id: args.userId } } });
 };
 
 const team = (parent, args, context, info) => {
@@ -95,7 +95,7 @@ module.exports = {
   user,
   todoLists,
   todoList,
-  teams,
+  teamsByUser,
   team,
   messages,
   message,
