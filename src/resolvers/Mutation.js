@@ -1,4 +1,6 @@
 const validateAndParseToken = require('../helpers/validateAndParseToken');
+const sgMail = require('@sendgrid/mail');
+sgMail.setApiKey(process.env.SENDGRID_API_KEY);
 
 async function createUser(parent, args, ctx, info) {
   return ctx.prisma.createUser({
@@ -190,13 +192,23 @@ function addUserToOwners(parent, args, context, info) {
 // TODO: need to send email and text to user when they are added as assignee to todoList
 async function addUserToAssignees(parent, args, context, info) {
     const user = await context.prisma.user({ id: args.userId });
-    console.log(user);
+    console.log('user', user);
+    const todoList = await context.prisma.todoList({ id: args.todoListId });
+    console.log('todoList', todoList);
     if (user.email) {
-        // send them an email using nodemailer
+        // send them an email using sendgrid
+        const email = {
+            to: user.email,
+            from: 'app@manaje.com',
+            subject: 'You have been assigned to a Todo List',
+            html: `<div>The owner of '${todoList.description}' has assigned you as a participant!<div><a href='http://manaje.netlify.com'>Check it out!</a>`
+        }
+        await sgMail.send(email);
     }
     if (user.phone) {
         // send them a text using twilio
     }
+
     return context.prisma.updateTodoList({
         where: { id: args.todoListId },
         data: {

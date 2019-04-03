@@ -561,6 +561,8 @@ export interface ClientConstructor<T> {
  * Types
  */
 
+export type Role = "ADMIN" | "GENERAL";
+
 export type TodoListOrderByInput =
   | "id_ASC"
   | "id_DESC"
@@ -582,6 +584,14 @@ export type UserOrderByInput =
   | "createdAt_DESC"
   | "name_ASC"
   | "name_DESC"
+  | "role_ASC"
+  | "role_DESC"
+  | "email_ASC"
+  | "email_DESC"
+  | "phone_ASC"
+  | "phone_DESC"
+  | "profilePic_ASC"
+  | "profilePic_DESC"
   | "updatedAt_ASC"
   | "updatedAt_DESC";
 
@@ -809,6 +819,52 @@ export interface UserWhereInput {
   inTeam_every?: TeamWhereInput;
   inTeam_some?: TeamWhereInput;
   inTeam_none?: TeamWhereInput;
+  role?: Role;
+  role_not?: Role;
+  role_in?: Role[] | Role;
+  role_not_in?: Role[] | Role;
+  email?: String;
+  email_not?: String;
+  email_in?: String[] | String;
+  email_not_in?: String[] | String;
+  email_lt?: String;
+  email_lte?: String;
+  email_gt?: String;
+  email_gte?: String;
+  email_contains?: String;
+  email_not_contains?: String;
+  email_starts_with?: String;
+  email_not_starts_with?: String;
+  email_ends_with?: String;
+  email_not_ends_with?: String;
+  phone?: String;
+  phone_not?: String;
+  phone_in?: String[] | String;
+  phone_not_in?: String[] | String;
+  phone_lt?: String;
+  phone_lte?: String;
+  phone_gt?: String;
+  phone_gte?: String;
+  phone_contains?: String;
+  phone_not_contains?: String;
+  phone_starts_with?: String;
+  phone_not_starts_with?: String;
+  phone_ends_with?: String;
+  phone_not_ends_with?: String;
+  profilePic?: String;
+  profilePic_not?: String;
+  profilePic_in?: String[] | String;
+  profilePic_not_in?: String[] | String;
+  profilePic_lt?: String;
+  profilePic_lte?: String;
+  profilePic_gt?: String;
+  profilePic_gte?: String;
+  profilePic_contains?: String;
+  profilePic_not_contains?: String;
+  profilePic_starts_with?: String;
+  profilePic_not_starts_with?: String;
+  profilePic_ends_with?: String;
+  profilePic_not_ends_with?: String;
   AND?: UserWhereInput[] | UserWhereInput;
   OR?: UserWhereInput[] | UserWhereInput;
   NOT?: UserWhereInput[] | UserWhereInput;
@@ -1378,6 +1434,10 @@ export interface UserCreateInput {
   todoListsOwned?: TodoListCreateManyWithoutOwnedByInput;
   todoListsAssigned?: TodoListCreateManyWithoutAssignedToInput;
   inTeam?: TeamCreateManyWithoutMembersInput;
+  role?: Role;
+  email?: String;
+  phone?: String;
+  profilePic?: String;
 }
 
 export interface TodoListCreateManyWithoutOwnedByInput {
@@ -1407,6 +1467,10 @@ export interface UserCreateWithoutTodoListsAssignedInput {
   name?: String;
   todoListsOwned?: TodoListCreateManyWithoutOwnedByInput;
   inTeam?: TeamCreateManyWithoutMembersInput;
+  role?: Role;
+  email?: String;
+  phone?: String;
+  profilePic?: String;
 }
 
 export interface TeamCreateManyWithoutMembersInput {
@@ -1451,6 +1515,10 @@ export interface UserCreateWithoutTodoListsOwnedInput {
   name?: String;
   todoListsAssigned?: TodoListCreateManyWithoutAssignedToInput;
   inTeam?: TeamCreateManyWithoutMembersInput;
+  role?: Role;
+  email?: String;
+  phone?: String;
+  profilePic?: String;
 }
 
 export interface TodoListCreateManyWithoutAssignedToInput {
@@ -1503,6 +1571,10 @@ export interface UserCreateWithoutInTeamInput {
   name?: String;
   todoListsOwned?: TodoListCreateManyWithoutOwnedByInput;
   todoListsAssigned?: TodoListCreateManyWithoutAssignedToInput;
+  role?: Role;
+  email?: String;
+  phone?: String;
+  profilePic?: String;
 }
 
 export interface MessageCreateManyWithoutInTeamInput {
@@ -1720,6 +1792,10 @@ export interface UserUpdateDataInput {
   todoListsOwned?: TodoListUpdateManyWithoutOwnedByInput;
   todoListsAssigned?: TodoListUpdateManyWithoutAssignedToInput;
   inTeam?: TeamUpdateManyWithoutMembersInput;
+  role?: Role;
+  email?: String;
+  phone?: String;
+  profilePic?: String;
 }
 
 export interface TodoListUpdateManyWithoutOwnedByInput {
@@ -1785,6 +1861,10 @@ export interface UserUpdateWithoutTodoListsAssignedDataInput {
   name?: String;
   todoListsOwned?: TodoListUpdateManyWithoutOwnedByInput;
   inTeam?: TeamUpdateManyWithoutMembersInput;
+  role?: Role;
+  email?: String;
+  phone?: String;
+  profilePic?: String;
 }
 
 export interface TeamUpdateManyWithoutMembersInput {
@@ -1883,6 +1963,10 @@ export interface UserUpdateWithoutTodoListsOwnedDataInput {
   name?: String;
   todoListsAssigned?: TodoListUpdateManyWithoutAssignedToInput;
   inTeam?: TeamUpdateManyWithoutMembersInput;
+  role?: Role;
+  email?: String;
+  phone?: String;
+  profilePic?: String;
 }
 
 export interface TodoListUpdateManyWithoutAssignedToInput {
@@ -2045,6 +2129,10 @@ export interface UserUpdateWithoutInTeamDataInput {
   name?: String;
   todoListsOwned?: TodoListUpdateManyWithoutOwnedByInput;
   todoListsAssigned?: TodoListUpdateManyWithoutAssignedToInput;
+  role?: Role;
+  email?: String;
+  phone?: String;
+  profilePic?: String;
 }
 
 export interface UserUpsertWithWhereUniqueWithoutInTeamInput {
@@ -2104,6 +2192,52 @@ export interface UserScalarWhereInput {
   name_not_starts_with?: String;
   name_ends_with?: String;
   name_not_ends_with?: String;
+  role?: Role;
+  role_not?: Role;
+  role_in?: Role[] | Role;
+  role_not_in?: Role[] | Role;
+  email?: String;
+  email_not?: String;
+  email_in?: String[] | String;
+  email_not_in?: String[] | String;
+  email_lt?: String;
+  email_lte?: String;
+  email_gt?: String;
+  email_gte?: String;
+  email_contains?: String;
+  email_not_contains?: String;
+  email_starts_with?: String;
+  email_not_starts_with?: String;
+  email_ends_with?: String;
+  email_not_ends_with?: String;
+  phone?: String;
+  phone_not?: String;
+  phone_in?: String[] | String;
+  phone_not_in?: String[] | String;
+  phone_lt?: String;
+  phone_lte?: String;
+  phone_gt?: String;
+  phone_gte?: String;
+  phone_contains?: String;
+  phone_not_contains?: String;
+  phone_starts_with?: String;
+  phone_not_starts_with?: String;
+  phone_ends_with?: String;
+  phone_not_ends_with?: String;
+  profilePic?: String;
+  profilePic_not?: String;
+  profilePic_in?: String[] | String;
+  profilePic_not_in?: String[] | String;
+  profilePic_lt?: String;
+  profilePic_lte?: String;
+  profilePic_gt?: String;
+  profilePic_gte?: String;
+  profilePic_contains?: String;
+  profilePic_not_contains?: String;
+  profilePic_starts_with?: String;
+  profilePic_not_starts_with?: String;
+  profilePic_ends_with?: String;
+  profilePic_not_ends_with?: String;
   AND?: UserScalarWhereInput[] | UserScalarWhereInput;
   OR?: UserScalarWhereInput[] | UserScalarWhereInput;
   NOT?: UserScalarWhereInput[] | UserScalarWhereInput;
@@ -2117,6 +2251,10 @@ export interface UserUpdateManyWithWhereNestedInput {
 export interface UserUpdateManyDataInput {
   authId?: String;
   name?: String;
+  role?: Role;
+  email?: String;
+  phone?: String;
+  profilePic?: String;
 }
 
 export interface MessageUpdateManyWithoutInTeamInput {
@@ -3548,11 +3686,19 @@ export interface UserUpdateInput {
   todoListsOwned?: TodoListUpdateManyWithoutOwnedByInput;
   todoListsAssigned?: TodoListUpdateManyWithoutAssignedToInput;
   inTeam?: TeamUpdateManyWithoutMembersInput;
+  role?: Role;
+  email?: String;
+  phone?: String;
+  profilePic?: String;
 }
 
 export interface UserUpdateManyMutationInput {
   authId?: String;
   name?: String;
+  role?: Role;
+  email?: String;
+  phone?: String;
+  profilePic?: String;
 }
 
 export interface DocumentSubscriptionWhereInput {
@@ -3778,6 +3924,10 @@ export interface User {
   authId?: String;
   createdAt: DateTimeOutput;
   name?: String;
+  role?: Role;
+  email?: String;
+  phone?: String;
+  profilePic?: String;
 }
 
 export interface UserPromise extends Promise<User>, Fragmentable {
@@ -3818,6 +3968,10 @@ export interface UserPromise extends Promise<User>, Fragmentable {
       last?: Int;
     }
   ) => T;
+  role: () => Promise<Role>;
+  email: () => Promise<String>;
+  phone: () => Promise<String>;
+  profilePic: () => Promise<String>;
 }
 
 export interface UserSubscription
@@ -3860,6 +4014,10 @@ export interface UserSubscription
       last?: Int;
     }
   ) => T;
+  role: () => Promise<AsyncIterator<Role>>;
+  email: () => Promise<AsyncIterator<String>>;
+  phone: () => Promise<AsyncIterator<String>>;
+  profilePic: () => Promise<AsyncIterator<String>>;
 }
 
 export interface TodoList {
@@ -5578,6 +5736,10 @@ export interface UserPreviousValues {
   authId?: String;
   createdAt: DateTimeOutput;
   name?: String;
+  role?: Role;
+  email?: String;
+  phone?: String;
+  profilePic?: String;
 }
 
 export interface UserPreviousValuesPromise
@@ -5587,6 +5749,10 @@ export interface UserPreviousValuesPromise
   authId: () => Promise<String>;
   createdAt: () => Promise<DateTimeOutput>;
   name: () => Promise<String>;
+  role: () => Promise<Role>;
+  email: () => Promise<String>;
+  phone: () => Promise<String>;
+  profilePic: () => Promise<String>;
 }
 
 export interface UserPreviousValuesSubscription
@@ -5596,6 +5762,10 @@ export interface UserPreviousValuesSubscription
   authId: () => Promise<AsyncIterator<String>>;
   createdAt: () => Promise<AsyncIterator<DateTimeOutput>>;
   name: () => Promise<AsyncIterator<String>>;
+  role: () => Promise<AsyncIterator<Role>>;
+  email: () => Promise<AsyncIterator<String>>;
+  phone: () => Promise<AsyncIterator<String>>;
+  profilePic: () => Promise<AsyncIterator<String>>;
 }
 
 /*

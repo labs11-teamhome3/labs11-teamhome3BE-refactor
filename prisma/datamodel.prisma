@@ -29,6 +29,10 @@ type User {
   todoListsOwned: [TodoList] @relation(name: "OwnedBy")
   todoListsAssigned: [TodoList] @relation(name: "AssignedTo")
   inTeam: [Team]
+  role: Role
+  email: String
+  phone: String
+  profilePic: String
 }
 
 type Team {

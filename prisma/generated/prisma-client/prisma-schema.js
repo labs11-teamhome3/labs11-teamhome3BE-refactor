@@ -1915,6 +1915,11 @@ type Query {
   node(id: ID!): Node
 }
 
+enum Role {
+  ADMIN
+  GENERAL
+}
+
 type Subscription {
   document(where: DocumentSubscriptionWhereInput): DocumentSubscriptionPayload
   documentComment(where: DocumentCommentSubscriptionWhereInput): DocumentCommentSubscriptionPayload
@@ -3162,6 +3167,10 @@ type User {
   todoListsOwned(where: TodoListWhereInput, orderBy: TodoListOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [TodoList!]
   todoListsAssigned(where: TodoListWhereInput, orderBy: TodoListOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [TodoList!]
   inTeam(where: TeamWhereInput, orderBy: TeamOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Team!]
+  role: Role
+  email: String
+  phone: String
+  profilePic: String
 }
 
 type UserConnection {
@@ -3176,6 +3185,10 @@ input UserCreateInput {
   todoListsOwned: TodoListCreateManyWithoutOwnedByInput
   todoListsAssigned: TodoListCreateManyWithoutAssignedToInput
   inTeam: TeamCreateManyWithoutMembersInput
+  role: Role
+  email: String
+  phone: String
+  profilePic: String
 }
 
 input UserCreateManyInput {
@@ -3208,6 +3221,10 @@ input UserCreateWithoutInTeamInput {
   name: String
   todoListsOwned: TodoListCreateManyWithoutOwnedByInput
   todoListsAssigned: TodoListCreateManyWithoutAssignedToInput
+  role: Role
+  email: String
+  phone: String
+  profilePic: String
 }
 
 input UserCreateWithoutTodoListsAssignedInput {
@@ -3215,6 +3232,10 @@ input UserCreateWithoutTodoListsAssignedInput {
   name: String
   todoListsOwned: TodoListCreateManyWithoutOwnedByInput
   inTeam: TeamCreateManyWithoutMembersInput
+  role: Role
+  email: String
+  phone: String
+  profilePic: String
 }
 
 input UserCreateWithoutTodoListsOwnedInput {
@@ -3222,6 +3243,10 @@ input UserCreateWithoutTodoListsOwnedInput {
   name: String
   todoListsAssigned: TodoListCreateManyWithoutAssignedToInput
   inTeam: TeamCreateManyWithoutMembersInput
+  role: Role
+  email: String
+  phone: String
+  profilePic: String
 }
 
 type UserEdge {
@@ -3238,6 +3263,14 @@ enum UserOrderByInput {
   createdAt_DESC
   name_ASC
   name_DESC
+  role_ASC
+  role_DESC
+  email_ASC
+  email_DESC
+  phone_ASC
+  phone_DESC
+  profilePic_ASC
+  profilePic_DESC
   updatedAt_ASC
   updatedAt_DESC
 }
@@ -3247,6 +3280,10 @@ type UserPreviousValues {
   authId: String
   createdAt: DateTime!
   name: String
+  role: Role
+  email: String
+  phone: String
+  profilePic: String
 }
 
 input UserScalarWhereInput {
@@ -3300,6 +3337,52 @@ input UserScalarWhereInput {
   name_not_starts_with: String
   name_ends_with: String
   name_not_ends_with: String
+  role: Role
+  role_not: Role
+  role_in: [Role!]
+  role_not_in: [Role!]
+  email: String
+  email_not: String
+  email_in: [String!]
+  email_not_in: [String!]
+  email_lt: String
+  email_lte: String
+  email_gt: String
+  email_gte: String
+  email_contains: String
+  email_not_contains: String
+  email_starts_with: String
+  email_not_starts_with: String
+  email_ends_with: String
+  email_not_ends_with: String
+  phone: String
+  phone_not: String
+  phone_in: [String!]
+  phone_not_in: [String!]
+  phone_lt: String
+  phone_lte: String
+  phone_gt: String
+  phone_gte: String
+  phone_contains: String
+  phone_not_contains: String
+  phone_starts_with: String
+  phone_not_starts_with: String
+  phone_ends_with: String
+  phone_not_ends_with: String
+  profilePic: String
+  profilePic_not: String
+  profilePic_in: [String!]
+  profilePic_not_in: [String!]
+  profilePic_lt: String
+  profilePic_lte: String
+  profilePic_gt: String
+  profilePic_gte: String
+  profilePic_contains: String
+  profilePic_not_contains: String
+  profilePic_starts_with: String
+  profilePic_not_starts_with: String
+  profilePic_ends_with: String
+  profilePic_not_ends_with: String
   AND: [UserScalarWhereInput!]
   OR: [UserScalarWhereInput!]
   NOT: [UserScalarWhereInput!]
@@ -3329,6 +3412,10 @@ input UserUpdateDataInput {
   todoListsOwned: TodoListUpdateManyWithoutOwnedByInput
   todoListsAssigned: TodoListUpdateManyWithoutAssignedToInput
   inTeam: TeamUpdateManyWithoutMembersInput
+  role: Role
+  email: String
+  phone: String
+  profilePic: String
 }
 
 input UserUpdateInput {
@@ -3337,11 +3424,19 @@ input UserUpdateInput {
   todoListsOwned: TodoListUpdateManyWithoutOwnedByInput
   todoListsAssigned: TodoListUpdateManyWithoutAssignedToInput
   inTeam: TeamUpdateManyWithoutMembersInput
+  role: Role
+  email: String
+  phone: String
+  profilePic: String
 }
 
 input UserUpdateManyDataInput {
   authId: String
   name: String
+  role: Role
+  email: String
+  phone: String
+  profilePic: String
 }
 
 input UserUpdateManyInput {
@@ -3359,6 +3454,10 @@ input UserUpdateManyInput {
 input UserUpdateManyMutationInput {
   authId: String
   name: String
+  role: Role
+  email: String
+  phone: String
+  profilePic: String
 }
 
 input UserUpdateManyWithoutInTeamInput {
@@ -3423,6 +3522,10 @@ input UserUpdateWithoutInTeamDataInput {
   name: String
   todoListsOwned: TodoListUpdateManyWithoutOwnedByInput
   todoListsAssigned: TodoListUpdateManyWithoutAssignedToInput
+  role: Role
+  email: String
+  phone: String
+  profilePic: String
 }
 
 input UserUpdateWithoutTodoListsAssignedDataInput {
@@ -3430,6 +3533,10 @@ input UserUpdateWithoutTodoListsAssignedDataInput {
   name: String
   todoListsOwned: TodoListUpdateManyWithoutOwnedByInput
   inTeam: TeamUpdateManyWithoutMembersInput
+  role: Role
+  email: String
+  phone: String
+  profilePic: String
 }
 
 input UserUpdateWithoutTodoListsOwnedDataInput {
@@ -3437,6 +3544,10 @@ input UserUpdateWithoutTodoListsOwnedDataInput {
   name: String
   todoListsAssigned: TodoListUpdateManyWithoutAssignedToInput
   inTeam: TeamUpdateManyWithoutMembersInput
+  role: Role
+  email: String
+  phone: String
+  profilePic: String
 }
 
 input UserUpdateWithWhereUniqueNestedInput {
@@ -3548,6 +3659,52 @@ input UserWhereInput {
   inTeam_every: TeamWhereInput
   inTeam_some: TeamWhereInput
   inTeam_none: TeamWhereInput
+  role: Role
+  role_not: Role
+  role_in: [Role!]
+  role_not_in: [Role!]
+  email: String
+  email_not: String
+  email_in: [String!]
+  email_not_in: [String!]
+  email_lt: String
+  email_lte: String
+  email_gt: String
+  email_gte: String
+  email_contains: String
+  email_not_contains: String
+  email_starts_with: String
+  email_not_starts_with: String
+  email_ends_with: String
+  email_not_ends_with: String
+  phone: String
+  phone_not: String
+  phone_in: [String!]
+  phone_not_in: [String!]
+  phone_lt: String
+  phone_lte: String
+  phone_gt: String
+  phone_gte: String
+  phone_contains: String
+  phone_not_contains: String
+  phone_starts_with: String
+  phone_not_starts_with: String
+  phone_ends_with: String
+  phone_not_ends_with: String
+  profilePic: String
+  profilePic_not: String
+  profilePic_in: [String!]
+  profilePic_not_in: [String!]
+  profilePic_lt: String
+  profilePic_lte: String
+  profilePic_gt: String
+  profilePic_gte: String
+  profilePic_contains: String
+  profilePic_not_contains: String
+  profilePic_starts_with: String
+  profilePic_not_starts_with: String
+  profilePic_ends_with: String
+  profilePic_not_ends_with: String
   AND: [UserWhereInput!]
   OR: [UserWhereInput!]
   NOT: [UserWhereInput!]

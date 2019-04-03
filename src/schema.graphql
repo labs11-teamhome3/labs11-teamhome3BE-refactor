@@ -175,6 +175,9 @@ type User {
   todoListsAssigned: [TodoList]
   inTeam: [Team]
   role: Role
+  email: String
+  phone: String
+  profilePic: String
 }
 
 type Team {
