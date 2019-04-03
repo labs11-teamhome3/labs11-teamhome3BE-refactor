@@ -42,6 +42,7 @@ type Mutation {
     userId: ID!
     content: String!
   ): Message
+  updateMessage(title: String, content: String): Message
   deleteMessage(id: ID!): Message
   addEvent(
     userId: ID
