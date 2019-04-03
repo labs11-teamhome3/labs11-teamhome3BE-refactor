@@ -1916,8 +1916,8 @@ type Query {
 }
 
 enum Role {
-  Admin
-  General
+  ADMIN
+  GENERAL
 }
 
 type Subscription {

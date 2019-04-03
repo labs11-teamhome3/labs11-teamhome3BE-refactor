@@ -6,6 +6,7 @@
   "author": "Daniel Weinman <namniewd@gmail.com>",
   "license": "MIT",
   "dependencies": {
+    "@sendgrid/mail": "^6.3.1",
     "apollo-server-express": "^2.4.8",
     "bcryptjs": "^2.4.3",
     "dotenv": "^7.0.0",
@@ -14,6 +15,7 @@
     "graphql-yoga": "^1.17.4",
     "jsonwebtoken": "^8.5.1",
     "jwks-rsa": "^1.4.0",
+    "nodemailer": "^6.0.0",
     "prisma": "^1.29.2",
     "prisma-client-lib": "^1.29.1"
   },
