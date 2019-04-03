@@ -1,3 +1,8 @@
+enum Role {
+    ADMIN
+    GENERAL
+}
+    
 type TodoList {
   id: ID! @unique
   createdAt: DateTime!

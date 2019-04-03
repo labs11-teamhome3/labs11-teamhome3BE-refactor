@@ -1,5 +1,10 @@
 scalar Date
 
+enum Role {
+  ADMIN
+  GENERAL
+}
+
 type Mutation {
   createUser(authId: String!): User!
   authenticateUser(idToken: String!): User
@@ -168,6 +173,7 @@ type User {
   todoListsOwned: [TodoList]
   todoListsAssigned: [TodoList]
   inTeam: [Team]
+  role: Role
 }
 
 type Team {
