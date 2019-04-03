@@ -74,11 +74,6 @@ async function createTodoList(parent, args, context, info) {
         id: args.ownedBy,
       },
     },
-    assignedTo: {
-      connect: {
-        id: args.assignedTo,
-      },
-    },
     inTeam: {
       connect: {
         id: args.inTeam,

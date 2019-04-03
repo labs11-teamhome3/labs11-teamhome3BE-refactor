@@ -14,7 +14,6 @@ type Mutation {
   createTodoList(
     description: String!
     ownedBy: String!
-    assignedTo: String!
     completed: Boolean
     inTeam: ID
   ): TodoList
