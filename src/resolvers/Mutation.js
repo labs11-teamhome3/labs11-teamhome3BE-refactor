@@ -8,7 +8,7 @@ async function createUser(parent, args, ctx, info) {
     email: args.email,
     identity: args.sub.split('|')[0],
     authId: args.sub.split('|')[1],
-    role: "Admin",
+    role: "ADMIN",
     profilePic: args.picture
   });
 }
