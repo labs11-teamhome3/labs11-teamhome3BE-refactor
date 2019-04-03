@@ -582,6 +582,8 @@ export type UserOrderByInput =
   | "authId_DESC"
   | "createdAt_ASC"
   | "createdAt_DESC"
+  | "identity_ASC"
+  | "identity_DESC"
   | "name_ASC"
   | "name_DESC"
   | "role_ASC"
@@ -796,6 +798,20 @@ export interface UserWhereInput {
   createdAt_lte?: DateTimeInput;
   createdAt_gt?: DateTimeInput;
   createdAt_gte?: DateTimeInput;
+  identity?: String;
+  identity_not?: String;
+  identity_in?: String[] | String;
+  identity_not_in?: String[] | String;
+  identity_lt?: String;
+  identity_lte?: String;
+  identity_gt?: String;
+  identity_gte?: String;
+  identity_contains?: String;
+  identity_not_contains?: String;
+  identity_starts_with?: String;
+  identity_not_starts_with?: String;
+  identity_ends_with?: String;
+  identity_not_ends_with?: String;
   name?: String;
   name_not?: String;
   name_in?: String[] | String;
@@ -1430,6 +1446,7 @@ export interface UserCreateOneInput {
 
 export interface UserCreateInput {
   authId?: String;
+  identity?: String;
   name?: String;
   todoListsOwned?: TodoListCreateManyWithoutOwnedByInput;
   todoListsAssigned?: TodoListCreateManyWithoutAssignedToInput;
@@ -1464,6 +1481,7 @@ export interface UserCreateManyWithoutTodoListsAssignedInput {
 
 export interface UserCreateWithoutTodoListsAssignedInput {
   authId?: String;
+  identity?: String;
   name?: String;
   todoListsOwned?: TodoListCreateManyWithoutOwnedByInput;
   inTeam?: TeamCreateManyWithoutMembersInput;
@@ -1512,6 +1530,7 @@ export interface UserCreateManyWithoutTodoListsOwnedInput {
 
 export interface UserCreateWithoutTodoListsOwnedInput {
   authId?: String;
+  identity?: String;
   name?: String;
   todoListsAssigned?: TodoListCreateManyWithoutAssignedToInput;
   inTeam?: TeamCreateManyWithoutMembersInput;
@@ -1568,6 +1587,7 @@ export interface UserCreateManyWithoutInTeamInput {
 
 export interface UserCreateWithoutInTeamInput {
   authId?: String;
+  identity?: String;
   name?: String;
   todoListsOwned?: TodoListCreateManyWithoutOwnedByInput;
   todoListsAssigned?: TodoListCreateManyWithoutAssignedToInput;
@@ -1788,6 +1808,7 @@ export interface UserUpdateOneRequiredInput {
 
 export interface UserUpdateDataInput {
   authId?: String;
+  identity?: String;
   name?: String;
   todoListsOwned?: TodoListUpdateManyWithoutOwnedByInput;
   todoListsAssigned?: TodoListUpdateManyWithoutAssignedToInput;
@@ -1858,6 +1879,7 @@ export interface UserUpdateWithWhereUniqueWithoutTodoListsAssignedInput {
 
 export interface UserUpdateWithoutTodoListsAssignedDataInput {
   authId?: String;
+  identity?: String;
   name?: String;
   todoListsOwned?: TodoListUpdateManyWithoutOwnedByInput;
   inTeam?: TeamUpdateManyWithoutMembersInput;
@@ -1960,6 +1982,7 @@ export interface UserUpdateWithWhereUniqueWithoutTodoListsOwnedInput {
 
 export interface UserUpdateWithoutTodoListsOwnedDataInput {
   authId?: String;
+  identity?: String;
   name?: String;
   todoListsAssigned?: TodoListUpdateManyWithoutAssignedToInput;
   inTeam?: TeamUpdateManyWithoutMembersInput;
@@ -2126,6 +2149,7 @@ export interface UserUpdateWithWhereUniqueWithoutInTeamInput {
 
 export interface UserUpdateWithoutInTeamDataInput {
   authId?: String;
+  identity?: String;
   name?: String;
   todoListsOwned?: TodoListUpdateManyWithoutOwnedByInput;
   todoListsAssigned?: TodoListUpdateManyWithoutAssignedToInput;
@@ -2178,6 +2202,20 @@ export interface UserScalarWhereInput {
   createdAt_lte?: DateTimeInput;
   createdAt_gt?: DateTimeInput;
   createdAt_gte?: DateTimeInput;
+  identity?: String;
+  identity_not?: String;
+  identity_in?: String[] | String;
+  identity_not_in?: String[] | String;
+  identity_lt?: String;
+  identity_lte?: String;
+  identity_gt?: String;
+  identity_gte?: String;
+  identity_contains?: String;
+  identity_not_contains?: String;
+  identity_starts_with?: String;
+  identity_not_starts_with?: String;
+  identity_ends_with?: String;
+  identity_not_ends_with?: String;
   name?: String;
   name_not?: String;
   name_in?: String[] | String;
@@ -2250,6 +2288,7 @@ export interface UserUpdateManyWithWhereNestedInput {
 
 export interface UserUpdateManyDataInput {
   authId?: String;
+  identity?: String;
   name?: String;
   role?: Role;
   email?: String;
@@ -3682,6 +3721,7 @@ export interface TodoListUpdateManyMutationInput {
 
 export interface UserUpdateInput {
   authId?: String;
+  identity?: String;
   name?: String;
   todoListsOwned?: TodoListUpdateManyWithoutOwnedByInput;
   todoListsAssigned?: TodoListUpdateManyWithoutAssignedToInput;
@@ -3694,6 +3734,7 @@ export interface UserUpdateInput {
 
 export interface UserUpdateManyMutationInput {
   authId?: String;
+  identity?: String;
   name?: String;
   role?: Role;
   email?: String;
@@ -3923,6 +3964,7 @@ export interface User {
   id: ID_Output;
   authId?: String;
   createdAt: DateTimeOutput;
+  identity?: String;
   name?: String;
   role?: Role;
   email?: String;
@@ -3934,6 +3976,7 @@ export interface UserPromise extends Promise<User>, Fragmentable {
   id: () => Promise<ID_Output>;
   authId: () => Promise<String>;
   createdAt: () => Promise<DateTimeOutput>;
+  identity: () => Promise<String>;
   name: () => Promise<String>;
   todoListsOwned: <T = FragmentableArray<TodoList>>(
     args?: {
@@ -3980,6 +4023,7 @@ export interface UserSubscription
   id: () => Promise<AsyncIterator<ID_Output>>;
   authId: () => Promise<AsyncIterator<String>>;
   createdAt: () => Promise<AsyncIterator<DateTimeOutput>>;
+  identity: () => Promise<AsyncIterator<String>>;
   name: () => Promise<AsyncIterator<String>>;
   todoListsOwned: <T = Promise<AsyncIterator<TodoListSubscription>>>(
     args?: {
@@ -5735,6 +5779,7 @@ export interface UserPreviousValues {
   id: ID_Output;
   authId?: String;
   createdAt: DateTimeOutput;
+  identity?: String;
   name?: String;
   role?: Role;
   email?: String;
@@ -5748,6 +5793,7 @@ export interface UserPreviousValuesPromise
   id: () => Promise<ID_Output>;
   authId: () => Promise<String>;
   createdAt: () => Promise<DateTimeOutput>;
+  identity: () => Promise<String>;
   name: () => Promise<String>;
   role: () => Promise<Role>;
   email: () => Promise<String>;
@@ -5761,6 +5807,7 @@ export interface UserPreviousValuesSubscription
   id: () => Promise<AsyncIterator<ID_Output>>;
   authId: () => Promise<AsyncIterator<String>>;
   createdAt: () => Promise<AsyncIterator<DateTimeOutput>>;
+  identity: () => Promise<AsyncIterator<String>>;
   name: () => Promise<AsyncIterator<String>>;
   role: () => Promise<AsyncIterator<Role>>;
   email: () => Promise<AsyncIterator<String>>;

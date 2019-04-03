@@ -3163,6 +3163,7 @@ type User {
   id: ID!
   authId: String
   createdAt: DateTime!
+  identity: String
   name: String
   todoListsOwned(where: TodoListWhereInput, orderBy: TodoListOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [TodoList!]
   todoListsAssigned(where: TodoListWhereInput, orderBy: TodoListOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [TodoList!]
@@ -3181,6 +3182,7 @@ type UserConnection {
 
 input UserCreateInput {
   authId: String
+  identity: String
   name: String
   todoListsOwned: TodoListCreateManyWithoutOwnedByInput
   todoListsAssigned: TodoListCreateManyWithoutAssignedToInput
@@ -3218,6 +3220,7 @@ input UserCreateOneInput {
 
 input UserCreateWithoutInTeamInput {
   authId: String
+  identity: String
   name: String
   todoListsOwned: TodoListCreateManyWithoutOwnedByInput
   todoListsAssigned: TodoListCreateManyWithoutAssignedToInput
@@ -3229,6 +3232,7 @@ input UserCreateWithoutInTeamInput {
 
 input UserCreateWithoutTodoListsAssignedInput {
   authId: String
+  identity: String
   name: String
   todoListsOwned: TodoListCreateManyWithoutOwnedByInput
   inTeam: TeamCreateManyWithoutMembersInput
@@ -3240,6 +3244,7 @@ input UserCreateWithoutTodoListsAssignedInput {
 
 input UserCreateWithoutTodoListsOwnedInput {
   authId: String
+  identity: String
   name: String
   todoListsAssigned: TodoListCreateManyWithoutAssignedToInput
   inTeam: TeamCreateManyWithoutMembersInput
@@ -3261,6 +3266,8 @@ enum UserOrderByInput {
   authId_DESC
   createdAt_ASC
   createdAt_DESC
+  identity_ASC
+  identity_DESC
   name_ASC
   name_DESC
   role_ASC
@@ -3279,6 +3286,7 @@ type UserPreviousValues {
   id: ID!
   authId: String
   createdAt: DateTime!
+  identity: String
   name: String
   role: Role
   email: String
@@ -3323,6 +3331,20 @@ input UserScalarWhereInput {
   createdAt_lte: DateTime
   createdAt_gt: DateTime
   createdAt_gte: DateTime
+  identity: String
+  identity_not: String
+  identity_in: [String!]
+  identity_not_in: [String!]
+  identity_lt: String
+  identity_lte: String
+  identity_gt: String
+  identity_gte: String
+  identity_contains: String
+  identity_not_contains: String
+  identity_starts_with: String
+  identity_not_starts_with: String
+  identity_ends_with: String
+  identity_not_ends_with: String
   name: String
   name_not: String
   name_in: [String!]
@@ -3408,6 +3430,7 @@ input UserSubscriptionWhereInput {
 
 input UserUpdateDataInput {
   authId: String
+  identity: String
   name: String
   todoListsOwned: TodoListUpdateManyWithoutOwnedByInput
   todoListsAssigned: TodoListUpdateManyWithoutAssignedToInput
@@ -3420,6 +3443,7 @@ input UserUpdateDataInput {
 
 input UserUpdateInput {
   authId: String
+  identity: String
   name: String
   todoListsOwned: TodoListUpdateManyWithoutOwnedByInput
   todoListsAssigned: TodoListUpdateManyWithoutAssignedToInput
@@ -3432,6 +3456,7 @@ input UserUpdateInput {
 
 input UserUpdateManyDataInput {
   authId: String
+  identity: String
   name: String
   role: Role
   email: String
@@ -3453,6 +3478,7 @@ input UserUpdateManyInput {
 
 input UserUpdateManyMutationInput {
   authId: String
+  identity: String
   name: String
   role: Role
   email: String
@@ -3519,6 +3545,7 @@ input UserUpdateOneRequiredInput {
 
 input UserUpdateWithoutInTeamDataInput {
   authId: String
+  identity: String
   name: String
   todoListsOwned: TodoListUpdateManyWithoutOwnedByInput
   todoListsAssigned: TodoListUpdateManyWithoutAssignedToInput
@@ -3530,6 +3557,7 @@ input UserUpdateWithoutInTeamDataInput {
 
 input UserUpdateWithoutTodoListsAssignedDataInput {
   authId: String
+  identity: String
   name: String
   todoListsOwned: TodoListUpdateManyWithoutOwnedByInput
   inTeam: TeamUpdateManyWithoutMembersInput
@@ -3541,6 +3569,7 @@ input UserUpdateWithoutTodoListsAssignedDataInput {
 
 input UserUpdateWithoutTodoListsOwnedDataInput {
   authId: String
+  identity: String
   name: String
   todoListsAssigned: TodoListUpdateManyWithoutAssignedToInput
   inTeam: TeamUpdateManyWithoutMembersInput
@@ -3636,6 +3665,20 @@ input UserWhereInput {
   createdAt_lte: DateTime
   createdAt_gt: DateTime
   createdAt_gte: DateTime
+  identity: String
+  identity_not: String
+  identity_in: [String!]
+  identity_not_in: [String!]
+  identity_lt: String
+  identity_lte: String
+  identity_gt: String
+  identity_gte: String
+  identity_contains: String
+  identity_not_contains: String
+  identity_starts_with: String
+  identity_not_starts_with: String
+  identity_ends_with: String
+  identity_not_ends_with: String
   name: String
   name_not: String
   name_in: [String!]

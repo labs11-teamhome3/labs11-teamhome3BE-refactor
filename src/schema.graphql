@@ -6,7 +6,7 @@ enum Role {
 }
 
 type Mutation {
-  createUser(authId: String!): User!
+  createUser(name: String!, email: String!, sub: String, profilePic: String): User!
   authenticateUser(idToken: String!): User
   createTodo(description: String!, partOf: ID!, completed: Boolean): Todo
   deleteTodo(id: String!): Todo
