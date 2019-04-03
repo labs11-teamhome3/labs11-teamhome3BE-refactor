@@ -109,6 +109,9 @@ const findDocumentsByTag = (parent, args, context, info) => {
   return context.prisma.documents({ where: { tag: { id: args.tagId } } });
 }
 
+const findMessagesByTag = (parent, args, context, info) => {
+  return context.prisma.Messages({ where: { tag: { id: args.tagId } } });
+}
 
 const documentComments = (parent, args, context, info) => {
   return context.prisma.documentComments();
@@ -159,6 +162,7 @@ module.exports = {
   findMessageComment,
   findDocument,
   findDocumentsByTag,
+  findMessagesByTag,
   findDocumentsByTeam,
   findDocumentsByUser,
   documentComments,

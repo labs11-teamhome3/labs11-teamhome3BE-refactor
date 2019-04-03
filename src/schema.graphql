@@ -130,6 +130,7 @@ type Query {
   findTag(tagId: ID!): Tag
   findMessageCommentsByMessage(messageId: ID!): [MessageComment]
   findMessageComment(commentId: ID!): MessageComment
+  findMessagesByTag(tagId: ID): [Message]
 
   findDocument(id: ID!): Document
   findDocumentsByTeam(teamId: ID): [Document]
