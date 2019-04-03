@@ -1,7 +1,12 @@
 scalar Date
 
+enum Role {
+  Admin
+  General
+}
+
 type Mutation {
-  createUser(authId: String!): User!
+  createUser(name: String!, email: String!, sub: String, profilePic: String): User!
   authenticateUser(idToken: String!): User
   createTodo(description: String!, partOf: ID!, completed: Boolean): Todo
   deleteTodo(id: String!): Todo
@@ -168,6 +173,10 @@ type User {
   todoListsOwned: [TodoList]
   todoListsAssigned: [TodoList]
   inTeam: [Team]
+  role: Role
+  email: String
+  phone: String
+  profilePic: String
 }
 
 type Team {
