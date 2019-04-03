@@ -2,6 +2,10 @@ const validateAndParseToken = require('../helpers/validateAndParseToken');
 const sgMail = require('@sendgrid/mail');
 sgMail.setApiKey(process.env.SENDGRID_API_KEY);
 
+const accountSid = process.env.TWILIO_SID;
+const authToken = process.env.TWILIO_TOKEN;
+const client = require('twilio')(accountSid, authToken);
+
 async function createUser(parent, args, ctx, info) {
   return ctx.prisma.createUser({
     name: args.name,
@@ -197,6 +201,7 @@ async function addUserToAssignees(parent, args, context, info) {
     console.log('user', user);
     const todoList = await context.prisma.todoList({ id: args.todoListId });
     console.log('todoList', todoList);
+    
     if (user.email) {
         // send them an email using sendgrid
         const email = {
@@ -209,6 +214,13 @@ async function addUserToAssignees(parent, args, context, info) {
     }
     if (user.phone) {
         // send them a text using twilio
+        client.messages
+            .create({
+                from: process.env.TWILIO_NUMBER,
+                body: `You have been assigned to a Todo List titled '${todoList.description}'.  Check it out at https://manaje.netlify.com/`,
+                to: user.phone
+            })
+            .then(message => console.log(message.sid));
     }
 
     return context.prisma.updateTodoList({
@@ -269,14 +281,38 @@ async function toggleTodoComplete(parent, args, context, info) {
 // TODO: SEND EMAIL/TEXT TO LIST OWNERS IN THIS FUNCTION WHEN COMPLETE
 // render button on front end when all todos are complete, then run this mutation on click
 async function toggleTodoListComplete(parent, args, context, info) {
-  const todoList = await context.prisma.todoList({ id: args.todoListId });
-  console.log(todoList);
-  return context.prisma.updateTodoList({
-    where: { id: args.todoListId },
-    data: {
-      completed: !todoList.completed,
-    },
-  });
+    const todoList = await context.prisma.todoList({ id: args.todoListId });
+    console.log(todoList);
+    const todoListOwners = await context.prisma.todoList({ id: args.todoListId }).ownedBy();
+    console.log('todoListOwners', todoListOwners);
+    todoListOwners.forEach(async owner => {
+        if (owner.email) {
+            // send email using sendgrid
+            const email = {
+                to: owner.email,
+                from: 'app@manaje.com',
+                subject: `The Todo List '${todoList.description}' has been completed`,
+                html: `<div>All of the tasks in '${todoList.description}' are complete!<div><a href='http://manaje.netlify.com'>Check it out!</a>`
+            }
+            await sgMail.send(email);
+        }
+        if (owner.phone) {
+            // send text using twilio
+            client.messages
+                .create({
+                    from: process.env.TWILIO_NUMBER,
+                    body: `Your Todo List '${todoList.description}' has been completed.  Check it out at https://manaje.netlify.com/`,
+                    to: owner.phone
+                })
+                .then(message => console.log(message.sid));
+        }
+    })
+    return context.prisma.updateTodoList({
+        where: { id: args.todoListId },
+        data: {
+        completed: !todoList.completed,
+        },
+    });
 }
 
 async function createMessage(parent, args, ctx, info) {
@@ -307,15 +343,6 @@ function deleteMessage(parent, args, context , info) {
     return context.prisma.deleteMessage({id: args.id,})
  }
 
- async function toggleTodoListComplete(parent, args, context, info) {
-    const todoList = await context.prisma.todoList({ id: args.todoListId });
-    return context.prisma.updateTodoList({
-        where: {id: args.todoListId},
-        data: {
-            completed: !todoList.completed
-        }
-    })
-}
 
 function addEvent(parent, args, context, info) {
     return context.prisma.createEvent({
