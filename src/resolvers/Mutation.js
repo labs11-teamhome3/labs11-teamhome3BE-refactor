@@ -5,6 +5,7 @@ sgMail.setApiKey(process.env.SENDGRID_API_KEY);
 const accountSid = process.env.TWILIO_SID;
 const authToken = process.env.TWILIO_TOKEN;
 const client = require('twilio')(accountSid, authToken);
+const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
 
 async function createUser(parent, args, ctx, info) {
   return ctx.prisma.createUser({
@@ -660,12 +661,22 @@ function removeDocumentFromFolder(parent, args, context, info) {
 }
 
 function upgradeToPremium(parent, args, context, info) {
-    return context.prisma.updateTeam({
-        where: { id: args.teamId },
-        data: {
-            premium: true
-        }
-    })
+    stripe.charges
+        .create({
+            soruce: args.source,
+            amount: args.charge,
+            currency: 'usd'
+        })
+        .then(() => {
+            return context.prisma.updateTeam({
+                where: { id: args.teamId },
+                data: {
+                    premium: true
+                }
+            })
+        })
+        .catch(err => console.log(err))
+
 }
 
 module.exports = {
