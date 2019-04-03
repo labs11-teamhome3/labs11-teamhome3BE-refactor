@@ -46,6 +46,7 @@ type Team {
   tags: [Tag]
   documents: [Document]
   folders: [Folder]
+  premium: Boolean @default(value: "false")
 }
 
 type Message {

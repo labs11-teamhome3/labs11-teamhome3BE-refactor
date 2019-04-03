@@ -1,4 +1,11 @@
 const validateAndParseToken = require('../helpers/validateAndParseToken');
+const sgMail = require('@sendgrid/mail');
+sgMail.setApiKey(process.env.SENDGRID_API_KEY);
+
+const accountSid = process.env.TWILIO_SID;
+const authToken = process.env.TWILIO_TOKEN;
+const client = require('twilio')(accountSid, authToken);
+const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
 
 async function createUser(parent, args, ctx, info) {
   return ctx.prisma.createUser({
@@ -6,7 +13,7 @@ async function createUser(parent, args, ctx, info) {
     email: args.email,
     identity: args.sub.split('|')[0],
     authId: args.sub.split('|')[1],
-    role: "Admin",
+    role: "ADMIN",
     profilePic: args.picture
   });
 }
@@ -100,14 +107,31 @@ async function updateTodoList(parent, args, context, info) {
 }
 
 async function createTeam(parent, args, ctx, info) {
-  return ctx.prisma.createTeam({
-      teamName: args.teamName,
-      members: {
-        connect: {
-          id: args.userId
-        }
-      }
-  });
+    const user = await ctx.prisma.user({ id: args.userId });
+    console.log(user);
+    const inTeams = await ctx.prisma.user({ id: args.userId }).inTeam();
+    console.log(inTeams);
+    if (inTeams.length === 0) {
+        return ctx.prisma.createTeam({
+            teamName: args.teamName,
+            members: {
+                connect: {
+                    id: args.userId
+                }
+            }
+        });
+    } else if (inTeams[0].premium) {
+        return ctx.prisma.createTeam({
+            teamName: args.teamName,
+            members: {
+                connect: {
+                    id: args.userId
+                }
+            }
+        });
+    } else {
+        throw new Error('Please upgrade to premium to add more teams.')
+    }
 }
 
 async function deleteTeam(parent, args, context, info) {
@@ -124,17 +148,25 @@ async function updateTeamName(parent, args, ctx, info) {
   });
 }
 
-function addUserToTeam(parent, args, context, info) {
-  return context.prisma.updateTeam({
-    where: { id: args.teamId },
-    data: {
-      members: {
-        connect: {
-          id: args.userId,
+async function addUserToTeam(parent, args, context, info) {
+    const team = await context.prisma.team({ id: args.teamId });
+    console.log(team)
+    const members = await context.prisma.team({ id: args.teamId }).members();
+    console.log(members);
+    if (members.length > 4 && !team.premium) {
+        throw new Error('Basic teams cannot have more than 4 members.  Consider upgrading to a premium plan.')
+    } else {
+        return context.prisma.updateTeam({
+        where: { id: args.teamId },
+        data: {
+            members: {
+            connect: {
+                id: args.userId,
+            },
+            },
         },
-      },
-    },
-  });
+        });
+    }
 }
 
 function addTodoListToTeam(parent, args, context, info) {
@@ -192,13 +224,31 @@ function addUserToOwners(parent, args, context, info) {
 // TODO: need to send email and text to user when they are added as assignee to todoList
 async function addUserToAssignees(parent, args, context, info) {
     const user = await context.prisma.user({ id: args.userId });
-    console.log(user);
+    console.log('user', user);
+    const todoList = await context.prisma.todoList({ id: args.todoListId });
+    console.log('todoList', todoList);
+    
     if (user.email) {
-        // send them an email using nodemailer
+        // send them an email using sendgrid
+        const email = {
+            to: user.email,
+            from: 'app@manaje.com',
+            subject: 'You have been assigned to a Todo List',
+            html: `<div>The owner of '${todoList.description}' has assigned you as a participant!<div><a href='http://manaje.netlify.com'>Check it out!</a>`
+        }
+        await sgMail.send(email);
     }
     if (user.phone) {
         // send them a text using twilio
+        client.messages
+            .create({
+                from: process.env.TWILIO_NUMBER,
+                body: `You have been assigned to a Todo List titled '${todoList.description}'.  Check it out at https://manaje.netlify.com/`,
+                to: user.phone
+            })
+            .then(message => console.log(message.sid));
     }
+
     return context.prisma.updateTodoList({
         where: { id: args.todoListId },
         data: {
@@ -257,14 +307,38 @@ async function toggleTodoComplete(parent, args, context, info) {
 // TODO: SEND EMAIL/TEXT TO LIST OWNERS IN THIS FUNCTION WHEN COMPLETE
 // render button on front end when all todos are complete, then run this mutation on click
 async function toggleTodoListComplete(parent, args, context, info) {
-  const todoList = await context.prisma.todoList({ id: args.todoListId });
-  console.log(todoList);
-  return context.prisma.updateTodoList({
-    where: { id: args.todoListId },
-    data: {
-      completed: !todoList.completed,
-    },
-  });
+    const todoList = await context.prisma.todoList({ id: args.todoListId });
+    console.log(todoList);
+    const todoListOwners = await context.prisma.todoList({ id: args.todoListId }).ownedBy();
+    console.log('todoListOwners', todoListOwners);
+    todoListOwners.forEach(async owner => {
+        if (owner.email) {
+            // send email using sendgrid
+            const email = {
+                to: owner.email,
+                from: 'app@manaje.com',
+                subject: `The Todo List '${todoList.description}' has been completed`,
+                html: `<div>All of the tasks in '${todoList.description}' are complete!<div><a href='http://manaje.netlify.com'>Check it out!</a>`
+            }
+            await sgMail.send(email);
+        }
+        if (owner.phone) {
+            // send text using twilio
+            client.messages
+                .create({
+                    from: process.env.TWILIO_NUMBER,
+                    body: `Your Todo List '${todoList.description}' has been completed.  Check it out at https://manaje.netlify.com/`,
+                    to: owner.phone
+                })
+                .then(message => console.log(message.sid));
+        }
+    })
+    return context.prisma.updateTodoList({
+        where: { id: args.todoListId },
+        data: {
+        completed: !todoList.completed,
+        },
+    });
 }
 
 async function createMessage(parent, args, ctx, info) {
@@ -295,15 +369,6 @@ function deleteMessage(parent, args, context , info) {
     return context.prisma.deleteMessage({id: args.id,})
  }
 
- async function toggleTodoListComplete(parent, args, context, info) {
-    const todoList = await context.prisma.todoList({ id: args.todoListId });
-    return context.prisma.updateTodoList({
-        where: {id: args.todoListId},
-        data: {
-            completed: !todoList.completed
-        }
-    })
-}
 
 function addEvent(parent, args, context, info) {
     return context.prisma.createEvent({
@@ -594,6 +659,26 @@ function removeDocumentFromFolder(parent, args, context, info) {
         }
     })
 }
+
+function upgradeToPremium(parent, args, context, info) {
+    stripe.charges
+        .create({
+            soruce: args.source,
+            amount: args.charge,
+            currency: 'usd'
+        })
+        .then(() => {
+            return context.prisma.updateTeam({
+                where: { id: args.teamId },
+                data: {
+                    premium: true
+                }
+            })
+        })
+        .catch(err => console.log(err))
+
+}
+
 module.exports = {
   createUser,
   authenticateUser,
@@ -657,6 +742,8 @@ module.exports = {
   addDocumentComment,
   deleteDocumentComment,
   likeDocumentComment,
-  unlikeDocumentComment
+  unlikeDocumentComment,
+
+  upgradeToPremium
 }
 
