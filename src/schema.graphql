@@ -109,6 +109,8 @@ type Mutation {
   removeTagFromMessage(messageId: ID!): Message
   addTagToDocument(documentId: ID!, tagId: ID!): Document
   removeTagFromDocument(documentId: ID!): Document
+
+  upgradeToPremium(teamId: ID!): Team
 }
 
 type Query {
