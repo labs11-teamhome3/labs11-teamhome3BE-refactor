@@ -14,5 +14,5 @@ function team(parent, args, context) {
 module.exports = {
     documents,
     team,
-    user
+    user,
 }
