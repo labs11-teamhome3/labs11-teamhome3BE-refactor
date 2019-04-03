@@ -1,3 +1,8 @@
+
+function documents(parent, args, context) {
+    return context.prisma.folder({ id: parent.id }).documents();
+}
+
 function user(parent, args, context) {
     return context.prisma.folder({ id: parent.id }).user();
 }
@@ -11,6 +16,7 @@ function documents(parent, args, context) {
 }
 
 module.exports = {
+    documents,
     team,
     user, 
     documents

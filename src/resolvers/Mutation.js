@@ -8,7 +8,7 @@ async function createUser(parent, args, ctx, info) {
   });
 }
 
-async function authenticateUser(parent, {idToken, name}, ctx, info) {
+async function authenticateUser(parent, {idToken}, ctx, info) {
  let userToken = null;
  try {
    userToken = await validateAndParseToken(idToken);
@@ -16,8 +16,7 @@ async function authenticateUser(parent, {idToken, name}, ctx, info) {
  } catch(err) {
    throw new Error(err.message)
  }
-
- userToken.name = name; 
+ 
  const id = userToken.sub.split("|")[1];
  //this function needs to be a query, how do I do that?
  let currentUser = await ctx.prisma.user({authId: id});
@@ -25,6 +24,7 @@ async function authenticateUser(parent, {idToken, name}, ctx, info) {
  if(!currentUser) {
    //error says that prisma is not defined, is this a binding issue?
    currentUser = await createUser(parent, userToken, ctx)
+   console.log(currentUser);
  }
  return currentUser; 
 }
@@ -104,7 +104,12 @@ async function updateTodoList(parent, args, context, info) {
 
 async function createTeam(parent, args, ctx, info) {
   return ctx.prisma.createTeam({
-    teamName: args.teamName,
+      teamName: args.teamName,
+      members: {
+        connect: {
+          id: args.userId
+        }
+      }
   });
 }
 
@@ -464,6 +469,115 @@ function deleteFolder(parent, args, context, info) {
   return context.prisma.deleteFolder({id: args.folderId})
 }
 
+function addDocument(parent, args, context, info) {
+    return context.prisma.addDocument({
+        doc_url: args.doc_url,
+        title: args.title,
+        textContent: args.textContent,
+        image: args.image,
+        folder: {
+            connect: {
+                id: args.folderId
+            }
+        },
+        team: {
+            connect: {
+                id: args.teamId
+            }
+        },
+        tag: {
+            connect: {
+                id: args.tagId
+            }
+        }
+    })
+}
+
+function updateDocument(parent, args, context, info) {
+    return context.prisma.updateDocument({
+        where: { id: args.documentId },
+        data: {
+            doc_url: args.doc_url,
+            title: args.title,
+            textContent: args.textContent,
+            image: args.image,
+        }
+    })
+}
+
+function deleteDocument(parent, args, context, info) {
+    return context.prisma.deleteDocument({ id: args.documentId })
+}
+
+function addDocumentComment(parent, args, context, info) {
+    return context.prisma.createDocumentComment({
+        content: args.content,
+        document: {
+            connect: {
+                id: args.documentId
+            }
+        },
+        user: {
+            connect: {
+                id: args.userId
+            }
+        }
+    })
+}
+
+function deleteDocumentComment(parent, args, context, info) {
+    return context.prisma.deleteDocumentComment({ id: args.documentCommentId });
+}
+
+function likeDocumentComment(parent, args, context, info) {
+    return context.prisma.updateDocumentComment({
+        where: { id: args.commentId },
+        data: {
+            likes: {
+                connect: {
+                    id: args.userId
+                }
+            }
+        }
+    })
+}
+
+function unlikeDocumentComment(parent, args, context, info) {
+    return context.prisma.updateDocumentComment({
+        where: { id: args.commentId },
+        data: {
+            likes: {
+                disconnect: {
+                    id: args.userId
+                }
+            }
+        }
+    })
+}
+
+function addDocumentToFolder(parent, args, context, info) {
+    return context.prisma.updateDocument({
+        where: { id: args.documentId },
+        data: {
+            folder: {
+                connect: {
+                    id: args.folderId
+                }
+            }
+        }
+    })
+}
+
+function removeDocumentFromFolder(parent, args, context, info) {
+    return context.prisma.updateDocument({
+        where: { id: args.documentId },
+        data: {
+            folder: {
+                disconnect: true
+            }
+        }
+    })
+}
 module.exports = {
   createUser,
   authenticateUser,
@@ -515,5 +629,17 @@ module.exports = {
 
   createFolder,
   updateFolderTitle,
-  deleteFolder
+  deleteFolder,
+
+  addDocument,
+  updateDocument,
+  deleteDocument,
+  addDocumentToFolder,
+  removeDocumentFromFolder,
+
+  addDocumentComment,
+  deleteDocumentComment,
+  likeDocumentComment,
+  unlikeDocumentComment
 }
+
