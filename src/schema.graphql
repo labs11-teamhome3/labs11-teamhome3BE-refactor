@@ -191,6 +191,7 @@ type Team {
   tags: [Tag]
   documents: [Document]
   folders: [Folder]
+  premium: Boolean
 }
 
 type Message {

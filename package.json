@@ -17,7 +17,8 @@
     "jwks-rsa": "^1.4.0",
     "nodemailer": "^6.0.0",
     "prisma": "^1.29.2",
-    "prisma-client-lib": "^1.29.1"
+    "prisma-client-lib": "^1.29.1",
+    "twilio": "^3.30.0"
   },
   "devDependencies": {
     "nodemon": "^1.18.10"

@@ -684,6 +684,8 @@ export type TeamOrderByInput =
   | "id_DESC"
   | "teamName_ASC"
   | "teamName_DESC"
+  | "premium_ASC"
+  | "premium_DESC"
   | "createdAt_ASC"
   | "createdAt_DESC"
   | "updatedAt_ASC"
@@ -936,6 +938,8 @@ export interface TeamWhereInput {
   folders_every?: FolderWhereInput;
   folders_some?: FolderWhereInput;
   folders_none?: FolderWhereInput;
+  premium?: Boolean;
+  premium_not?: Boolean;
   AND?: TeamWhereInput[] | TeamWhereInput;
   OR?: TeamWhereInput[] | TeamWhereInput;
   NOT?: TeamWhereInput[] | TeamWhereInput;
@@ -1504,6 +1508,7 @@ export interface TeamCreateWithoutMembersInput {
   tags?: TagCreateManyWithoutTeamInput;
   documents?: DocumentCreateManyWithoutTeamInput;
   folders?: FolderCreateManyWithoutTeamInput;
+  premium?: Boolean;
 }
 
 export interface TodoListCreateManyWithoutInTeamInput {
@@ -1578,6 +1583,7 @@ export interface TeamCreateWithoutTodoListsInput {
   tags?: TagCreateManyWithoutTeamInput;
   documents?: DocumentCreateManyWithoutTeamInput;
   folders?: FolderCreateManyWithoutTeamInput;
+  premium?: Boolean;
 }
 
 export interface UserCreateManyWithoutInTeamInput {
@@ -1639,6 +1645,7 @@ export interface TeamCreateWithoutTagsInput {
   events?: EventCreateManyWithoutTeamInput;
   documents?: DocumentCreateManyWithoutTeamInput;
   folders?: FolderCreateManyWithoutTeamInput;
+  premium?: Boolean;
 }
 
 export interface EventCreateManyWithoutTeamInput {
@@ -1693,6 +1700,7 @@ export interface TeamCreateWithoutFoldersInput {
   events?: EventCreateManyWithoutTeamInput;
   tags?: TagCreateManyWithoutTeamInput;
   documents?: DocumentCreateManyWithoutTeamInput;
+  premium?: Boolean;
 }
 
 export interface TagCreateManyWithoutTeamInput {
@@ -1770,6 +1778,7 @@ export interface TeamCreateWithoutDocumentsInput {
   events?: EventCreateManyWithoutTeamInput;
   tags?: TagCreateManyWithoutTeamInput;
   folders?: FolderCreateManyWithoutTeamInput;
+  premium?: Boolean;
 }
 
 export interface MessageCommentCreateManyWithoutMessageInput {
@@ -1920,6 +1929,7 @@ export interface TeamUpdateWithoutMembersDataInput {
   tags?: TagUpdateManyWithoutTeamInput;
   documents?: DocumentUpdateManyWithoutTeamInput;
   folders?: FolderUpdateManyWithoutTeamInput;
+  premium?: Boolean;
 }
 
 export interface TodoListUpdateManyWithoutInTeamInput {
@@ -2122,6 +2132,7 @@ export interface TeamUpdateWithoutTodoListsDataInput {
   tags?: TagUpdateManyWithoutTeamInput;
   documents?: DocumentUpdateManyWithoutTeamInput;
   folders?: FolderUpdateManyWithoutTeamInput;
+  premium?: Boolean;
 }
 
 export interface UserUpdateManyWithoutInTeamInput {
@@ -2364,6 +2375,7 @@ export interface TeamUpdateWithoutTagsDataInput {
   events?: EventUpdateManyWithoutTeamInput;
   documents?: DocumentUpdateManyWithoutTeamInput;
   folders?: FolderUpdateManyWithoutTeamInput;
+  premium?: Boolean;
 }
 
 export interface EventUpdateManyWithoutTeamInput {
@@ -2546,6 +2558,7 @@ export interface TeamUpdateWithoutFoldersDataInput {
   events?: EventUpdateManyWithoutTeamInput;
   tags?: TagUpdateManyWithoutTeamInput;
   documents?: DocumentUpdateManyWithoutTeamInput;
+  premium?: Boolean;
 }
 
 export interface TagUpdateManyWithoutTeamInput {
@@ -2944,6 +2957,7 @@ export interface TeamUpdateWithoutDocumentsDataInput {
   events?: EventUpdateManyWithoutTeamInput;
   tags?: TagUpdateManyWithoutTeamInput;
   folders?: FolderUpdateManyWithoutTeamInput;
+  premium?: Boolean;
 }
 
 export interface TeamUpsertWithoutDocumentsInput {
@@ -3317,6 +3331,8 @@ export interface TeamScalarWhereInput {
   teamName_not_starts_with?: String;
   teamName_ends_with?: String;
   teamName_not_ends_with?: String;
+  premium?: Boolean;
+  premium_not?: Boolean;
   AND?: TeamScalarWhereInput[] | TeamScalarWhereInput;
   OR?: TeamScalarWhereInput[] | TeamScalarWhereInput;
   NOT?: TeamScalarWhereInput[] | TeamScalarWhereInput;
@@ -3329,6 +3345,7 @@ export interface TeamUpdateManyWithWhereNestedInput {
 
 export interface TeamUpdateManyDataInput {
   teamName?: String;
+  premium?: Boolean;
 }
 
 export interface UserUpsertWithWhereUniqueWithoutTodoListsAssignedInput {
@@ -3432,6 +3449,7 @@ export interface TeamCreateWithoutEventsInput {
   tags?: TagCreateManyWithoutTeamInput;
   documents?: DocumentCreateManyWithoutTeamInput;
   folders?: FolderCreateManyWithoutTeamInput;
+  premium?: Boolean;
 }
 
 export interface EventUpdateInput {
@@ -3456,6 +3474,7 @@ export interface TeamUpdateWithoutEventsDataInput {
   tags?: TagUpdateManyWithoutTeamInput;
   documents?: DocumentUpdateManyWithoutTeamInput;
   folders?: FolderUpdateManyWithoutTeamInput;
+  premium?: Boolean;
 }
 
 export interface TeamUpsertWithoutEventsInput {
@@ -3510,6 +3529,7 @@ export interface TeamCreateWithoutMessagesInput {
   tags?: TagCreateManyWithoutTeamInput;
   documents?: DocumentCreateManyWithoutTeamInput;
   folders?: FolderCreateManyWithoutTeamInput;
+  premium?: Boolean;
 }
 
 export interface MessageUpdateInput {
@@ -3538,6 +3558,7 @@ export interface TeamUpdateWithoutMessagesDataInput {
   tags?: TagUpdateManyWithoutTeamInput;
   documents?: DocumentUpdateManyWithoutTeamInput;
   folders?: FolderUpdateManyWithoutTeamInput;
+  premium?: Boolean;
 }
 
 export interface TeamUpsertWithoutMessagesInput {
@@ -3627,6 +3648,7 @@ export interface TeamCreateInput {
   tags?: TagCreateManyWithoutTeamInput;
   documents?: DocumentCreateManyWithoutTeamInput;
   folders?: FolderCreateManyWithoutTeamInput;
+  premium?: Boolean;
 }
 
 export interface TeamUpdateInput {
@@ -3638,10 +3660,12 @@ export interface TeamUpdateInput {
   tags?: TagUpdateManyWithoutTeamInput;
   documents?: DocumentUpdateManyWithoutTeamInput;
   folders?: FolderUpdateManyWithoutTeamInput;
+  premium?: Boolean;
 }
 
 export interface TeamUpdateManyMutationInput {
   teamName?: String;
+  premium?: Boolean;
 }
 
 export interface TodoCreateInput {
@@ -4180,6 +4204,7 @@ export interface TodoSubscription
 export interface Team {
   id: ID_Output;
   teamName: String;
+  premium?: Boolean;
 }
 
 export interface TeamPromise extends Promise<Team>, Fragmentable {
@@ -4262,6 +4287,7 @@ export interface TeamPromise extends Promise<Team>, Fragmentable {
       last?: Int;
     }
   ) => T;
+  premium: () => Promise<Boolean>;
 }
 
 export interface TeamSubscription
@@ -4346,6 +4372,7 @@ export interface TeamSubscription
       last?: Int;
     }
   ) => T;
+  premium: () => Promise<AsyncIterator<Boolean>>;
 }
 
 export interface Message {
@@ -5637,6 +5664,7 @@ export interface TeamSubscriptionPayloadSubscription
 export interface TeamPreviousValues {
   id: ID_Output;
   teamName: String;
+  premium?: Boolean;
 }
 
 export interface TeamPreviousValuesPromise
@@ -5644,6 +5672,7 @@ export interface TeamPreviousValuesPromise
     Fragmentable {
   id: () => Promise<ID_Output>;
   teamName: () => Promise<String>;
+  premium: () => Promise<Boolean>;
 }
 
 export interface TeamPreviousValuesSubscription
@@ -5651,6 +5680,7 @@ export interface TeamPreviousValuesSubscription
     Fragmentable {
   id: () => Promise<AsyncIterator<ID_Output>>;
   teamName: () => Promise<AsyncIterator<String>>;
+  premium: () => Promise<AsyncIterator<Boolean>>;
 }
 
 export interface TodoSubscriptionPayload {

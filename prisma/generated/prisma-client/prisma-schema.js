@@ -2151,6 +2151,7 @@ type Team {
   tags(where: TagWhereInput, orderBy: TagOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Tag!]
   documents(where: DocumentWhereInput, orderBy: DocumentOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Document!]
   folders(where: FolderWhereInput, orderBy: FolderOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Folder!]
+  premium: Boolean
 }
 
 type TeamConnection {
@@ -2168,6 +2169,7 @@ input TeamCreateInput {
   tags: TagCreateManyWithoutTeamInput
   documents: DocumentCreateManyWithoutTeamInput
   folders: FolderCreateManyWithoutTeamInput
+  premium: Boolean
 }
 
 input TeamCreateManyWithoutMembersInput {
@@ -2213,6 +2215,7 @@ input TeamCreateWithoutDocumentsInput {
   events: EventCreateManyWithoutTeamInput
   tags: TagCreateManyWithoutTeamInput
   folders: FolderCreateManyWithoutTeamInput
+  premium: Boolean
 }
 
 input TeamCreateWithoutEventsInput {
@@ -2223,6 +2226,7 @@ input TeamCreateWithoutEventsInput {
   tags: TagCreateManyWithoutTeamInput
   documents: DocumentCreateManyWithoutTeamInput
   folders: FolderCreateManyWithoutTeamInput
+  premium: Boolean
 }
 
 input TeamCreateWithoutFoldersInput {
@@ -2233,6 +2237,7 @@ input TeamCreateWithoutFoldersInput {
   events: EventCreateManyWithoutTeamInput
   tags: TagCreateManyWithoutTeamInput
   documents: DocumentCreateManyWithoutTeamInput
+  premium: Boolean
 }
 
 input TeamCreateWithoutMembersInput {
@@ -2243,6 +2248,7 @@ input TeamCreateWithoutMembersInput {
   tags: TagCreateManyWithoutTeamInput
   documents: DocumentCreateManyWithoutTeamInput
   folders: FolderCreateManyWithoutTeamInput
+  premium: Boolean
 }
 
 input TeamCreateWithoutMessagesInput {
@@ -2253,6 +2259,7 @@ input TeamCreateWithoutMessagesInput {
   tags: TagCreateManyWithoutTeamInput
   documents: DocumentCreateManyWithoutTeamInput
   folders: FolderCreateManyWithoutTeamInput
+  premium: Boolean
 }
 
 input TeamCreateWithoutTagsInput {
@@ -2263,6 +2270,7 @@ input TeamCreateWithoutTagsInput {
   events: EventCreateManyWithoutTeamInput
   documents: DocumentCreateManyWithoutTeamInput
   folders: FolderCreateManyWithoutTeamInput
+  premium: Boolean
 }
 
 input TeamCreateWithoutTodoListsInput {
@@ -2273,6 +2281,7 @@ input TeamCreateWithoutTodoListsInput {
   tags: TagCreateManyWithoutTeamInput
   documents: DocumentCreateManyWithoutTeamInput
   folders: FolderCreateManyWithoutTeamInput
+  premium: Boolean
 }
 
 type TeamEdge {
@@ -2285,6 +2294,8 @@ enum TeamOrderByInput {
   id_DESC
   teamName_ASC
   teamName_DESC
+  premium_ASC
+  premium_DESC
   createdAt_ASC
   createdAt_DESC
   updatedAt_ASC
@@ -2294,6 +2305,7 @@ enum TeamOrderByInput {
 type TeamPreviousValues {
   id: ID!
   teamName: String!
+  premium: Boolean
 }
 
 input TeamScalarWhereInput {
@@ -2325,6 +2337,8 @@ input TeamScalarWhereInput {
   teamName_not_starts_with: String
   teamName_ends_with: String
   teamName_not_ends_with: String
+  premium: Boolean
+  premium_not: Boolean
   AND: [TeamScalarWhereInput!]
   OR: [TeamScalarWhereInput!]
   NOT: [TeamScalarWhereInput!]
@@ -2357,14 +2371,17 @@ input TeamUpdateInput {
   tags: TagUpdateManyWithoutTeamInput
   documents: DocumentUpdateManyWithoutTeamInput
   folders: FolderUpdateManyWithoutTeamInput
+  premium: Boolean
 }
 
 input TeamUpdateManyDataInput {
   teamName: String
+  premium: Boolean
 }
 
 input TeamUpdateManyMutationInput {
   teamName: String
+  premium: Boolean
 }
 
 input TeamUpdateManyWithoutMembersInput {
@@ -2438,6 +2455,7 @@ input TeamUpdateWithoutDocumentsDataInput {
   events: EventUpdateManyWithoutTeamInput
   tags: TagUpdateManyWithoutTeamInput
   folders: FolderUpdateManyWithoutTeamInput
+  premium: Boolean
 }
 
 input TeamUpdateWithoutEventsDataInput {
@@ -2448,6 +2466,7 @@ input TeamUpdateWithoutEventsDataInput {
   tags: TagUpdateManyWithoutTeamInput
   documents: DocumentUpdateManyWithoutTeamInput
   folders: FolderUpdateManyWithoutTeamInput
+  premium: Boolean
 }
 
 input TeamUpdateWithoutFoldersDataInput {
@@ -2458,6 +2477,7 @@ input TeamUpdateWithoutFoldersDataInput {
   events: EventUpdateManyWithoutTeamInput
   tags: TagUpdateManyWithoutTeamInput
   documents: DocumentUpdateManyWithoutTeamInput
+  premium: Boolean
 }
 
 input TeamUpdateWithoutMembersDataInput {
@@ -2468,6 +2488,7 @@ input TeamUpdateWithoutMembersDataInput {
   tags: TagUpdateManyWithoutTeamInput
   documents: DocumentUpdateManyWithoutTeamInput
   folders: FolderUpdateManyWithoutTeamInput
+  premium: Boolean
 }
 
 input TeamUpdateWithoutMessagesDataInput {
@@ -2478,6 +2499,7 @@ input TeamUpdateWithoutMessagesDataInput {
   tags: TagUpdateManyWithoutTeamInput
   documents: DocumentUpdateManyWithoutTeamInput
   folders: FolderUpdateManyWithoutTeamInput
+  premium: Boolean
 }
 
 input TeamUpdateWithoutTagsDataInput {
@@ -2488,6 +2510,7 @@ input TeamUpdateWithoutTagsDataInput {
   events: EventUpdateManyWithoutTeamInput
   documents: DocumentUpdateManyWithoutTeamInput
   folders: FolderUpdateManyWithoutTeamInput
+  premium: Boolean
 }
 
 input TeamUpdateWithoutTodoListsDataInput {
@@ -2498,6 +2521,7 @@ input TeamUpdateWithoutTodoListsDataInput {
   tags: TagUpdateManyWithoutTeamInput
   documents: DocumentUpdateManyWithoutTeamInput
   folders: FolderUpdateManyWithoutTeamInput
+  premium: Boolean
 }
 
 input TeamUpdateWithWhereUniqueWithoutMembersInput {
@@ -2591,6 +2615,8 @@ input TeamWhereInput {
   folders_every: FolderWhereInput
   folders_some: FolderWhereInput
   folders_none: FolderWhereInput
+  premium: Boolean
+  premium_not: Boolean
   AND: [TeamWhereInput!]
   OR: [TeamWhereInput!]
   NOT: [TeamWhereInput!]
