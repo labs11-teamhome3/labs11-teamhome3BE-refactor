@@ -106,14 +106,31 @@ async function updateTodoList(parent, args, context, info) {
 }
 
 async function createTeam(parent, args, ctx, info) {
-  return ctx.prisma.createTeam({
-      teamName: args.teamName,
-      members: {
-        connect: {
-          id: args.userId
-        }
-      }
-  });
+    const user = await ctx.prisma.user({ id: args.userId });
+    console.log(user);
+    const inTeams = await ctx.prisma.user({ id: args.userId }).inTeam();
+    console.log(inTeams);
+    if (inTeams.length === 0) {
+        return ctx.prisma.createTeam({
+            teamName: args.teamName,
+            members: {
+                connect: {
+                    id: args.userId
+                }
+            }
+        });
+    } else if (inTeams[0].premium) {
+        return ctx.prisma.createTeam({
+            teamName: args.teamName,
+            members: {
+                connect: {
+                    id: args.userId
+                }
+            }
+        });
+    } else {
+        throw new Error('Please upgrade to premium to add more teams.')
+    }
 }
 
 async function deleteTeam(parent, args, context, info) {
@@ -130,17 +147,25 @@ async function updateTeamName(parent, args, ctx, info) {
   });
 }
 
-function addUserToTeam(parent, args, context, info) {
-  return context.prisma.updateTeam({
-    where: { id: args.teamId },
-    data: {
-      members: {
-        connect: {
-          id: args.userId,
+async function addUserToTeam(parent, args, context, info) {
+    const team = await context.prisma.team({ id: args.teamId });
+    console.log(team)
+    const members = await context.prisma.team({ id: args.teamId }).members();
+    console.log(members);
+    if (members.length > 4 && !team.premium) {
+        throw new Error('Basic teams cannot have more than 4 members.  Consider upgrading to a premium plan.')
+    } else {
+        return context.prisma.updateTeam({
+        where: { id: args.teamId },
+        data: {
+            members: {
+            connect: {
+                id: args.userId,
+            },
+            },
         },
-      },
-    },
-  });
+        });
+    }
 }
 
 function addTodoListToTeam(parent, args, context, info) {
@@ -633,6 +658,16 @@ function removeDocumentFromFolder(parent, args, context, info) {
         }
     })
 }
+
+function upgradeToPremium(parent, args, context, info) {
+    return context.prisma.updateTeam({
+        where: { id: args.teamId },
+        data: {
+            premium: true
+        }
+    })
+}
+
 module.exports = {
   createUser,
   authenticateUser,
@@ -696,6 +731,8 @@ module.exports = {
   addDocumentComment,
   deleteDocumentComment,
   likeDocumentComment,
-  unlikeDocumentComment
+  unlikeDocumentComment,
+
+  upgradeToPremium
 }
 
