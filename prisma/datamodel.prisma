@@ -1,3 +1,8 @@
+enum Role {
+    ADMIN
+    GENERAL
+}
+    
 type TodoList {
   id: ID! @unique
   createdAt: DateTime!
@@ -20,10 +25,15 @@ type User {
   id: ID! @unique
   authId: String @unique
   createdAt: DateTime!
+  identity: String
   name: String
   todoListsOwned: [TodoList] @relation(name: "OwnedBy")
   todoListsAssigned: [TodoList] @relation(name: "AssignedTo")
   inTeam: [Team]
+  role: Role
+  email: String
+  phone: String
+  profilePic: String
 }
 
 type Team {

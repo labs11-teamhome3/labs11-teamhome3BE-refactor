@@ -2,9 +2,12 @@ const validateAndParseToken = require('../helpers/validateAndParseToken');
 
 async function createUser(parent, args, ctx, info) {
   return ctx.prisma.createUser({
-    //name: args.name,
-    //identity: args.sub.split('|')[0],
-    authId: args.sub.split('|')[1]
+    name: args.name,
+    email: args.email,
+    identity: args.sub.split('|')[0],
+    authId: args.sub.split('|')[1],
+    role: "Admin",
+    profilePic: args.picture
   });
 }
 
@@ -12,19 +15,18 @@ async function authenticateUser(parent, {idToken}, ctx, info) {
  let userToken = null;
  try {
    userToken = await validateAndParseToken(idToken);
-   console.log(userToken);
  } catch(err) {
    throw new Error(err.message)
  }
  
+ console.log('userToken', userToken);
  const id = userToken.sub.split("|")[1];
  //this function needs to be a query, how do I do that?
  let currentUser = await ctx.prisma.user({authId: id});
- console.log(currentUser)
+
  if(!currentUser) {
    //error says that prisma is not defined, is this a binding issue?
    currentUser = await createUser(parent, userToken, ctx)
-   console.log(currentUser);
  }
  return currentUser; 
 }
@@ -72,11 +74,6 @@ async function createTodoList(parent, args, context, info) {
     ownedBy: {
       connect: {
         id: args.ownedBy,
-      },
-    },
-    assignedTo: {
-      connect: {
-        id: args.assignedTo,
       },
     },
     inTeam: {
@@ -192,17 +189,26 @@ function addUserToOwners(parent, args, context, info) {
   });
 }
 
+// TODO: need to send email and text to user when they are added as assignee to todoList
 async function addUserToAssignees(parent, args, context, info) {
-  return context.prisma.updateTodoList({
-    where: { id: args.todoListId },
-    data: {
-      assignedTo: {
-        connect: {
-          id: args.userId,
+    const user = await context.prisma.user({ id: args.userId });
+    console.log(user);
+    if (user.email) {
+        // send them an email using nodemailer
+    }
+    if (user.phone) {
+        // send them a text using twilio
+    }
+    return context.prisma.updateTodoList({
+        where: { id: args.todoListId },
+        data: {
+        assignedTo: {
+            connect: {
+            id: args.userId,
+            },
         },
-      },
-    },
-  });
+        },
+    });
 }
 
 async function removeUserFromOwners(parent, args, context, info) {
@@ -248,8 +254,11 @@ async function toggleTodoComplete(parent, args, context, info) {
   });
 }
 
+// TODO: SEND EMAIL/TEXT TO LIST OWNERS IN THIS FUNCTION WHEN COMPLETE
+// render button on front end when all todos are complete, then run this mutation on click
 async function toggleTodoListComplete(parent, args, context, info) {
   const todoList = await context.prisma.todoList({ id: args.todoListId });
+  console.log(todoList);
   return context.prisma.updateTodoList({
     where: { id: args.todoListId },
     data: {
@@ -273,6 +282,13 @@ async function createMessage(parent, args, ctx, info) {
         },
         content: args.content,
     });
+}
+
+function updateMessage(parent, args, context, info) {
+    return context.prisma.updateMessage({
+        title: args.title,
+        content: args.content,
+    })
 }
 
 function deleteMessage(parent, args, context , info) {
@@ -608,6 +624,7 @@ module.exports = {
   removeUserFromAssignees,
 
   createMessage,
+  updateMessage,
   deleteMessage,
 
   addEvent,

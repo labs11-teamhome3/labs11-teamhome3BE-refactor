@@ -1,7 +1,12 @@
 scalar Date
 
+enum Role {
+  ADMIN
+  GENERAL
+}
+
 type Mutation {
-  createUser(authId: String!): User!
+  createUser(name: String!, email: String!, sub: String, profilePic: String): User!
   authenticateUser(idToken: String!): User
   createTodo(description: String!, partOf: ID!, completed: Boolean): Todo
   deleteTodo(id: String!): Todo
@@ -9,7 +14,6 @@ type Mutation {
   createTodoList(
     description: String!
     ownedBy: String!
-    assignedTo: String!
     completed: Boolean
     inTeam: ID
   ): TodoList
@@ -38,6 +42,7 @@ type Mutation {
     userId: ID!
     content: String!
   ): Message
+  updateMessage(title: String, content: String): Message
   deleteMessage(id: ID!): Message
   addEvent(
     userId: ID
@@ -125,6 +130,7 @@ type Query {
   findTag(tagId: ID!): Tag
   findMessageCommentsByMessage(messageId: ID!): [MessageComment]
   findMessageComment(commentId: ID!): MessageComment
+  findMessagesByTag(tagId: ID): [Message]
 
   findDocument(id: ID!): Document
   findDocumentsByTeam(teamId: ID): [Document]
@@ -168,6 +174,10 @@ type User {
   todoListsOwned: [TodoList]
   todoListsAssigned: [TodoList]
   inTeam: [Team]
+  role: Role
+  email: String
+  phone: String
+  profilePic: String
 }
 
 type Team {
