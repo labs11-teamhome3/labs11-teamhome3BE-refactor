@@ -50,6 +50,9 @@ async function updateUser(parent, args, context, info) {
 } */
 
 async function createTodo(parent, args, context, info) {
+    // await context.prisma.createEvent({
+
+    // })
   return context.prisma.createTodo({
     description: args.description,
     partOf: {
@@ -360,8 +363,13 @@ async function createMessage(parent, args, ctx, info) {
 
 function updateMessage(parent, args, context, info) {
     return context.prisma.updateMessage({
-        title: args.title,
-        content: args.content,
+        where: {
+            id: args.messageId
+        },
+        data: {
+            title: args.title,
+            content: args.content,
+        }
     })
 }
 
