@@ -50,17 +50,31 @@ async function updateUser(parent, args, context, info) {
 } */
 
 async function createTodo(parent, args, context, info) {
+    // commented out code is how to create an event on the activity timeline for this action, currently handling event creation on the front end by calling addEvent mutation
+    
     // await context.prisma.createEvent({
-
+    //     action_string: 'created',
+    //     object_string: 'todo',
+    //     user: {
+    //         connect: {
+    //             id: args.userId
+    //         }
+    //     },
+    //     team: {
+    //         connect: {
+    //             id: args.teamId
+    //         }
+    //     }
     // })
-  return context.prisma.createTodo({
-    description: args.description,
-    partOf: {
-      connect: {
-        id: args.partOf,
-      },
-    },
-  });
+
+    return context.prisma.createTodo({
+        description: args.description,
+        partOf: {
+            connect: {
+                id: args.partOf,
+            },
+        },
+    });
 }
 
 async function deleteTodo(parent, args, context, info) {
