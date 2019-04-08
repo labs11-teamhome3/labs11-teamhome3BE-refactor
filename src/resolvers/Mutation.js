@@ -559,24 +559,19 @@ function deleteFolder(parent, args, context, info) {
 }
 
 function addDocument(parent, args, context, info) {
-    return context.prisma.addDocument({
+    return context.prisma.createDocument({
         doc_url: args.doc_url,
         title: args.title,
         textContent: args.textContent,
         image: args.image,
-        folder: {
-            connect: {
-                id: args.folderId
-            }
-        },
         team: {
             connect: {
                 id: args.teamId
             }
         },
-        tag: {
+        user: {
             connect: {
-                id: args.tagId
+                id: args.userId
             }
         }
     })
