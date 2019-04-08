@@ -73,6 +73,7 @@ type Mutation {
     doc_url: String!
     folderId: ID
     teamId: ID!
+    userId: ID!
     title: String!
     textContent: String!
     tagId: ID
