@@ -41,8 +41,8 @@ type Team {
   teamName: String!
   members: [User!]
   todoLists: [TodoList!]
-  messages: [Message!]
-  events: [Event]
+  messages: [Message!] @relation(name: "MessageInTeam", onDelete: CASCADE)
+  events: [Event] @relation(name: "EventInTeam", onDelete: CASCADE)
   tags: [Tag]
   documents: [Document]
   folders: [Folder]
@@ -53,7 +53,7 @@ type Message {
   id: ID! @unique
   title: String!
   creator: User! @relation(name: "MessageCreator")
-  inTeam: Team!
+  inTeam: Team! @relation(name: "MessageInTeam", onDelete: CASCADE)
   content: String!
   images: [String]
   tag: Tag
@@ -80,7 +80,7 @@ type Tag {
 
 type Event {
   id: ID! @unique
-  team: Team!
+  team: Team! @relation(name: "EventInTeam", onDelete: SET_NULL)
   user: User
   action_string: String!
   object_string: String!
