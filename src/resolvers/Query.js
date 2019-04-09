@@ -5,6 +5,9 @@ const users = (parent, args, context, info) => {
 };
 
 const user = (parent, args, context, info) => {
+  if (args.authId) {
+    return context.prisma.user({ authId: args.authId})
+  }
   return context.prisma.user({ id: args.id });
 };
 
@@ -91,7 +94,7 @@ const findMessageComment = (parent, args, context, info) => {
 }
 
 const findDocument = (parent, args, context, info) => {
-  return context.prisma.documents({id: args.id});
+  return context.prisma.document({id: args.id});
 }
 
 const findDocumentsByTeam = (parent, args, context, info) => {
