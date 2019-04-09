@@ -25,7 +25,7 @@ type Mutation {
   ): TodoList
   createTeam(teamName: String!, userId: ID!): Team
   deleteTeam(id: ID!): Team
-  updateTeamName(id: ID!, teamName: ID!): Team
+  updateTeamName(id: ID!, teamName: String!): Team
   addTodoListToTeam(teamId: ID!, todoListId: ID!): Team
   removeTodoListFromTeam(teamId: ID!, todoListId: ID!): Team
   addUserToTeam(userId: ID!, teamId: ID!): Team
