@@ -11,7 +11,7 @@ type TodoList {
   assignedTo: [User!]! @relation(name: "AssignedTo")
   todos: [Todo!]! @relation(name: "TodosInList", onDelete: CASCADE)
   completed: Boolean @default(value: "false")
-  inTeam: Team
+  inTeam: Team @relation(name: "TodoListsInTeam", onDelete: SET_NULL)
 }
 
 type Todo {
@@ -40,12 +40,12 @@ type Team {
   id: ID! @unique
   teamName: String!
   members: [User!]
-  todoLists: [TodoList!]
+  todoLists: [TodoList!] @relation(name: "TodoListsInTeam", onDelete: CASCADE)
   messages: [Message!] @relation(name: "MessageInTeam", onDelete: CASCADE)
   events: [Event] @relation(name: "EventInTeam", onDelete: CASCADE)
-  tags: [Tag]
+  tags: [Tag] @relation(name: "TagInTeam", onDelete: CASCADE)
   documents: [Document] @relation(name: "DocumentInTeam", onDelete: CASCADE)
-  folders: [Folder]
+  folders: [Folder] @relation(name: "FolderInTeam", onDelete: CASCADE)
   premium: Boolean @default(value: "false")
 }
 
@@ -75,7 +75,7 @@ type MessageComment {
 type Tag {
   id: ID! @unique
   name: String!
-  team: Team
+  team: Team@relation(name: "TagInTeam", onDelete: SET_NULL)
 }
 
 type Event {
@@ -116,7 +116,7 @@ type Folder {
   id: ID! @unique
   title: String!
   user: User!
-  team: Team!
+  team: Team! @relation(name: "FolderInTeam", onDelete: SET_NULL)
   createdAt: DateTime!
   documents: [Document]
 }
