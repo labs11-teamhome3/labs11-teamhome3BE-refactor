@@ -44,7 +44,7 @@ type Team {
   messages: [Message!] @relation(name: "MessageInTeam", onDelete: CASCADE)
   events: [Event] @relation(name: "EventInTeam", onDelete: CASCADE)
   tags: [Tag]
-  documents: [Document]
+  documents: [Document] @relation(name: "DocumentInTeam", onDelete: CASCADE)
   folders: [Folder]
   premium: Boolean @default(value: "false")
 }
@@ -92,12 +92,12 @@ type Document {
   doc_url: String!
   user: User! @relation(name: "DocumentCreator")
   folder: Folder
-  team: Team!
+  team: Team! @relation(name: "DocumentInTeam", onDelete: SET_NULL)
   title: String!
   textContent: String!
   tag: Tag
   images: [String]
-  comments: [DocumentComment]
+  comments: [DocumentComment] @relation(name: "DocumentComments", onDelete: CASCADE)
   subscribedUsers: [User] @relation(name: "DocumentSubscribers")
   createdAt: DateTime!
 }
@@ -105,7 +105,7 @@ type Document {
 type DocumentComment {
   id: ID! @unique
   user: User! @relation(name: "DocumentCommentor")
-  document: Document!
+  document: Document! @relation(name: "DocumentComments", onDelete: SET_NULL)
   content: String!
   image: String
   likes: [User] @relation(name: "DocumentCommentLikers")
