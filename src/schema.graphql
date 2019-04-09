@@ -8,6 +8,7 @@ enum Role {
 type Mutation {
   createUser(name: String!, email: String!, sub: String, profilePic: String): User!
   authenticateUser(idToken: String!): User
+  updateUserContactInfo(name: String, email: String, phone: String, profilePic: String): User!
   createTodo(description: String!, partOf: ID!, completed: Boolean): Todo
   deleteTodo(id: String!): Todo
   updateTodo(id: String!, description: String!, completed: Boolean): Todo
