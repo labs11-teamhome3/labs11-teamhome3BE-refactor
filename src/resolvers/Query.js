@@ -5,6 +5,9 @@ const users = (parent, args, context, info) => {
 };
 
 const user = (parent, args, context, info) => {
+  if (args.authId) {
+    return context.prisma.user({ authId: args.authId})
+  }
   return context.prisma.user({ id: args.id });
 };
 
