@@ -38,16 +38,16 @@ async function authenticateUser(parent, {idToken}, ctx, info) {
  return currentUser; 
 }
 
-/*
-async function updateUser(parent, args, context, info) {
+async function updateUserContactInfo(parent, args, context, info) {
     return context.prisma.updateUser({
         where: {id: args.id},
         data: {
             name: args.name,
-            inTeam: args.inTeam,
+            email: args.email,
+            phone: args.phone
         }
     })
-} */
+} 
 
 async function createTodo(parent, args, context, info) {
     // commented out code is how to create an event on the activity timeline for this action, currently handling event creation on the front end by calling addEvent mutation
@@ -699,7 +699,7 @@ function upgradeToPremium(parent, args, context, info) {
 module.exports = {
   createUser,
   authenticateUser,
-  // updateUser,
+  updateUserContactInfo,
 
   createTodo,
   deleteTodo,
