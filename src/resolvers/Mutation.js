@@ -681,8 +681,9 @@ function upgradeToPremium(parent, args, context, info) {
     stripe.charges
         .create({
             source: args.source,
-            amount: args.charge,
-            currency: 'usd'
+            amount: 9.99,
+            currency: 'usd',
+            description: 'Upgrading To Premium'
         })
         .then(() => {
             return context.prisma.updateTeam({

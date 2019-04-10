@@ -112,7 +112,7 @@ type Mutation {
   addTagToDocument(documentId: ID!, tagId: ID!): Document
   removeTagFromDocument(documentId: ID!): Document
 
-  upgradeToPremium(teamId: ID!): Team
+  upgradeToPremium(teamId: ID!, source: String!): Team
 }
 
 type Query {
