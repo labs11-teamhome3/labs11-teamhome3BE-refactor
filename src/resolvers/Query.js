@@ -133,7 +133,7 @@ const findDocumentCommentsByUser = (parent, args, context, info) => {
 }
 
 const findFolder = (parent, args, context, info) => {
-  return context.prisma.folders({ id: args.id });
+  return context.prisma.folder({ id: args.id });
 }
 
 const findFoldersByTeam = (parent, args, context, info) => {
