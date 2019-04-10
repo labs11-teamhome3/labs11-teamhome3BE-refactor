@@ -680,7 +680,7 @@ function removeDocumentFromFolder(parent, args, context, info) {
 function upgradeToPremium(parent, args, context, info) {
     stripe.charges
         .create({
-            soruce: args.source,
+            source: args.source,
             amount: args.charge,
             currency: 'usd'
         })
