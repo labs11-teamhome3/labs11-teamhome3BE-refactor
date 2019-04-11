@@ -681,7 +681,7 @@ function upgradeToPremium(parent, args, context, info) {
     stripe.charges
         .create({
             source: args.source,
-            amount: 9.99,
+            amount: 999,
             currency: 'usd',
             description: 'Upgrading To Premium'
         })
