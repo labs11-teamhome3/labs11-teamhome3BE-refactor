@@ -330,7 +330,7 @@ async function toggleTodoListComplete(parent, args, context, info) {
     console.log(todoList);
     const todoListOwners = await context.prisma.todoList({ id: args.todoListId }).ownedBy();
     console.log('todoListOwners', todoListOwners);
-    const team = await context.prisma.todoList({ id: args.todListId }).inTeam();
+    const team = await context.prisma.todoList({ id: args.todoListId }).inTeam();
     todoListOwners.forEach(async owner => {
         if (owner.email) {
             // send email using sendgrid
