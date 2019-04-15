@@ -53,7 +53,7 @@ type Message {
   id: ID! @unique
   title: String!
   creator: User! @relation(name: "MessageCreator")
-  inTeam: Team! @relation(name: "MessageInTeam", onDelete: CASCADE)
+  inTeam: Team! @relation(name: "MessageInTeam", onDelete: SET_NULL)
   content: String!
   images: [String]
   tag: Tag
