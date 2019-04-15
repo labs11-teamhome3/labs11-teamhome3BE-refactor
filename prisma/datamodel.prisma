@@ -34,6 +34,7 @@ type User {
   email: String
   phone: String
   profilePic: String
+  events: [Event] @relation(name: "EventCreator")
 }
 
 type Team {
@@ -81,7 +82,7 @@ type Tag {
 type Event {
   id: ID! @unique
   team: Team! @relation(name: "EventInTeam", onDelete: SET_NULL)
-  user: User
+  user: User @relation(name: "EventCreator")
   action_string: String!
   object_string: String!
   createdAt: DateTime!
