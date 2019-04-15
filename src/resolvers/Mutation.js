@@ -251,7 +251,7 @@ async function addUserToAssignees(parent, args, context, info) {
             to: user.email,
             from: 'app@manaje.com',
             subject: 'You have been assigned to a Todo List',
-            html: `<div>The owner of '${todoList.description}' has assigned you as a participant!<div><a href='http://manaje.netlify.com'>Check it out!</a>`
+            html: `<div>One of the owners of '${todoList.description}' has assigned you as a participant!<div><a href='https://manaje-refactor.netlify.com/'>Check it out!</a>`
         }
         await sgMail.send(email);
     }
@@ -260,7 +260,7 @@ async function addUserToAssignees(parent, args, context, info) {
         client.messages
             .create({
                 from: process.env.TWILIO_NUMBER,
-                body: `You have been assigned to a Todo List titled '${todoList.description}'.  Check it out at https://manaje.netlify.com/`,
+                body: `One of the owners of '${todoList.description}' has assigned you as a participant! Check it out at https://manaje-refactor.netlify.com/`,
                 to: user.phone
             })
             .then(message => console.log(message.sid));
@@ -335,7 +335,7 @@ async function toggleTodoListComplete(parent, args, context, info) {
                 to: owner.email,
                 from: 'app@manaje.com',
                 subject: `The Todo List '${todoList.description}' has been completed`,
-                html: `<div>All of the tasks in '${todoList.description}' are complete!<div><a href='http://manaje.netlify.com'>Check it out!</a>`
+                html: `<div>All of the tasks in '${todoList.description}' are complete!<div><a href='https://manaje-refactor.netlify.com/'>Check it out!</a>`
             }
             await sgMail.send(email);
         }
@@ -344,7 +344,7 @@ async function toggleTodoListComplete(parent, args, context, info) {
             client.messages
                 .create({
                     from: process.env.TWILIO_NUMBER,
-                    body: `Your Todo List '${todoList.description}' has been completed.  Check it out at https://manaje.netlify.com/`,
+                    body: `Your Todo List '${todoList.description}' has been completed.  Check it out at https://manaje-refactor.netlify.com/`,
                     to: owner.phone
                 })
                 .then(message => console.log(message.sid));
