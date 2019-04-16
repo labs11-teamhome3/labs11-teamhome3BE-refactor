@@ -57,6 +57,7 @@ type Message {
   content: String!
   images: [String]
   tag: Tag
+  likes: [User] @relation(name: "MessageLiker")
   comments: [MessageComment] @relation(name: "MessageComments", onDelete: CASCADE)
   subscribedUsers: [User] @relation(name: "MessageSubscribers")
   createdAt: DateTime!

@@ -471,6 +471,32 @@ function deleteMessageComment(parent, args, context, info) {
     return context.prisma.deleteMessageComment({ id: args.commentId });
 }
 
+function likeMessage(parent, args, context, info) {
+    return context.prisma.updateMessage({
+        where: { id: args.messageId },
+        data: {
+            likes: {
+                connect: {
+                    id: args.userId
+                }
+            }
+        }
+    })
+}
+
+function unlikeMessage(parent, args, context, info) {
+    return context.prisma.updateMessage({
+        where: { id: args.messageId },
+        data: {
+            likes: {
+                disconnect: {
+                    id: args.userId
+                }
+            }
+        }
+    })
+}
+
 function likeMessageComment(parent, args, context, info) {
     return context.prisma.updateMessageComment({
         where: { id: args.commentId },
