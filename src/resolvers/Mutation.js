@@ -758,6 +758,8 @@ module.exports = {
   createMessage,
   updateMessage,
   deleteMessage,
+  likeMessage,
+  unlikeMessage,
 
   addEvent,
   deleteEvent,
