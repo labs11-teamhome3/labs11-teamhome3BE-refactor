@@ -1267,6 +1267,7 @@ type Message {
   content: String!
   images: [String!]!
   tag: Tag
+  likes(where: UserWhereInput, orderBy: UserOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [User!]
   comments(where: MessageCommentWhereInput, orderBy: MessageCommentOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [MessageComment!]
   subscribedUsers(where: UserWhereInput, orderBy: UserOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [User!]
   createdAt: DateTime!
@@ -1542,6 +1543,7 @@ input MessageCreateInput {
   content: String!
   images: MessageCreateimagesInput
   tag: TagCreateOneInput
+  likes: UserCreateManyInput
   comments: MessageCommentCreateManyWithoutMessageInput
   subscribedUsers: UserCreateManyInput
 }
@@ -1563,6 +1565,7 @@ input MessageCreateWithoutCommentsInput {
   content: String!
   images: MessageCreateimagesInput
   tag: TagCreateOneInput
+  likes: UserCreateManyInput
   subscribedUsers: UserCreateManyInput
 }
 
@@ -1572,6 +1575,7 @@ input MessageCreateWithoutInTeamInput {
   content: String!
   images: MessageCreateimagesInput
   tag: TagCreateOneInput
+  likes: UserCreateManyInput
   comments: MessageCommentCreateManyWithoutMessageInput
   subscribedUsers: UserCreateManyInput
 }
@@ -1687,6 +1691,7 @@ input MessageUpdateInput {
   content: String
   images: MessageUpdateimagesInput
   tag: TagUpdateOneInput
+  likes: UserUpdateManyInput
   comments: MessageCommentUpdateManyWithoutMessageInput
   subscribedUsers: UserUpdateManyInput
 }
@@ -1734,6 +1739,7 @@ input MessageUpdateWithoutCommentsDataInput {
   content: String
   images: MessageUpdateimagesInput
   tag: TagUpdateOneInput
+  likes: UserUpdateManyInput
   subscribedUsers: UserUpdateManyInput
 }
 
@@ -1743,6 +1749,7 @@ input MessageUpdateWithoutInTeamDataInput {
   content: String
   images: MessageUpdateimagesInput
   tag: TagUpdateOneInput
+  likes: UserUpdateManyInput
   comments: MessageCommentUpdateManyWithoutMessageInput
   subscribedUsers: UserUpdateManyInput
 }
@@ -1809,6 +1816,9 @@ input MessageWhereInput {
   content_ends_with: String
   content_not_ends_with: String
   tag: TagWhereInput
+  likes_every: UserWhereInput
+  likes_some: UserWhereInput
+  likes_none: UserWhereInput
   comments_every: MessageCommentWhereInput
   comments_some: MessageCommentWhereInput
   comments_none: MessageCommentWhereInput

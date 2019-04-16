@@ -243,7 +243,9 @@ async function addUserToAssignees(parent, args, context, info) {
     const user = await context.prisma.user({ id: args.userId });
     console.log('user', user);
     const todoList = await context.prisma.todoList({ id: args.todoListId });
+    const team = await context.prisma.todoList({ id: args.todoListId }).inTeam();
     console.log('todoList', todoList);
+    console.log('team', team)
     
     if (user.email) {
         // send them an email using sendgrid
@@ -251,7 +253,7 @@ async function addUserToAssignees(parent, args, context, info) {
             to: user.email,
             from: 'app@manaje.com',
             subject: 'You have been assigned to a Todo List',
-            html: `<div>One of the owners of '${todoList.description}' has assigned you as a participant!<div><a href='https://manaje-refactor.netlify.com/'>Check it out!</a>`
+            html: `<div>One of the owners of '${todoList.description}' has assigned you as a participant!<div><a href='https://manaje-refactor.netlify.com/teams/${team.id}/home'>Check it out!</a>`
         }
         await sgMail.send(email);
     }
@@ -260,7 +262,7 @@ async function addUserToAssignees(parent, args, context, info) {
         client.messages
             .create({
                 from: process.env.TWILIO_NUMBER,
-                body: `One of the owners of '${todoList.description}' has assigned you as a participant! Check it out at https://manaje-refactor.netlify.com/`,
+                body: `One of the owners of '${todoList.description}' has assigned you as a participant! Check it out at https://manaje-refactor.netlify.com/teams/${team.id}/home`,
                 to: user.phone
             })
             .then(message => console.log(message.sid));
@@ -328,6 +330,7 @@ async function toggleTodoListComplete(parent, args, context, info) {
     console.log(todoList);
     const todoListOwners = await context.prisma.todoList({ id: args.todoListId }).ownedBy();
     console.log('todoListOwners', todoListOwners);
+    const team = await context.prisma.todoList({ id: args.todoListId }).inTeam();
     todoListOwners.forEach(async owner => {
         if (owner.email) {
             // send email using sendgrid
@@ -335,7 +338,7 @@ async function toggleTodoListComplete(parent, args, context, info) {
                 to: owner.email,
                 from: 'app@manaje.com',
                 subject: `The Todo List '${todoList.description}' has been completed`,
-                html: `<div>All of the tasks in '${todoList.description}' are complete!<div><a href='https://manaje-refactor.netlify.com/'>Check it out!</a>`
+                html: `<div>All of the tasks in '${todoList.description}' are complete!<div><a href='https://manaje-refactor.netlify.com/teams/${team.id}/home'>Check it out!</a>`
             }
             await sgMail.send(email);
         }
@@ -344,7 +347,7 @@ async function toggleTodoListComplete(parent, args, context, info) {
             client.messages
                 .create({
                     from: process.env.TWILIO_NUMBER,
-                    body: `Your Todo List '${todoList.description}' has been completed.  Check it out at https://manaje-refactor.netlify.com/`,
+                    body: `Your Todo List '${todoList.description}' has been completed.  Check it out at https://manaje-refactor.netlify.com/teams/${team.id}/home`,
                     to: owner.phone
                 })
                 .then(message => console.log(message.sid));
@@ -466,6 +469,32 @@ function updateMessageComment(parent, args, context, info) {
 
 function deleteMessageComment(parent, args, context, info) {
     return context.prisma.deleteMessageComment({ id: args.commentId });
+}
+
+function likeMessage(parent, args, context, info) {
+    return context.prisma.updateMessage({
+        where: { id: args.messageId },
+        data: {
+            likes: {
+                connect: {
+                    id: args.userId
+                }
+            }
+        }
+    })
+}
+
+function unlikeMessage(parent, args, context, info) {
+    return context.prisma.updateMessage({
+        where: { id: args.messageId },
+        data: {
+            likes: {
+                disconnect: {
+                    id: args.userId
+                }
+            }
+        }
+    })
 }
 
 function likeMessageComment(parent, args, context, info) {
@@ -729,6 +758,8 @@ module.exports = {
   createMessage,
   updateMessage,
   deleteMessage,
+  likeMessage,
+  unlikeMessage,
 
   addEvent,
   deleteEvent,

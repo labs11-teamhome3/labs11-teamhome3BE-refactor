@@ -45,6 +45,8 @@ type Mutation {
   ): Message
   updateMessage(title: String, content: String, messageId: ID!): Message
   deleteMessage(id: ID!): Message
+  likeMessage(messageId: ID!, userId: ID!): Message
+  unlikeMessage(messageId: ID!, userId: ID!): Message
   addEvent(
     userId: ID
     teamId: ID!
@@ -208,6 +210,7 @@ type Message {
   content: String!
   images: [String]
   tag: Tag
+  likes: [User]
   comments: [MessageComment]
   subscribedUsers: [User]
 }

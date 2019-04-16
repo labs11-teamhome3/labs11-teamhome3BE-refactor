@@ -994,6 +994,9 @@ export interface MessageWhereInput {
   content_ends_with?: String;
   content_not_ends_with?: String;
   tag?: TagWhereInput;
+  likes_every?: UserWhereInput;
+  likes_some?: UserWhereInput;
+  likes_none?: UserWhereInput;
   comments_every?: MessageCommentWhereInput;
   comments_some?: MessageCommentWhereInput;
   comments_none?: MessageCommentWhereInput;
@@ -1648,6 +1651,7 @@ export interface MessageCreateWithoutInTeamInput {
   content: String;
   images?: MessageCreateimagesInput;
   tag?: TagCreateOneInput;
+  likes?: UserCreateManyInput;
   comments?: MessageCommentCreateManyWithoutMessageInput;
   subscribedUsers?: UserCreateManyInput;
 }
@@ -2302,6 +2306,7 @@ export interface MessageUpdateWithoutInTeamDataInput {
   content?: String;
   images?: MessageUpdateimagesInput;
   tag?: TagUpdateOneInput;
+  likes?: UserUpdateManyInput;
   comments?: MessageCommentUpdateManyWithoutMessageInput;
   subscribedUsers?: UserUpdateManyInput;
 }
@@ -3605,6 +3610,7 @@ export interface MessageCreateInput {
   content: String;
   images?: MessageCreateimagesInput;
   tag?: TagCreateOneInput;
+  likes?: UserCreateManyInput;
   comments?: MessageCommentCreateManyWithoutMessageInput;
   subscribedUsers?: UserCreateManyInput;
 }
@@ -3632,6 +3638,7 @@ export interface MessageUpdateInput {
   content?: String;
   images?: MessageUpdateimagesInput;
   tag?: TagUpdateOneInput;
+  likes?: UserUpdateManyInput;
   comments?: MessageCommentUpdateManyWithoutMessageInput;
   subscribedUsers?: UserUpdateManyInput;
 }
@@ -3685,6 +3692,7 @@ export interface MessageCreateWithoutCommentsInput {
   content: String;
   images?: MessageCreateimagesInput;
   tag?: TagCreateOneInput;
+  likes?: UserCreateManyInput;
   subscribedUsers?: UserCreateManyInput;
 }
 
@@ -3710,6 +3718,7 @@ export interface MessageUpdateWithoutCommentsDataInput {
   content?: String;
   images?: MessageUpdateimagesInput;
   tag?: TagUpdateOneInput;
+  likes?: UserUpdateManyInput;
   subscribedUsers?: UserUpdateManyInput;
 }
 
@@ -4507,6 +4516,17 @@ export interface MessagePromise extends Promise<Message>, Fragmentable {
   content: () => Promise<String>;
   images: () => Promise<String[]>;
   tag: <T = TagPromise>() => T;
+  likes: <T = FragmentableArray<User>>(
+    args?: {
+      where?: UserWhereInput;
+      orderBy?: UserOrderByInput;
+      skip?: Int;
+      after?: String;
+      before?: String;
+      first?: Int;
+      last?: Int;
+    }
+  ) => T;
   comments: <T = FragmentableArray<MessageComment>>(
     args?: {
       where?: MessageCommentWhereInput;
@@ -4542,6 +4562,17 @@ export interface MessageSubscription
   content: () => Promise<AsyncIterator<String>>;
   images: () => Promise<AsyncIterator<String[]>>;
   tag: <T = TagSubscription>() => T;
+  likes: <T = Promise<AsyncIterator<UserSubscription>>>(
+    args?: {
+      where?: UserWhereInput;
+      orderBy?: UserOrderByInput;
+      skip?: Int;
+      after?: String;
+      before?: String;
+      first?: Int;
+      last?: Int;
+    }
+  ) => T;
   comments: <T = Promise<AsyncIterator<MessageCommentSubscription>>>(
     args?: {
       where?: MessageCommentWhereInput;

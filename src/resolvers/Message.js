@@ -18,10 +18,15 @@ function subscribedUsers(parent, args, context) {
     return context.prisma.message({ id: parent.id }).subscribedUsers();
 }
 
+function likes(parent, args, context) {
+    return context.prisma.message({ id: parent.id }).likes();
+}
+
 module.exports = {
     creator,
     inTeam,
     comments,
     tag,
-    subscribedUsers
+    subscribedUsers,
+    likes
 }
