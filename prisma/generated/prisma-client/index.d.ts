@@ -883,6 +883,9 @@ export interface UserWhereInput {
   profilePic_not_starts_with?: String;
   profilePic_ends_with?: String;
   profilePic_not_ends_with?: String;
+  events_every?: EventWhereInput;
+  events_some?: EventWhereInput;
+  events_none?: EventWhereInput;
   AND?: UserWhereInput[] | UserWhereInput;
   OR?: UserWhereInput[] | UserWhereInput;
   NOT?: UserWhereInput[] | UserWhereInput;
@@ -1462,6 +1465,7 @@ export interface UserCreateInput {
   email?: String;
   phone?: String;
   profilePic?: String;
+  events?: EventCreateManyWithoutUserInput;
 }
 
 export interface TodoListCreateManyWithoutOwnedByInput {
@@ -1496,6 +1500,7 @@ export interface UserCreateWithoutTodoListsAssignedInput {
   email?: String;
   phone?: String;
   profilePic?: String;
+  events?: EventCreateManyWithoutUserInput;
 }
 
 export interface TeamCreateManyWithoutMembersInput {
@@ -1546,6 +1551,7 @@ export interface UserCreateWithoutTodoListsOwnedInput {
   email?: String;
   phone?: String;
   profilePic?: String;
+  events?: EventCreateManyWithoutUserInput;
 }
 
 export interface TodoListCreateManyWithoutAssignedToInput {
@@ -1604,6 +1610,34 @@ export interface UserCreateWithoutInTeamInput {
   email?: String;
   phone?: String;
   profilePic?: String;
+  events?: EventCreateManyWithoutUserInput;
+}
+
+export interface EventCreateManyWithoutUserInput {
+  create?: EventCreateWithoutUserInput[] | EventCreateWithoutUserInput;
+  connect?: EventWhereUniqueInput[] | EventWhereUniqueInput;
+}
+
+export interface EventCreateWithoutUserInput {
+  team: TeamCreateOneWithoutEventsInput;
+  action_string: String;
+  object_string: String;
+}
+
+export interface TeamCreateOneWithoutEventsInput {
+  create?: TeamCreateWithoutEventsInput;
+  connect?: TeamWhereUniqueInput;
+}
+
+export interface TeamCreateWithoutEventsInput {
+  teamName: String;
+  members?: UserCreateManyWithoutInTeamInput;
+  todoLists?: TodoListCreateManyWithoutInTeamInput;
+  messages?: MessageCreateManyWithoutInTeamInput;
+  tags?: TagCreateManyWithoutTeamInput;
+  documents?: DocumentCreateManyWithoutTeamInput;
+  folders?: FolderCreateManyWithoutTeamInput;
+  premium?: Boolean;
 }
 
 export interface MessageCreateManyWithoutInTeamInput {
@@ -1658,9 +1692,27 @@ export interface EventCreateManyWithoutTeamInput {
 }
 
 export interface EventCreateWithoutTeamInput {
-  user?: UserCreateOneInput;
+  user?: UserCreateOneWithoutEventsInput;
   action_string: String;
   object_string: String;
+}
+
+export interface UserCreateOneWithoutEventsInput {
+  create?: UserCreateWithoutEventsInput;
+  connect?: UserWhereUniqueInput;
+}
+
+export interface UserCreateWithoutEventsInput {
+  authId?: String;
+  identity?: String;
+  name?: String;
+  todoListsOwned?: TodoListCreateManyWithoutOwnedByInput;
+  todoListsAssigned?: TodoListCreateManyWithoutAssignedToInput;
+  inTeam?: TeamCreateManyWithoutMembersInput;
+  role?: Role;
+  email?: String;
+  phone?: String;
+  profilePic?: String;
 }
 
 export interface DocumentCreateManyWithoutTeamInput {
@@ -1830,6 +1882,7 @@ export interface UserUpdateDataInput {
   email?: String;
   phone?: String;
   profilePic?: String;
+  events?: EventUpdateManyWithoutUserInput;
 }
 
 export interface TodoListUpdateManyWithoutOwnedByInput {
@@ -1900,6 +1953,7 @@ export interface UserUpdateWithoutTodoListsAssignedDataInput {
   email?: String;
   phone?: String;
   profilePic?: String;
+  events?: EventUpdateManyWithoutUserInput;
 }
 
 export interface TeamUpdateManyWithoutMembersInput {
@@ -2004,6 +2058,7 @@ export interface UserUpdateWithoutTodoListsOwnedDataInput {
   email?: String;
   phone?: String;
   profilePic?: String;
+  events?: EventUpdateManyWithoutUserInput;
 }
 
 export interface TodoListUpdateManyWithoutAssignedToInput {
@@ -2172,143 +2227,54 @@ export interface UserUpdateWithoutInTeamDataInput {
   email?: String;
   phone?: String;
   profilePic?: String;
+  events?: EventUpdateManyWithoutUserInput;
 }
 
-export interface UserUpsertWithWhereUniqueWithoutInTeamInput {
-  where: UserWhereUniqueInput;
-  update: UserUpdateWithoutInTeamDataInput;
-  create: UserCreateWithoutInTeamInput;
+export interface EventUpdateManyWithoutUserInput {
+  create?: EventCreateWithoutUserInput[] | EventCreateWithoutUserInput;
+  delete?: EventWhereUniqueInput[] | EventWhereUniqueInput;
+  connect?: EventWhereUniqueInput[] | EventWhereUniqueInput;
+  set?: EventWhereUniqueInput[] | EventWhereUniqueInput;
+  disconnect?: EventWhereUniqueInput[] | EventWhereUniqueInput;
+  update?:
+    | EventUpdateWithWhereUniqueWithoutUserInput[]
+    | EventUpdateWithWhereUniqueWithoutUserInput;
+  upsert?:
+    | EventUpsertWithWhereUniqueWithoutUserInput[]
+    | EventUpsertWithWhereUniqueWithoutUserInput;
+  deleteMany?: EventScalarWhereInput[] | EventScalarWhereInput;
+  updateMany?:
+    | EventUpdateManyWithWhereNestedInput[]
+    | EventUpdateManyWithWhereNestedInput;
 }
 
-export interface UserScalarWhereInput {
-  id?: ID_Input;
-  id_not?: ID_Input;
-  id_in?: ID_Input[] | ID_Input;
-  id_not_in?: ID_Input[] | ID_Input;
-  id_lt?: ID_Input;
-  id_lte?: ID_Input;
-  id_gt?: ID_Input;
-  id_gte?: ID_Input;
-  id_contains?: ID_Input;
-  id_not_contains?: ID_Input;
-  id_starts_with?: ID_Input;
-  id_not_starts_with?: ID_Input;
-  id_ends_with?: ID_Input;
-  id_not_ends_with?: ID_Input;
-  authId?: String;
-  authId_not?: String;
-  authId_in?: String[] | String;
-  authId_not_in?: String[] | String;
-  authId_lt?: String;
-  authId_lte?: String;
-  authId_gt?: String;
-  authId_gte?: String;
-  authId_contains?: String;
-  authId_not_contains?: String;
-  authId_starts_with?: String;
-  authId_not_starts_with?: String;
-  authId_ends_with?: String;
-  authId_not_ends_with?: String;
-  createdAt?: DateTimeInput;
-  createdAt_not?: DateTimeInput;
-  createdAt_in?: DateTimeInput[] | DateTimeInput;
-  createdAt_not_in?: DateTimeInput[] | DateTimeInput;
-  createdAt_lt?: DateTimeInput;
-  createdAt_lte?: DateTimeInput;
-  createdAt_gt?: DateTimeInput;
-  createdAt_gte?: DateTimeInput;
-  identity?: String;
-  identity_not?: String;
-  identity_in?: String[] | String;
-  identity_not_in?: String[] | String;
-  identity_lt?: String;
-  identity_lte?: String;
-  identity_gt?: String;
-  identity_gte?: String;
-  identity_contains?: String;
-  identity_not_contains?: String;
-  identity_starts_with?: String;
-  identity_not_starts_with?: String;
-  identity_ends_with?: String;
-  identity_not_ends_with?: String;
-  name?: String;
-  name_not?: String;
-  name_in?: String[] | String;
-  name_not_in?: String[] | String;
-  name_lt?: String;
-  name_lte?: String;
-  name_gt?: String;
-  name_gte?: String;
-  name_contains?: String;
-  name_not_contains?: String;
-  name_starts_with?: String;
-  name_not_starts_with?: String;
-  name_ends_with?: String;
-  name_not_ends_with?: String;
-  role?: Role;
-  role_not?: Role;
-  role_in?: Role[] | Role;
-  role_not_in?: Role[] | Role;
-  email?: String;
-  email_not?: String;
-  email_in?: String[] | String;
-  email_not_in?: String[] | String;
-  email_lt?: String;
-  email_lte?: String;
-  email_gt?: String;
-  email_gte?: String;
-  email_contains?: String;
-  email_not_contains?: String;
-  email_starts_with?: String;
-  email_not_starts_with?: String;
-  email_ends_with?: String;
-  email_not_ends_with?: String;
-  phone?: String;
-  phone_not?: String;
-  phone_in?: String[] | String;
-  phone_not_in?: String[] | String;
-  phone_lt?: String;
-  phone_lte?: String;
-  phone_gt?: String;
-  phone_gte?: String;
-  phone_contains?: String;
-  phone_not_contains?: String;
-  phone_starts_with?: String;
-  phone_not_starts_with?: String;
-  phone_ends_with?: String;
-  phone_not_ends_with?: String;
-  profilePic?: String;
-  profilePic_not?: String;
-  profilePic_in?: String[] | String;
-  profilePic_not_in?: String[] | String;
-  profilePic_lt?: String;
-  profilePic_lte?: String;
-  profilePic_gt?: String;
-  profilePic_gte?: String;
-  profilePic_contains?: String;
-  profilePic_not_contains?: String;
-  profilePic_starts_with?: String;
-  profilePic_not_starts_with?: String;
-  profilePic_ends_with?: String;
-  profilePic_not_ends_with?: String;
-  AND?: UserScalarWhereInput[] | UserScalarWhereInput;
-  OR?: UserScalarWhereInput[] | UserScalarWhereInput;
-  NOT?: UserScalarWhereInput[] | UserScalarWhereInput;
+export interface EventUpdateWithWhereUniqueWithoutUserInput {
+  where: EventWhereUniqueInput;
+  data: EventUpdateWithoutUserDataInput;
 }
 
-export interface UserUpdateManyWithWhereNestedInput {
-  where: UserScalarWhereInput;
-  data: UserUpdateManyDataInput;
+export interface EventUpdateWithoutUserDataInput {
+  team?: TeamUpdateOneRequiredWithoutEventsInput;
+  action_string?: String;
+  object_string?: String;
 }
 
-export interface UserUpdateManyDataInput {
-  authId?: String;
-  identity?: String;
-  name?: String;
-  role?: Role;
-  email?: String;
-  phone?: String;
-  profilePic?: String;
+export interface TeamUpdateOneRequiredWithoutEventsInput {
+  create?: TeamCreateWithoutEventsInput;
+  update?: TeamUpdateWithoutEventsDataInput;
+  upsert?: TeamUpsertWithoutEventsInput;
+  connect?: TeamWhereUniqueInput;
+}
+
+export interface TeamUpdateWithoutEventsDataInput {
+  teamName?: String;
+  members?: UserUpdateManyWithoutInTeamInput;
+  todoLists?: TodoListUpdateManyWithoutInTeamInput;
+  messages?: MessageUpdateManyWithoutInTeamInput;
+  tags?: TagUpdateManyWithoutTeamInput;
+  documents?: DocumentUpdateManyWithoutTeamInput;
+  folders?: FolderUpdateManyWithoutTeamInput;
+  premium?: Boolean;
 }
 
 export interface MessageUpdateManyWithoutInTeamInput {
@@ -2407,23 +2373,36 @@ export interface EventUpdateWithWhereUniqueWithoutTeamInput {
 }
 
 export interface EventUpdateWithoutTeamDataInput {
-  user?: UserUpdateOneInput;
+  user?: UserUpdateOneWithoutEventsInput;
   action_string?: String;
   object_string?: String;
 }
 
-export interface UserUpdateOneInput {
-  create?: UserCreateInput;
-  update?: UserUpdateDataInput;
-  upsert?: UserUpsertNestedInput;
+export interface UserUpdateOneWithoutEventsInput {
+  create?: UserCreateWithoutEventsInput;
+  update?: UserUpdateWithoutEventsDataInput;
+  upsert?: UserUpsertWithoutEventsInput;
   delete?: Boolean;
   disconnect?: Boolean;
   connect?: UserWhereUniqueInput;
 }
 
-export interface UserUpsertNestedInput {
-  update: UserUpdateDataInput;
-  create: UserCreateInput;
+export interface UserUpdateWithoutEventsDataInput {
+  authId?: String;
+  identity?: String;
+  name?: String;
+  todoListsOwned?: TodoListUpdateManyWithoutOwnedByInput;
+  todoListsAssigned?: TodoListUpdateManyWithoutAssignedToInput;
+  inTeam?: TeamUpdateManyWithoutMembersInput;
+  role?: Role;
+  email?: String;
+  phone?: String;
+  profilePic?: String;
+}
+
+export interface UserUpsertWithoutEventsInput {
+  update: UserUpdateWithoutEventsDataInput;
+  create: UserCreateWithoutEventsInput;
 }
 
 export interface EventUpsertWithWhereUniqueWithoutTeamInput {
@@ -2719,6 +2698,137 @@ export interface UserUpsertWithWhereUniqueNestedInput {
   where: UserWhereUniqueInput;
   update: UserUpdateDataInput;
   create: UserCreateInput;
+}
+
+export interface UserScalarWhereInput {
+  id?: ID_Input;
+  id_not?: ID_Input;
+  id_in?: ID_Input[] | ID_Input;
+  id_not_in?: ID_Input[] | ID_Input;
+  id_lt?: ID_Input;
+  id_lte?: ID_Input;
+  id_gt?: ID_Input;
+  id_gte?: ID_Input;
+  id_contains?: ID_Input;
+  id_not_contains?: ID_Input;
+  id_starts_with?: ID_Input;
+  id_not_starts_with?: ID_Input;
+  id_ends_with?: ID_Input;
+  id_not_ends_with?: ID_Input;
+  authId?: String;
+  authId_not?: String;
+  authId_in?: String[] | String;
+  authId_not_in?: String[] | String;
+  authId_lt?: String;
+  authId_lte?: String;
+  authId_gt?: String;
+  authId_gte?: String;
+  authId_contains?: String;
+  authId_not_contains?: String;
+  authId_starts_with?: String;
+  authId_not_starts_with?: String;
+  authId_ends_with?: String;
+  authId_not_ends_with?: String;
+  createdAt?: DateTimeInput;
+  createdAt_not?: DateTimeInput;
+  createdAt_in?: DateTimeInput[] | DateTimeInput;
+  createdAt_not_in?: DateTimeInput[] | DateTimeInput;
+  createdAt_lt?: DateTimeInput;
+  createdAt_lte?: DateTimeInput;
+  createdAt_gt?: DateTimeInput;
+  createdAt_gte?: DateTimeInput;
+  identity?: String;
+  identity_not?: String;
+  identity_in?: String[] | String;
+  identity_not_in?: String[] | String;
+  identity_lt?: String;
+  identity_lte?: String;
+  identity_gt?: String;
+  identity_gte?: String;
+  identity_contains?: String;
+  identity_not_contains?: String;
+  identity_starts_with?: String;
+  identity_not_starts_with?: String;
+  identity_ends_with?: String;
+  identity_not_ends_with?: String;
+  name?: String;
+  name_not?: String;
+  name_in?: String[] | String;
+  name_not_in?: String[] | String;
+  name_lt?: String;
+  name_lte?: String;
+  name_gt?: String;
+  name_gte?: String;
+  name_contains?: String;
+  name_not_contains?: String;
+  name_starts_with?: String;
+  name_not_starts_with?: String;
+  name_ends_with?: String;
+  name_not_ends_with?: String;
+  role?: Role;
+  role_not?: Role;
+  role_in?: Role[] | Role;
+  role_not_in?: Role[] | Role;
+  email?: String;
+  email_not?: String;
+  email_in?: String[] | String;
+  email_not_in?: String[] | String;
+  email_lt?: String;
+  email_lte?: String;
+  email_gt?: String;
+  email_gte?: String;
+  email_contains?: String;
+  email_not_contains?: String;
+  email_starts_with?: String;
+  email_not_starts_with?: String;
+  email_ends_with?: String;
+  email_not_ends_with?: String;
+  phone?: String;
+  phone_not?: String;
+  phone_in?: String[] | String;
+  phone_not_in?: String[] | String;
+  phone_lt?: String;
+  phone_lte?: String;
+  phone_gt?: String;
+  phone_gte?: String;
+  phone_contains?: String;
+  phone_not_contains?: String;
+  phone_starts_with?: String;
+  phone_not_starts_with?: String;
+  phone_ends_with?: String;
+  phone_not_ends_with?: String;
+  profilePic?: String;
+  profilePic_not?: String;
+  profilePic_in?: String[] | String;
+  profilePic_not_in?: String[] | String;
+  profilePic_lt?: String;
+  profilePic_lte?: String;
+  profilePic_gt?: String;
+  profilePic_gte?: String;
+  profilePic_contains?: String;
+  profilePic_not_contains?: String;
+  profilePic_starts_with?: String;
+  profilePic_not_starts_with?: String;
+  profilePic_ends_with?: String;
+  profilePic_not_ends_with?: String;
+  AND?: UserScalarWhereInput[] | UserScalarWhereInput;
+  OR?: UserScalarWhereInput[] | UserScalarWhereInput;
+  NOT?: UserScalarWhereInput[] | UserScalarWhereInput;
+}
+
+export interface UserUpdateManyWithWhereNestedInput {
+  where: UserScalarWhereInput;
+  data: UserUpdateManyDataInput;
+}
+
+export interface UserUpdateManyDataInput {
+  authId?: String;
+  identity?: String;
+  name?: String;
+  role?: Role;
+  email?: String;
+  phone?: String;
+  profilePic?: String;
 }
 
 export interface DocumentCommentUpsertWithWhereUniqueWithoutDocumentInput {
@@ -3224,6 +3334,23 @@ export interface MessageUpdateManyDataInput {
   images?: MessageUpdateimagesInput;
 }
 
+export interface TeamUpsertWithoutEventsInput {
+  update: TeamUpdateWithoutEventsDataInput;
+  create: TeamCreateWithoutEventsInput;
+}
+
+export interface EventUpsertWithWhereUniqueWithoutUserInput {
+  where: EventWhereUniqueInput;
+  update: EventUpdateWithoutUserDataInput;
+  create: EventCreateWithoutUserInput;
+}
+
+export interface UserUpsertWithWhereUniqueWithoutInTeamInput {
+  where: UserWhereUniqueInput;
+  update: UserUpdateWithoutInTeamDataInput;
+  create: UserCreateWithoutInTeamInput;
+}
+
 export interface TeamUpsertWithoutTodoListsInput {
   update: TeamUpdateWithoutTodoListsDataInput;
   create: TeamCreateWithoutTodoListsInput;
@@ -3365,6 +3492,11 @@ export interface TodoListUpsertWithWhereUniqueWithoutOwnedByInput {
   create: TodoListCreateWithoutOwnedByInput;
 }
 
+export interface UserUpsertNestedInput {
+  update: UserUpdateDataInput;
+  create: UserCreateInput;
+}
+
 export interface DocumentUpdateManyMutationInput {
   doc_url?: String;
   title?: String;
@@ -3436,55 +3568,16 @@ export interface DocumentCommentUpdateManyMutationInput {
 
 export interface EventCreateInput {
   team: TeamCreateOneWithoutEventsInput;
-  user?: UserCreateOneInput;
+  user?: UserCreateOneWithoutEventsInput;
   action_string: String;
   object_string: String;
 }
 
-export interface TeamCreateOneWithoutEventsInput {
-  create?: TeamCreateWithoutEventsInput;
-  connect?: TeamWhereUniqueInput;
-}
-
-export interface TeamCreateWithoutEventsInput {
-  teamName: String;
-  members?: UserCreateManyWithoutInTeamInput;
-  todoLists?: TodoListCreateManyWithoutInTeamInput;
-  messages?: MessageCreateManyWithoutInTeamInput;
-  tags?: TagCreateManyWithoutTeamInput;
-  documents?: DocumentCreateManyWithoutTeamInput;
-  folders?: FolderCreateManyWithoutTeamInput;
-  premium?: Boolean;
-}
-
 export interface EventUpdateInput {
   team?: TeamUpdateOneRequiredWithoutEventsInput;
-  user?: UserUpdateOneInput;
+  user?: UserUpdateOneWithoutEventsInput;
   action_string?: String;
   object_string?: String;
-}
-
-export interface TeamUpdateOneRequiredWithoutEventsInput {
-  create?: TeamCreateWithoutEventsInput;
-  update?: TeamUpdateWithoutEventsDataInput;
-  upsert?: TeamUpsertWithoutEventsInput;
-  connect?: TeamWhereUniqueInput;
-}
-
-export interface TeamUpdateWithoutEventsDataInput {
-  teamName?: String;
-  members?: UserUpdateManyWithoutInTeamInput;
-  todoLists?: TodoListUpdateManyWithoutInTeamInput;
-  messages?: MessageUpdateManyWithoutInTeamInput;
-  tags?: TagUpdateManyWithoutTeamInput;
-  documents?: DocumentUpdateManyWithoutTeamInput;
-  folders?: FolderUpdateManyWithoutTeamInput;
-  premium?: Boolean;
-}
-
-export interface TeamUpsertWithoutEventsInput {
-  update: TeamUpdateWithoutEventsDataInput;
-  create: TeamCreateWithoutEventsInput;
 }
 
 export interface EventUpdateManyMutationInput {
@@ -3763,6 +3856,7 @@ export interface UserUpdateInput {
   email?: String;
   phone?: String;
   profilePic?: String;
+  events?: EventUpdateManyWithoutUserInput;
 }
 
 export interface UserUpdateManyMutationInput {
@@ -4048,6 +4142,17 @@ export interface UserPromise extends Promise<User>, Fragmentable {
   email: () => Promise<String>;
   phone: () => Promise<String>;
   profilePic: () => Promise<String>;
+  events: <T = FragmentableArray<Event>>(
+    args?: {
+      where?: EventWhereInput;
+      orderBy?: EventOrderByInput;
+      skip?: Int;
+      after?: String;
+      before?: String;
+      first?: Int;
+      last?: Int;
+    }
+  ) => T;
 }
 
 export interface UserSubscription
@@ -4095,6 +4200,17 @@ export interface UserSubscription
   email: () => Promise<AsyncIterator<String>>;
   phone: () => Promise<AsyncIterator<String>>;
   profilePic: () => Promise<AsyncIterator<String>>;
+  events: <T = Promise<AsyncIterator<EventSubscription>>>(
+    args?: {
+      where?: EventWhereInput;
+      orderBy?: EventOrderByInput;
+      skip?: Int;
+      after?: String;
+      before?: String;
+      first?: Int;
+      last?: Int;
+    }
+  ) => T;
 }
 
 export interface TodoList {

@@ -184,6 +184,7 @@ type User {
   email: String
   phone: String
   profilePic: String
+  events: [Event]
 }
 
 type Team {

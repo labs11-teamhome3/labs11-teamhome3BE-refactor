@@ -743,7 +743,7 @@ type EventConnection {
 
 input EventCreateInput {
   team: TeamCreateOneWithoutEventsInput!
-  user: UserCreateOneInput
+  user: UserCreateOneWithoutEventsInput
   action_string: String!
   object_string: String!
 }
@@ -753,8 +753,19 @@ input EventCreateManyWithoutTeamInput {
   connect: [EventWhereUniqueInput!]
 }
 
+input EventCreateManyWithoutUserInput {
+  create: [EventCreateWithoutUserInput!]
+  connect: [EventWhereUniqueInput!]
+}
+
 input EventCreateWithoutTeamInput {
-  user: UserCreateOneInput
+  user: UserCreateOneWithoutEventsInput
+  action_string: String!
+  object_string: String!
+}
+
+input EventCreateWithoutUserInput {
+  team: TeamCreateOneWithoutEventsInput!
   action_string: String!
   object_string: String!
 }
@@ -860,7 +871,7 @@ input EventSubscriptionWhereInput {
 
 input EventUpdateInput {
   team: TeamUpdateOneRequiredWithoutEventsInput
-  user: UserUpdateOneInput
+  user: UserUpdateOneWithoutEventsInput
   action_string: String
   object_string: String
 }
@@ -887,13 +898,31 @@ input EventUpdateManyWithoutTeamInput {
   updateMany: [EventUpdateManyWithWhereNestedInput!]
 }
 
+input EventUpdateManyWithoutUserInput {
+  create: [EventCreateWithoutUserInput!]
+  delete: [EventWhereUniqueInput!]
+  connect: [EventWhereUniqueInput!]
+  set: [EventWhereUniqueInput!]
+  disconnect: [EventWhereUniqueInput!]
+  update: [EventUpdateWithWhereUniqueWithoutUserInput!]
+  upsert: [EventUpsertWithWhereUniqueWithoutUserInput!]
+  deleteMany: [EventScalarWhereInput!]
+  updateMany: [EventUpdateManyWithWhereNestedInput!]
+}
+
 input EventUpdateManyWithWhereNestedInput {
   where: EventScalarWhereInput!
   data: EventUpdateManyDataInput!
 }
 
 input EventUpdateWithoutTeamDataInput {
-  user: UserUpdateOneInput
+  user: UserUpdateOneWithoutEventsInput
+  action_string: String
+  object_string: String
+}
+
+input EventUpdateWithoutUserDataInput {
+  team: TeamUpdateOneRequiredWithoutEventsInput
   action_string: String
   object_string: String
 }
@@ -903,10 +932,21 @@ input EventUpdateWithWhereUniqueWithoutTeamInput {
   data: EventUpdateWithoutTeamDataInput!
 }
 
+input EventUpdateWithWhereUniqueWithoutUserInput {
+  where: EventWhereUniqueInput!
+  data: EventUpdateWithoutUserDataInput!
+}
+
 input EventUpsertWithWhereUniqueWithoutTeamInput {
   where: EventWhereUniqueInput!
   update: EventUpdateWithoutTeamDataInput!
   create: EventCreateWithoutTeamInput!
+}
+
+input EventUpsertWithWhereUniqueWithoutUserInput {
+  where: EventWhereUniqueInput!
+  update: EventUpdateWithoutUserDataInput!
+  create: EventCreateWithoutUserInput!
 }
 
 input EventWhereInput {
@@ -3208,6 +3248,7 @@ type User {
   email: String
   phone: String
   profilePic: String
+  events(where: EventWhereInput, orderBy: EventOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Event!]
 }
 
 type UserConnection {
@@ -3227,6 +3268,7 @@ input UserCreateInput {
   email: String
   phone: String
   profilePic: String
+  events: EventCreateManyWithoutUserInput
 }
 
 input UserCreateManyInput {
@@ -3254,6 +3296,24 @@ input UserCreateOneInput {
   connect: UserWhereUniqueInput
 }
 
+input UserCreateOneWithoutEventsInput {
+  create: UserCreateWithoutEventsInput
+  connect: UserWhereUniqueInput
+}
+
+input UserCreateWithoutEventsInput {
+  authId: String
+  identity: String
+  name: String
+  todoListsOwned: TodoListCreateManyWithoutOwnedByInput
+  todoListsAssigned: TodoListCreateManyWithoutAssignedToInput
+  inTeam: TeamCreateManyWithoutMembersInput
+  role: Role
+  email: String
+  phone: String
+  profilePic: String
+}
+
 input UserCreateWithoutInTeamInput {
   authId: String
   identity: String
@@ -3264,6 +3324,7 @@ input UserCreateWithoutInTeamInput {
   email: String
   phone: String
   profilePic: String
+  events: EventCreateManyWithoutUserInput
 }
 
 input UserCreateWithoutTodoListsAssignedInput {
@@ -3276,6 +3337,7 @@ input UserCreateWithoutTodoListsAssignedInput {
   email: String
   phone: String
   profilePic: String
+  events: EventCreateManyWithoutUserInput
 }
 
 input UserCreateWithoutTodoListsOwnedInput {
@@ -3288,6 +3350,7 @@ input UserCreateWithoutTodoListsOwnedInput {
   email: String
   phone: String
   profilePic: String
+  events: EventCreateManyWithoutUserInput
 }
 
 type UserEdge {
@@ -3475,6 +3538,7 @@ input UserUpdateDataInput {
   email: String
   phone: String
   profilePic: String
+  events: EventUpdateManyWithoutUserInput
 }
 
 input UserUpdateInput {
@@ -3488,6 +3552,7 @@ input UserUpdateInput {
   email: String
   phone: String
   profilePic: String
+  events: EventUpdateManyWithoutUserInput
 }
 
 input UserUpdateManyDataInput {
@@ -3563,20 +3628,33 @@ input UserUpdateManyWithWhereNestedInput {
   data: UserUpdateManyDataInput!
 }
 
-input UserUpdateOneInput {
-  create: UserCreateInput
-  update: UserUpdateDataInput
-  upsert: UserUpsertNestedInput
-  delete: Boolean
-  disconnect: Boolean
-  connect: UserWhereUniqueInput
-}
-
 input UserUpdateOneRequiredInput {
   create: UserCreateInput
   update: UserUpdateDataInput
   upsert: UserUpsertNestedInput
   connect: UserWhereUniqueInput
+}
+
+input UserUpdateOneWithoutEventsInput {
+  create: UserCreateWithoutEventsInput
+  update: UserUpdateWithoutEventsDataInput
+  upsert: UserUpsertWithoutEventsInput
+  delete: Boolean
+  disconnect: Boolean
+  connect: UserWhereUniqueInput
+}
+
+input UserUpdateWithoutEventsDataInput {
+  authId: String
+  identity: String
+  name: String
+  todoListsOwned: TodoListUpdateManyWithoutOwnedByInput
+  todoListsAssigned: TodoListUpdateManyWithoutAssignedToInput
+  inTeam: TeamUpdateManyWithoutMembersInput
+  role: Role
+  email: String
+  phone: String
+  profilePic: String
 }
 
 input UserUpdateWithoutInTeamDataInput {
@@ -3589,6 +3667,7 @@ input UserUpdateWithoutInTeamDataInput {
   email: String
   phone: String
   profilePic: String
+  events: EventUpdateManyWithoutUserInput
 }
 
 input UserUpdateWithoutTodoListsAssignedDataInput {
@@ -3601,6 +3680,7 @@ input UserUpdateWithoutTodoListsAssignedDataInput {
   email: String
   phone: String
   profilePic: String
+  events: EventUpdateManyWithoutUserInput
 }
 
 input UserUpdateWithoutTodoListsOwnedDataInput {
@@ -3613,6 +3693,7 @@ input UserUpdateWithoutTodoListsOwnedDataInput {
   email: String
   phone: String
   profilePic: String
+  events: EventUpdateManyWithoutUserInput
 }
 
 input UserUpdateWithWhereUniqueNestedInput {
@@ -3638,6 +3719,11 @@ input UserUpdateWithWhereUniqueWithoutTodoListsOwnedInput {
 input UserUpsertNestedInput {
   update: UserUpdateDataInput!
   create: UserCreateInput!
+}
+
+input UserUpsertWithoutEventsInput {
+  update: UserUpdateWithoutEventsDataInput!
+  create: UserCreateWithoutEventsInput!
 }
 
 input UserUpsertWithWhereUniqueNestedInput {
@@ -3784,6 +3870,9 @@ input UserWhereInput {
   profilePic_not_starts_with: String
   profilePic_ends_with: String
   profilePic_not_ends_with: String
+  events_every: EventWhereInput
+  events_some: EventWhereInput
+  events_none: EventWhereInput
   AND: [UserWhereInput!]
   OR: [UserWhereInput!]
   NOT: [UserWhereInput!]
