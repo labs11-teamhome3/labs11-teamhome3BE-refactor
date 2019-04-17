@@ -171,7 +171,7 @@ async function addUserToTeam(parent, args, context, info) {
     const members = await context.prisma.team({ id: args.teamId }).members();
     console.log(members);
     if (members.length > 4 && !team.premium) {
-        throw new Error('Basic teams cannot have more than 4 members.  Consider upgrading to a premium plan.')
+        throw new Error('Basic teams cannot have more than 5 members.  Consider upgrading to a premium plan.')
     } else {
         return context.prisma.updateTeam({
         where: { id: args.teamId },
